@@ -19,6 +19,7 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+._*
 
 # Logs
 *.log
@@ -32,3 +33,8 @@ pids/
 # Coverage
 coverage/
 .nyc_output/
+
+# Hidden files (macOS, system)
+.*
+!.gitignore
+!.env.example
