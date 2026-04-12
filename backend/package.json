@@ -8,13 +8,18 @@
     "dev": "node src/app.js",
     "test": "node --test src/lib/scoreQuiz.test.js"
   },
-  "keywords": ["wmls", "mayday", "test"],
+  "keywords": [
+    "wmls",
+    "mayday",
+    "test"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "mysql2": "^3.22.0",
     "uuid": "^13.0.0"
   }
 }

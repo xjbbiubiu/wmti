@@ -50,7 +50,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { apiUrl } from '../api'
+import { apiUrl, track } from '../api'
 
 const router = useRouter()
 
@@ -103,6 +103,7 @@ const submitTest = async () => {
       body: JSON.stringify({ answers: answers.value })
     })
     const result = await response.json()
+    track('quiz_submit', { url_path: '/quiz', quiz_result_id: result.id })
     router.push({ name: 'result', params: { id: result.id } })
   } catch (error) {
     console.error('Failed to submit test:', error)

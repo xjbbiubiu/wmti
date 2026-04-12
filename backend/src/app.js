@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const questionRoutes = require('./routes/questions');
 const resultRoutes = require('./routes/results');
+const analyticsRoutes = require('./routes/analytics');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.use('/posters', express.static(path.join(__dirname, '..', 'public', 'posters
 // API routes
 app.use('/api/questions', questionRoutes);
 app.use('/api/results', resultRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'WMTI backend is running' });

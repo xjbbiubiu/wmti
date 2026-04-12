@@ -65,6 +65,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { track } from '../api'
 
 const router = useRouter()
 const cachedResult = ref(null)
@@ -78,9 +79,11 @@ onMounted(() => {
       localStorage.removeItem('wmti_last_result')
     }
   }
+  track('page_view', { url_path: '/', quiz_type: 'home' })
 })
 
 const startTest = () => {
+  track('quiz_start')
   router.push('/quiz')
 }
 

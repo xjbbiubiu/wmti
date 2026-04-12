@@ -123,7 +123,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { apiUrl, imageUrl } from '../api'
+import { apiUrl, imageUrl, track } from '../api'
 
 const router = useRouter()
 const route = useRoute()
@@ -279,6 +279,10 @@ const copyShareText = () => {
     // 降级：弹窗显示文案让用户手动复制
     alert('请长按下方文案区域，全选复制哦～')
   }
+  track('result_share', {
+    quiz_type: result.value.label,
+    quiz_type_code: result.value.typeCode
+  })
 }
 
 const restartTest = () => {

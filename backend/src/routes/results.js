@@ -344,46 +344,50 @@ router.post('/submit', (req, res) => {
     '任性': '就为了你为了你勇敢任性，世界再对我再错又有何惧。'
   };
 
-  const songSelection = {
-    '倔强': (wType === 1 && mType === 1) || sType === 1,
-    '顽固': (wType === 2 && mType === 1) || wType === 1,
-    '温柔': lType === 3 && mType === 3,
-    '离开地球表面': wType === 3 || mType === 3,
-    '干杯': wType === 3 && mType === 3,
-    '最重要的事': lType === 3 || (wType === 2 && lType === 2),
-    '我不愿让你一个人': lType === 2 && sType === 1,
-    '垃圾车': sType === 3 || mType === 3,
-    '洋葱': mType === 3 && lType === 1,
-    '人生无限公司': wType === 1 && mType === 2,
-    '盛夏光年': mType === 1 && sType === 1,
-    '有些事不做一辈子都不会做了': wType === 3 && mType === 1,
-    '派对动物': wType === 3 && sType === 3,
-    '星空': mType === 1 && lType === 1,
-    '恋爱ing': lType === 3 && sType === 3,
-    '知足': mType === 3 && sType === 3,
-    '后青春的诗': wType === 2 && mType === 1,
-    '人生海海': sType === 2 && mType === 3,
-    '一颗苹果': sType === 1 && mType === 2,
-    '约翰蓝侬': mType === 1 && sType === 2,
-    '玫瑰少年': lType === 1 && sType === 1,
-    '任意门': wType === 3 && lType === 3,
-    '任性': wType === 3 && sType === 1
+  // 精确匹配：27种W×M×L组合，每种对应一首主打歌
+  const typeCodeSong = {
+    'W1M1L1': '倔强',
+    'W1M1L2': '约翰蓝侬',
+    'W1M1L3': '最重要的事',
+    'W1M2L1': '人生无限公司',
+    'W1M2L2': '顽固',
+    'W1M2L3': '任意门',
+    'W1M3L1': '派对动物',
+    'W1M3L2': '憨人',
+    'W1M3L3': '干杯',
+    'W2M1L1': '盛夏光年',
+    'W2M1L2': '玫瑰少年',
+    'W2M1L3': '最重要的事',
+    'W2M2L1': '后青春的诗',
+    'W2M2L2': '一颗苹果',
+    'W2M2L3': '洋葱',
+    'W2M3L1': '恋爱ing',
+    'W2M3L2': '知足',
+    'W2M3L3': '知足',
+    'W3M1L1': '有些事不做一辈子都不会做了',
+    'W3M1L2': '任性',
+    'W3M1L3': '任性',
+    'W3M2L1': '人生海海',
+    'W3M2L2': '离开地球表面',
+    'W3M2L3': '温柔',
+    'W3M3L1': '离开地球表面',
+    'W3M3L2': '任意门',
+    'W3M3L3': '任意门',
   };
 
-  let recommendedSong = '倔强';
-  for (const [song, condition] of Object.entries(songSelection)) {
-    if (condition) {
-      recommendedSong = song;
-      break;
-    }
-  }
+  const primarySong = typeCodeSong[typeCode] || '倔强';
+  const primaryLyric = finalSongLyrics[primarySong] || '';
 
-  const matchingSongs = Object.entries(songSelection)
-    .filter(([_, matches]) => matches)
-    .map(([song]) => ({
-      name: song,
-      lyric: finalSongLyrics[song] || ''
-    }));
+  // 二号歌曲：根据W维度选（增加多样性）
+  const wSong = { 1: '倔强', 2: '盛夏光年', 3: '离开地球表面' }[wType] || '倔强';
+  const wLyric = finalSongLyrics[wSong] || '';
+
+  const matchingSongs = primarySong !== wSong
+    ? [
+        { name: primarySong, lyric: primaryLyric },
+        { name: wSong, lyric: wLyric }
+      ]
+    : [{ name: primarySong, lyric: primaryLyric }];
 
   const responseData = {
     id: resultId,
@@ -393,8 +397,8 @@ router.post('/submit', (req, res) => {
     label: personResult.label,
     desc: personResult.desc,
     trait: personResult.trait,
-    maydaySong: personResult.maydaySong,
-    maydayInsight: personResult.maydayInsight,
+    maydaySong: primarySong,
+    maydayInsight: finalSongLyrics[primarySong] || '',
     scores: {
       w: wScore,
       m: mScore,
