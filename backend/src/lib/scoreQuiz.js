@@ -1,6 +1,7 @@
 /**
  * Pure scoring helpers for WMLS-style quiz (29 questions, 4 dimensions).
- * Thresholds match routes/results.js: type 1 if sum >= 2*n, else 2 if >= 1*n, else 3.
+ * 每维度满分：W=24 M=24 L=21 S=18
+ * Thresholds: type1≥16(高)  type2≥8(中)  type3<8(低)
  */
 
 function aggregateScores(answers, questions) {
@@ -18,18 +19,18 @@ function aggregateScores(answers, questions) {
   return scores;
 }
 
-function typeFromDimensionSum(sum, totalQuestions) {
-  if (sum >= totalQuestions * 2) return 1;
-  if (sum >= totalQuestions * 1) return 2;
-  return 3;
+function typeFromDimensionSum(sum) {
+  if (sum >= 16) return 1;  // 高
+  if (sum >= 8)  return 2;  // 中
+  return 3;                  // 低
 }
 
-function typesFromScores(scores, totalQuestions) {
+function typesFromScores(scores) {
   return {
-    wType: typeFromDimensionSum(scores.w, totalQuestions),
-    mType: typeFromDimensionSum(scores.m, totalQuestions),
-    lType: typeFromDimensionSum(scores.l, totalQuestions),
-    sType: typeFromDimensionSum(scores.s, totalQuestions)
+    wType: typeFromDimensionSum(scores.w),
+    mType: typeFromDimensionSum(scores.m),
+    lType: typeFromDimensionSum(scores.l),
+    sType: typeFromDimensionSum(scores.s)
   };
 }
 
@@ -37,16 +38,13 @@ function typeCodeFromTypes(wType, mType, lType) {
   return `W${wType}M${mType}L${lType}`;
 }
 
-function percentScores(scores, totalQuestions) {
-  const max = totalQuestions * 3;
-  if (max <= 0) {
-    return { w: 0, m: 0, l: 0, s: 0 };
-  }
+function percentScores(scores) {
+  const maxByDim = { w: 24, m: 24, l: 21, s: 18 };
   return {
-    w: Math.round((scores.w / max) * 100),
-    m: Math.round((scores.m / max) * 100),
-    l: Math.round((scores.l / max) * 100),
-    s: Math.round((scores.s / max) * 100)
+    w: Math.round((scores.w / maxByDim.w) * 100),
+    m: Math.round((scores.m / maxByDim.m) * 100),
+    l: Math.round((scores.l / maxByDim.l) * 100),
+    s: Math.round((scores.s / maxByDim.s) * 100)
   };
 }
 
@@ -76,6 +74,7 @@ const POSTER_TAGLINES = {
   'W2M3L1': '佛系矛盾体',
   'W2M3L2': '演唱会爱好者',
   'W2M3L3': '阳光陪伴使者',
+  'W2M2L3': '清醒生活派',
   'W3M1L1': '嘴上躺平族',
   'W3M1L2': '精神支柱型',
   'W3M1L3': '省钱真粉',

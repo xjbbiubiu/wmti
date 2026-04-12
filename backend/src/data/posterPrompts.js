@@ -55,6 +55,10 @@ const posterPrompts = {
     prompt: 'Authentic chibi character with paintbrush painting colorful world, standing out from ordinary gray background, vibrant rainbow colors, artistic and unique, creative explosion, self-expression vibes',
     tagline: '不平庸五迷'
   },
+  'W2M2L3': {
+    prompt: 'Wise chibi owl wearing glasses sitting calmly, observing world with clarity, floating ice cream cone and concert ticket, balance and perspective, warm golden hour lighting, thoughtful and serene expression, cozy atmosphere',
+    tagline: '清醒生活派'
+  },
   'W2M3L1': {
     prompt: 'Zen chibi monk with sunglasses at day, suddenly bursting with rock energy at night concert, before and after transformation, calm lotus background transforming to wild concert stage, contrast theme',
     tagline: '佛系矛盾体'

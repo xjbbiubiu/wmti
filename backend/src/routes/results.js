@@ -22,7 +22,7 @@ router.post('/submit', (req, res) => {
   const scores = aggregateScores(answers, questions);
   const totalQuestions = answers.length;
 
-  const { wType, mType, lType, sType } = typesFromScores(scores, totalQuestions);
+  const { wType, mType, lType, sType } = typesFromScores(scores);
 
   const resultId = uuidv4();
 
@@ -311,7 +311,7 @@ router.post('/submit', (req, res) => {
     trait: ['独特', '真实', '有自我']
   };
 
-  const { w: wScore, m: mScore, l: lScore, s: sScore } = percentScores(scores, totalQuestions);
+  const { w: wScore, m: mScore, l: lScore, s: sScore } = percentScores(scores);
 
   const wAnalysis = { ...dimensionAnalysis.W[wType], type: dimensionLabels.W[wType-1] };
   const mAnalysis = { ...dimensionAnalysis.M[mType], type: dimensionLabels.M[mType-1] };

@@ -86,7 +86,7 @@
       <p class="disclaimer">个人项目 · 仅供娱乐</p>
 
       <div class="action-buttons">
-        <button type="button" class="btn btn-primary" @click="shareResult">
+        <button type="button" class="btn btn-primary" @click="openShareModal">
           分享结果
         </button>
         <button type="button" class="btn btn-ghost" @click="restartTest">
@@ -97,6 +97,27 @@
 
     </div>
   </div>
+
+  <!-- 分享弹窗 -->
+  <Teleport to="body">
+    <div v-if="showShareModal" class="share-overlay" @click.self="closeShareModal">
+      <div class="share-modal">
+        <div class="modal-header">
+          <h3>分享你的结果</h3>
+          <button class="modal-close" @click="closeShareModal" aria-label="关闭">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-label">复制文案，发到朋友圈/微博/小红书：</p>
+          <div class="share-text-box">
+            <p class="share-text">{{ shareText }}</p>
+          </div>
+          <button class="copy-btn" :class="{ copied: copyDone }" @click="copyShareText">
+            {{ copyDone ? '已复制！去粘贴分享吧～' : '复制文案' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
@@ -157,6 +178,29 @@ const defaultResult = {
 const result = ref(defaultResult)
 const loading = ref(true)
 const error = ref(null)
+const showShareModal = ref(false)
+const copyDone = ref(false)
+
+const shareText = computed(() => {
+  const r = result.value
+  const lines = [
+    `🎵 我的 WMTI 测试结果`,
+    ``,
+    `【${r.label}】`,
+    ``,
+    `📊 四维分型`,
+    `  工作 W：${r.scores?.w ?? 0}%  ${r.analysis?.W?.type ?? ''}`,
+    `  心态 M：${r.scores?.m ?? 0}%  ${r.analysis?.M?.type ?? ''}`,
+    `  情感 L：${r.scores?.l ?? 0}%  ${r.analysis?.L?.type ?? ''}`,
+    `  挫折 S：${r.scores?.s ?? 0}%  ${r.analysis?.S?.type ?? ''}`,
+    ``,
+    `🎤 ${r.maydaySong} · ${r.maydayInsight}`,
+    ``,
+    `${r.label}！快来看看你的wmls趣味测试结果吧~~`,
+    `http://buluinfo.cn/wmti/`
+  ]
+  return lines.join('\n')
+})
 
 onMounted(async () => {
   try {
@@ -164,6 +208,13 @@ onMounted(async () => {
     const response = await fetch(apiUrl(`/api/results/${id}`))
     if (!response.ok) throw new Error('Result not found')
     result.value = await response.json()
+    // 缓存到本地
+    localStorage.setItem('wmti_last_result', JSON.stringify({
+      id,
+      label: result.value.label,
+      typeCode: result.value.typeCode,
+      posterUrl: imageUrl(result.value.posterVisual?.imageUrl || '/posters/快乐五迷.webp')
+    }))
   } catch (e) {
     error.value = e.message
     result.value = defaultResult
@@ -197,8 +248,37 @@ const dimensionBlocks = computed(() => {
   })
 })
 
-const shareResult = () => {
-  alert('分享功能开发中...')
+const openShareModal = () => {
+  showShareModal.value = true
+  copyDone.value = false
+}
+
+const closeShareModal = () => {
+  showShareModal.value = false
+}
+
+const copyShareText = () => {
+  const text = shareText.value
+  const textarea = document.createElement('textarea')
+  textarea.value = text
+  textarea.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px;'
+  document.body.appendChild(textarea)
+  textarea.focus()
+  textarea.select()
+  let success = false
+  try {
+    success = document.execCommand('copy')
+  } catch {
+    success = false
+  }
+  document.body.removeChild(textarea)
+  if (success) {
+    copyDone.value = true
+    setTimeout(() => { copyDone.value = false }, 2500)
+  } else {
+    // 降级：弹窗显示文案让用户手动复制
+    alert('请长按下方文案区域，全选复制哦～')
+  }
 }
 
 const restartTest = () => {
@@ -208,8 +288,8 @@ const restartTest = () => {
 
 <style scoped>
 .result {
-  min-height: 100vh;
-  padding: 20px 16px 40px;
+  min-height: 100dvh;
+  padding: 20px 16px max(40px, calc(16px + env(safe-area-inset-bottom)));
 }
 
 .result-bg {
@@ -598,5 +678,166 @@ const restartTest = () => {
   .hero-traits {
     justify-content: flex-start;
   }
+}
+
+@media (max-width: 399px) {
+  .hero-image-wrap {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .hero-label {
+    font-size: 22px;
+  }
+
+  .dimension-card {
+    padding: 12px;
+  }
+
+  .card-header {
+    gap: 8px;
+  }
+
+  .card-letter {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  .score-num {
+    font-size: 18px;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* 分享弹窗 */
+.share-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 26, 46, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.share-modal {
+  background: white;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 60px rgba(5, 26, 46, 0.3);
+  overflow: hidden;
+  animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--md-blue-100, #e8f6fc);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--md-blue-900, #062d4a);
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--md-blue-50, #e8f6fc);
+  color: var(--md-blue-600, #0077b5);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.modal-close:hover {
+  background: var(--md-blue-100, #d0eefa);
+}
+
+.modal-body {
+  padding: 20px 24px 24px;
+}
+
+.modal-label {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--md-blue-700, #035a86);
+}
+
+.share-text-box {
+  background: var(--md-blue-50, #e8f6fc);
+  border: 1.5px solid var(--md-blue-200, #b8dff5);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.share-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--md-blue-900, #062d4a);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.copy-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #0088cc, #0099d9);
+  color: white;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(0, 136, 204, 0.3);
+}
+
+.copy-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+}
+
+.copy-btn.copied {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.3);
 }
 </style>

@@ -164,6 +164,8 @@ const submitTest = async () => {
   line-height: 1.65;
   margin-bottom: 30px;
   text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .options {

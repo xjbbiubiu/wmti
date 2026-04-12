@@ -43,6 +43,14 @@
         </div>
       </div>
 
+      <div v-if="cachedResult" class="cached-result" @click="goToResult">
+        <img :src="cachedResult.posterUrl" class="cached-poster" :alt="cachedResult.label" />
+        <div class="cached-info">
+          <span class="cached-label">{{ cachedResult.label }}</span>
+          <span class="cached-tip">查看上次结果 →</span>
+        </div>
+      </div>
+
       <button class="start-btn" @click="startTest">
         开始测试
       </button>
@@ -55,12 +63,31 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const cachedResult = ref(null)
+
+onMounted(() => {
+  const stored = localStorage.getItem('wmti_last_result')
+  if (stored) {
+    try {
+      cachedResult.value = JSON.parse(stored)
+    } catch {
+      localStorage.removeItem('wmti_last_result')
+    }
+  }
+})
 
 const startTest = () => {
   router.push('/quiz')
+}
+
+const goToResult = () => {
+  if (cachedResult.value) {
+    router.push(`/result/${cachedResult.value.id}`)
+  }
 }
 </script>
 
@@ -136,22 +163,23 @@ const startTest = () => {
 }
 
 .dimensions {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
+  max-width: 360px;
+  margin: 0 auto;
 }
 
 .dimension-item {
   background: var(--md-surface);
   border-radius: 16px;
-  padding: 16px 12px;
+  padding: 16px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   box-shadow: 0 6px 20px rgba(5, 26, 46, 0.12);
   border: 1px solid rgba(0, 136, 204, 0.12);
-  min-width: 70px;
 }
 
 .dim-letter {
@@ -168,18 +196,18 @@ const startTest = () => {
 }
 
 .dim-full {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--md-blue-600);
   font-weight: 500;
 }
 
 .dim-icon {
-  font-size: 20px;
+  font-size: 18px;
   margin: 2px 0;
 }
 
 .dim-name {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--md-blue-900);
   font-weight: 600;
 }
@@ -219,5 +247,93 @@ const startTest = () => {
   color: rgba(255, 255, 255, 0.65);
   font-size: 12px;
   letter-spacing: 0.06em;
+}
+
+/* 手机端适配 */
+@media (max-width: 400px) {
+  .logo {
+    font-size: 52px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+
+  .intro-card {
+    padding: 20px 16px;
+  }
+
+  .dimensions {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-width: 200px;
+  }
+
+  .dimension-item {
+    padding: 12px 6px;
+  }
+
+  .dim-letter {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .dim-full {
+    font-size: 8px;
+  }
+
+  .dim-icon {
+    font-size: 16px;
+  }
+
+  .dim-name {
+    font-size: 10px;
+  }
+}
+
+/* 缓存结果卡片 */
+.cached-result {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--md-surface);
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(5, 26, 46, 0.15);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.cached-result:active {
+  transform: scale(0.98);
+}
+
+.cached-poster {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.cached-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.cached-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--md-blue-900, #062d4a);
+}
+
+.cached-tip {
+  font-size: 13px;
+  color: var(--md-blue-500, #0088cc);
 }
 </style>

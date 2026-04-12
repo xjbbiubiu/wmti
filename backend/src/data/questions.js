@@ -1,292 +1,307 @@
+/**
+ * 每题只测一个主维度，其他维度全部为0。
+ * 分值设计：A=3 B=2 C=1 D=0，主维度差距3分，确保区分度。
+ *
+ * 维度分布：W×8  M×8  L×7  S×6 = 29题
+ * 每维度满分：W=24  M=24  L=21  S=18
+ * 分型阈值：type1≥16  type2≥8  type3<8
+ */
 const questions = [
+  // ── W 工作 Work ──────────────────────────────────────────────
   {
     id: 1,
-    content: '《生存以上 生活以下》唱「活着只会呼吸吃饭喝水」——老板突然甩来加班通知，你会？',
+    content: '老板突然甩来加班通知，周五晚上你会？',
     options: [
-      { key: 'A', content: '发完疯深呼吸，然后默默去加班（工作要紧）', scores: { w: 3, m: 1, l: 1, s: 1 } },
-      { key: 'B', content: '准时下班，"不约不约"后果自负', scores: { w: 1, m: 2, l: 1, s: 2 } },
-      { key: 'C', content: '躺平任嘲，反正工资照发就行', scores: { w: 1, m: 3, l: 1, s: 3 } },
-      { key: 'D', content: '假装没看到，继续刷演唱会视频', scores: { w: 1, m: 2, l: 2, s: 2 } }
+      { key: 'A', content: '发完疯深呼吸，然后默默去加班', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '准时下班，后果自负吧', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '象征性抗议一下，然后还是去', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '直接躺平，反正工资照发就行', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 2,
-    content: '五月天官宣演唱会，抢票键还没亮，你已经？',
+    content: '周末只有一天休息，你会选择？',
     options: [
-      { key: 'A', content: '立刻设闹钟蹲守，抢不到不罢休', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '随缘，抢到就去，抢不到看直播', scores: { w: 1, m: 2, l: 2, s: 2 } },
-      { key: 'C', content: '找朋友帮忙，人多力量大', scores: { w: 2, m: 2, l: 3, s: 1 } },
-      { key: 'D', content: '等朋友抢到一起去，一个人太孤单', scores: { w: 1, m: 2, l: 1, s: 2 } }
+      { key: 'A', content: '加班搞钱，演唱会经费自己挣', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '给自己充电，学点新东西', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '在家看演唱会视频，躺平休息', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '约朋友出去玩，放松最重要', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 3,
-    content: '《温柔》现场版：对方说「不打扰是我的温柔」，你内心 OS 是？',
+    content: '对于"内卷"这件事，你是什么态度？',
     options: [
-      { key: 'A', content: '倔强追问到底，"为什么不让我打扰"', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '默默关注朋友圈，假装释怀', scores: { w: 1, m: 2, l: 1, s: 2 } },
-      { key: 'C', content: '乖乖放手，还对方自由', scores: { w: 2, m: 2, l: 1, s: 3 } },
-      { key: 'D', content: '唱一首《洋葱》，给自己一个交代', scores: { w: 1, m: 3, l: 2, s: 2 } }
+      { key: 'A', content: '卷！要卷到金字塔顶端！', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '被迫加入，但心里很抵触', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '走自己的路，让别人卷去吧', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '无所谓，反正我只想看演唱会', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 4,
-    content: '周末你只有一天休息时间，你会选择？',
+    content: '你现在的工作状态最接近？',
     options: [
-      { key: 'A', content: '加班搞钱，演唱会经费不会从天上掉', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '去咖啡厅/图书馆给自己充电', scores: { w: 2, m: 2, l: 1, s: 2 } },
-      { key: 'C', content: '睡到自然醒，在家看演唱会视频', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'D', content: '约朋友出去玩，不能浪费好天气', scores: { w: 2, m: 2, l: 1, s: 2 } }
+      { key: 'A', content: '拼命三郎，工作就是我的命', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '高效精英，完成任务就下班', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '差不多先生，认真就输了', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '摸鱼大师，带薪上厕所是强项', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 5,
-    content: '看到"人生就像打电话，重要的不是结果，而是过程"这句话，你认同吗？',
+    content: '生活中最看重什么？',
     options: [
-      { key: 'A', content: '结果很重要！没有结果的付出有什么意义？', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '一半一半，有些事看结果有些事享受过程', scores: { w: 2, m: 2, l: 2, s: 2 } },
-      { key: 'C', content: '非常认同！过程才是最美的风景', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'D', content: '管它呢，开心就好！', scores: { w: 1, m: 3, l: 3, s: 2 } }
+      { key: 'A', content: '事业成功，得到认可和成就感', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '内心平静，活得自在舒心', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '身边有人陪伴和爱', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '忠于自我，不被外界定义', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 6,
-    content: '你最近遇到了一件很挫折的事，你的第一反应是？',
+    content: '5年前的自己，想对ta说什么？',
     options: [
-      { key: 'A', content: '"我不转弯"——困难算什么，冲过去！', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '"一步一步往上爬"——冷静分析重新出发', scores: { w: 3, m: 2, l: 1, s: 1 } },
-      { key: 'C', content: '"有些事根本不用怕"——放宽心睡一觉', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'D', content: '"人生有限公司"——先让我emo一下', scores: { w: 1, m: 2, l: 1, s: 2 } }
+      { key: 'A', content: '"继续坚持梦想，别放弃"', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '"想做什么就去做，别留遗憾"', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '"珍惜身边人，别等失去才后悔"', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '"别那么拼命，多爱惜身体"', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 7,
-    content: '你的朋友向你吐槽感情问题，你会？',
+    content: '演唱会当天发现要上班，你会？',
     options: [
-      { key: 'A', content: '直接给结论，"分手，下一个更香"', scores: { w: 1, m: 1, l: 1, s: 1 } },
-      { key: 'B', content: '安静倾听，适时递纸巾和建议', scores: { w: 2, m: 2, l: 3, s: 2 } },
-      { key: 'C', content: '陪他/她一起骂，义愤填膺站队', scores: { w: 1, m: 3, l: 2, s: 2 } },
-      { key: 'D', content: '唱一首《垃圾车》，有我陪伴你', scores: { w: 2, m: 2, l: 3, s: 2 } }
+      { key: 'A', content: '请假！演唱会不能没有我', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '想办法调班，实在不行看晚场', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '算了下次再去，工作要紧', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '工作第一位，网上看视频也香', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 8,
-    content: '在KTV里，你一定会点哪首歌？',
+    content: '你买专辑/周边的频率是？',
     options: [
-      { key: 'A', content: '《倔强》——坚持对我来说就是以刚克刚', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '《憨人》——我的梦不是从现在开始做的', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'C', content: '《离开地球表面》——就要蹦就要嗨！', scores: { w: 1, m: 3, l: 2, s: 2 } },
-      { key: 'D', content: '《温柔》——情到深处自然唱', scores: { w: 1, m: 2, l: 1, s: 2 } }
+      { key: 'A', content: '出新必买，支持正版是原则', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '遇到喜欢的才买，不强制', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '网上听听就算了，不花钱', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '只买演唱会周边，其他不考虑', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
+
+  // ── M 心态 Mind ──────────────────────────────────────────────
   {
     id: 9,
-    content: '你现在的存款能支撑你说走就走的旅行吗？',
+    content: '面对"看不到结果"的事，你通常会？',
     options: [
-      { key: 'A', content: '说走就走？我还要攒钱买演唱会票呢！', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '有积蓄才有安全感，穷游也不想', scores: { w: 2, m: 1, l: 2, s: 2 } },
-      { key: 'C', content: '想走就走，大不了吃泡面！', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'D', content: '钱不是问题，问题是假！工作不允许', scores: { w: 3, m: 2, l: 2, s: 1 } }
+      { key: 'A', content: '管它呢，过程开心就行！', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '先观望，看情况再决定', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '没有结果就不做，及时止损', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '先设定小目标，边走边看', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 10,
-    content: '对于"内卷"这件事，你的态度是？',
+    content: '五月天官宣演唱会，你的反应是？',
     options: [
-      { key: 'A', content: '卷！要卷到金字塔顶端！', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '被迫加入，卷不过就躺不平太难了', scores: { w: 2, m: 2, l: 1, s: 2 } },
-      { key: 'C', content: '我不卷，走自己的路让别人说去', scores: { w: 1, m: 3, l: 2, s: 2 } },
-      { key: 'D', content: '无所谓，反正我只想看演唱会', scores: { w: 1, m: 3, l: 2, s: 3 } }
+      { key: 'A', content: '立刻设闹钟蹲守，抢不到不罢休！', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '随缘，抢到就去，抢不到看直播', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '等朋友抢到一起去，一个人太孤单', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '有没有票无所谓，听歌心情好就行', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 11,
-    content: '如果有机会见到五月天任何一个成员，你最想说的是？',
+    content: '听到"人生有限公司"这句歌词，你的感受是？',
     options: [
-      { key: 'A', content: '"再开一百场演唱会吧！"——贪心请求', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '什么都不说，让我多看两眼就好', scores: { w: 1, m: 3, l: 1, s: 3 } },
-      { key: 'C', content: '"你们就是我的青春，谢谢你们还在"', scores: { w: 1, m: 2, l: 3, s: 2 } },
-      { key: 'D', content: '"谢谢你们陪我走过难熬的日子"', scores: { w: 1, m: 2, l: 3, s: 2 } }
+      { key: 'A', content: '太真实了，人生就是要及时行乐！', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '有点丧，但好像说得也没错', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '无所谓，该干嘛干嘛', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '只要活着就有无限可能！', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 12,
-    content: '你现在的爱情观最接近哪句歌词？',
+    content: '遇到挫折时，《倔强》里哪句最戳你？',
     options: [
-      { key: 'A', content: '"爱情不是你想要，想就能就能爱"', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '"单身也挺好的，自由自在"', scores: { w: 1, m: 3, l: 1, s: 3 } },
-      { key: 'C', content: '"恋爱ing，完美结局正在靠近"', scores: { w: 1, m: 3, l: 1, s: 2 } },
-      { key: 'D', content: '"我不愿让你一个人"——陪伴', scores: { w: 2, m: 2, l: 1, s: 2 } }
+      { key: 'A', content: '"我不怕千万人阻挡，只怕自己投降"', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '"逆风的方向，更适合飞翔"', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '"如果对自己如果有太多疑问"', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '"就算失望，不能绝望"', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 13,
-    content: '你通常如何度过人生低谷期？',
+    content: '看完一场演唱会后，你通常会？',
     options: [
-      { key: 'A', content: '闷头想办法，越难越要撑过去', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '睡一觉就好了，明天又是新的一天', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'C', content: '听五月天的歌，从歌词里汲取力量', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'D', content: '找朋友倾诉，不能一个人扛', scores: { w: 1, m: 2, l: 1, s: 2 } }
+      { key: 'A', content: '激动好几天，见人就想分享！', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '安静地回味，心里暖暖的', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '期待下一场，继续攒钱', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '该干嘛干嘛，生活继续', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 14,
-    content: '如果可以重来，你最想改变什么？',
+    content: '对于"活在当下"，你认同几分？',
     options: [
-      { key: 'A', content: '重新选择职业道路，追求自己的梦想', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '不后悔，往前看就好，无所谓', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'C', content: '珍惜身边的人，别忽略爱你的人', scores: { w: 2, m: 2, l: 1, s: 2 } },
-      { key: 'D', content: '希望能更勇敢一点，不要错过机会', scores: { w: 2, m: 1, l: 1, s: 1 } }
+      { key: 'A', content: '10分！明天的事明天再说！', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '7分认同，但也要有规划', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '5分，活在当下也要有底线', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '3分，未来规划更重要', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 15,
-    content: '你觉得存钱最好的理由是？',
+    content: '朋友问你怎么还在听五月天，你会说？',
     options: [
-      { key: 'A', content: '为了下一次演唱会！这是信仰！', scores: { w: 3, m: 2, l: 2, s: 1 } },
-      { key: 'B', content: '为了以后能过得更好，梦想还是要有的', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'C', content: '及时行乐！存什么钱！', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'D', content: '为了不时之需，安全感很重要', scores: { w: 2, m: 1, l: 2, s: 2 } }
+      { key: 'A', content: '他们的歌陪我度过了人生所有低谷', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '就是喜欢，不需要理由啊！', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '因为他们的歌真的很好听', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '习惯了，像老朋友一样离不开', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 16,
-    content: '"你心中尚未崩坏的地方"是哪里？',
+    content: '"加入五月天，永远不会太迟"你怎么看？',
     options: [
-      { key: 'A', content: '对未来的希望，相信自己会更好的信念', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '我的心灵净土，谁都不能触碰', scores: { w: 1, m: 3, l: 2, s: 2 } },
-      { key: 'C', content: '对家人的爱，这是不变的依靠', scores: { w: 2, m: 2, l: 1, s: 2 } },
-      { key: 'D', content: '对音乐的热爱，对五月天的信仰', scores: { w: 1, m: 1, l: 3, s: 1 } }
+      { key: 'A', content: '太对了！有梦什么时候开始都不晚', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '有道理，但也要面对现实', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '哈哈，我早就加入了，资深五迷！', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '能听进去就是缘分吧', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
+
+  // ── L 情感 Love ──────────────────────────────────────────────
   {
     id: 17,
-    content: '朋友突然约你但你有其他计划，你会？',
+    content: '你想和谁一起看五月天？',
     options: [
-      { key: 'A', content: '坚持原有计划，我已经安排了', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '看情况，不重要就改期', scores: { w: 2, m: 2, l: 2, s: 2 } },
-      { key: 'C', content: '取消计划赴约，朋友比什么都重要', scores: { w: 1, m: 2, l: 1, s: 2 } },
-      { key: 'D', content: '一起去呗，多一个人更热闹', scores: { w: 1, m: 3, l: 1, s: 2 } }
+      { key: 'A', content: '和朋友们一起，氛围感拉满！', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '和另一半，一起创造美好回忆', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '自己去，一个人更自在', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '无所谓，有票就去，人多人少都行', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 18,
-    content: '你更认同以下哪种人生态度？',
+    content: '朋友临时有事不能一起看演唱会，你会？',
     options: [
-      { key: 'A', content: '"逆风的方向，更适合飞翔"——越难越冲', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '"最重要的事，就是和你一起慢慢变老"', scores: { w: 1, m: 3, l: 1, s: 2 } },
-      { key: 'C', content: '"人生有限公司，你要学会保护自己"', scores: { w: 2, m: 2, l: 2, s: 1 } },
-      { key: 'D', content: '"有些事我不说，不代表我不在乎"', scores: { w: 2, m: 2, l: 3, s: 2 } }
+      { key: 'A', content: '自己去！不能浪费票一个人也要嗨', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '转让或改期，下次再一起去', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '算了不去了，没人陪没意思', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '找其他朋友一起去', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 19,
-    content: '如果你是《人生有限公司》的员工，你觉得自己是什么类型？',
+    content: '五月天对你来说意味着什么？',
     options: [
-      { key: 'A', content: '拼命三郎型——工作就是我的命', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '高效精英型——工作是为了更好生活', scores: { w: 2, m: 2, l: 2, s: 2 } },
-      { key: 'C', content: '差不多先生型——认真就输了', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'D', content: '摸鱼大师型——带薪上厕所是我的强项', scores: { w: 1, m: 3, l: 2, s: 3 } }
+      { key: 'A', content: '青春回忆，每首歌都是一段故事', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '陪伴，无论何时都在的温暖存在', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '信仰，照亮前路的精神支柱', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '就是偶像，听歌娱乐而已', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 20,
-    content: '对你来说，五月天在你生命中扮演着什么角色？',
+    content: '"不打扰是我的温柔"，你认同吗？',
     options: [
-      { key: 'A', content: '信仰——他们是我想成为的那种人', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '生活背景音——陪伴我度过每一天', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'C', content: '青春记忆——每一首歌都是一段回忆', scores: { w: 1, m: 2, l: 3, s: 2 } },
-      { key: 'D', content: '精神支柱——每次听歌都能满血复活', scores: { w: 2, m: 1, l: 3, s: 1 } }
+      { key: 'A', content: '认同，有时候放手才是真正的爱', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '一半吧，有时候需要打扰一下', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '不认同，有爱就要大声说出来', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '管它呢，听歌开心就好', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 21,
-    content: '当你听到《倔强》这首歌时，你最想做什么？',
+    content: '你最想和谁分享一首五月天的歌？',
     options: [
-      { key: 'A', content: '跟着大声唱，"我不怕千万人阻挡"', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '想起那些坚持的日子，默默流泪', scores: { w: 1, m: 2, l: 3, s: 2 } },
-      { key: 'C', content: '分享给正在低谷的朋友', scores: { w: 2, m: 2, l: 1, s: 1 } },
-      { key: 'D', content: '算了，换一首更嗨的歌吧', scores: { w: 1, m: 3, l: 2, s: 3 } }
+      { key: 'A', content: '在最重要的人面前唱给他们听', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '分享给朋友，一起感动', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '自己听，不想分享', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '安利给更多人，让他们也入坑', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 22,
-    content: '你和朋友约好了一起看演唱会，但朋友临时有事，你会？',
+    content: '"你不孤单，因为你是我最想留住的幸运"——感受是？',
     options: [
-      { key: 'A', content: '自己去！不能浪费票一个人也要嗨', scores: { w: 2, m: 2, l: 1, s: 1 } },
-      { key: 'B', content: '算了不去了，没人陪没意思', scores: { w: 1, m: 3, l: 1, s: 3 } },
-      { key: 'C', content: '找其他朋友一起去', scores: { w: 2, m: 2, l: 2, s: 2 } },
-      { key: 'D', content: '转让给别人，和朋友下次再去', scores: { w: 1, m: 2, l: 1, s: 2 } }
+      { key: 'A', content: '戳心！我也有很多想留住的人', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '有点感动，但没那么强烈', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '听歌就好，不要想太多', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '单身也挺好，不需要留谁', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 23,
-    content: '你每个月愿意为看演出或相关活动花多少钱？',
+    content: '遇到困难时，你最需要谁的支持？',
     options: [
-      { key: 'A', content: '只要能去看，攒多久钱都愿意', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '很少花钱，有免费视频看就够了', scores: { w: 1, m: 2, l: 2, s: 2 } },
-      { key: 'C', content: '有免费活动就去，收费就算了', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'D', content: '量力而行，工资的一部分刚好够用', scores: { w: 2, m: 2, l: 2, s: 2 } }
+      { key: 'A', content: '家人，他们永远是我的后盾', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '朋友们，有他们在就够了', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '一个人消化，习惯了', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '五月天的歌，它们就是我的支撑', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
+
+  // ── S 挫折 Stress ─────────────────────────────────────────────
   {
     id: 24,
-    content: '如果可以，你想对5年前的自己说什么？',
+    content: '遇到挫折时，你通常怎么应对？',
     options: [
-      { key: 'A', content: '"继续坚持你的梦想，别放弃"', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '"想做什么就去做，别留遗憾"', scores: { w: 2, m: 3, l: 2, s: 1 } },
-      { key: 'C', content: '"珍惜身边的人，别等失去了才后悔"', scores: { w: 1, m: 2, l: 1, s: 2 } },
-      { key: 'D', content: '"别那么拼命，多爱惜身体"', scores: { w: 2, m: 2, l: 3, s: 2 } }
+      { key: 'A', content: '越难越要冲，不信过不去', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '先停下来想想，再找办法解决', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '给自己一点时间，慢慢释怀', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '睡一觉就好了，第二天满血复活', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 25,
-    content: '你更喜欢用什么方式支持五月天？',
+    content: '你最近一次情绪低落，是因为什么？',
     options: [
-      { key: 'A', content: '买专辑和周边，支持正版是基本原则', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '默默听歌，不打扰是我的温柔', scores: { w: 1, m: 2, l: 1, s: 3 } },
-      { key: 'C', content: '安利给朋友，让他们也入坑', scores: { w: 1, m: 3, l: 2, s: 2 } },
-      { key: 'D', content: '演唱会现场，用力挥舞荧光棒到手臂酸', scores: { w: 2, m: 2, l: 1, s: 1 } }
+      { key: 'A', content: '工作/学业压力，KPI让我喘不过气', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '感情问题，心里堵得慌', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '生活琐事累积，莫名就emo了', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '很少情绪低落，我心态超好', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 26,
-    content: '当你一个人加班到深夜时，你会？',
+    content: '当别人对你说"加油"的时候，你的反应是？',
     options: [
-      { key: 'A', content: '戴上耳机，让五月天陪你加班', scores: { w: 3, m: 2, l: 2, s: 1 } },
-      { key: 'B', content: '不干了明天再说！工作不是人生全部', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'C', content: '默默忍受，反正习惯了', scores: { w: 2, m: 1, l: 2, s: 2 } },
-      { key: 'D', content: '边听《倔强》边给自己打气', scores: { w: 2, m: 1, l: 2, s: 1 } }
+      { key: 'A', content: '谢谢！我会更努力的！', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '心里暖暖的，有被鼓励到', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '谢谢……但我其实还好', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '该咋咋地，我自己能调整', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 27,
-    content: '"加入五月天，永远不会太迟"——你对这句话的理解是？',
+    content: '面对"成年人的崩溃"，你的态度是？',
     options: [
-      { key: 'A', content: '只要开始就不晚，人生随时可以重启', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '哈哈，我早就加入了！资深五迷在此', scores: { w: 1, m: 2, l: 1, s: 3 } },
-      { key: 'C', content: '只要心里有梦，什么时候加入都可以', scores: { w: 2, m: 3, l: 2, s: 1 } },
-      { key: 'D', content: '五月天的歌什么时候听都有道理', scores: { w: 1, m: 2, l: 3, s: 2 } }
+      { key: 'A', content: '咬咬牙就过去了，没有过不去的坎', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '允许自己崩溃一下，然后重新出发', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '人之常情，找个方式发泄就好', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '无所谓，睡一觉世界依然美好', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 28,
-    content: '你在生活中最看重的是什么？',
+    content: '你每个月愿意为看演出花多少钱？',
     options: [
-      { key: 'A', content: '事业成功，得到认可和成就感', scores: { w: 3, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '内心平静，活得自在舒心', scores: { w: 1, m: 3, l: 1, s: 3 } },
-      { key: 'C', content: '身边有人陪伴和爱', scores: { w: 1, m: 2, l: 3, s: 2 } },
-      { key: 'D', content: '不断挑战自我突破极限', scores: { w: 2, m: 1, l: 1, s: 1 } }
+      { key: 'A', content: '只要能去看，攒多久钱都愿意', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '量力而行，工资的一部分刚好够用', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '有免费活动就去，收费就算了', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '基本不花钱，网上看看视频就行', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 29,
-    content: '如果可以，你想成为五月天MV里的哪个角色？',
+    content: '如果可以成为五月天MV里的角色，你想成为？',
     options: [
-      { key: 'A', content: '《倔强》里逆风飞翔的主角', scores: { w: 2, m: 1, l: 2, s: 1 } },
-      { key: 'B', content: '《干杯》里和朋友们畅饮的快乐路人', scores: { w: 1, m: 3, l: 2, s: 3 } },
-      { key: 'C', content: '《温柔》里默默守护的深情角色', scores: { w: 1, m: 2, l: 1, s: 2 } },
-      { key: 'D', content: '《离开地球表面》里在月球漫步的梦想家', scores: { w: 1, m: 3, l: 2, s: 2 } }
+      { key: 'A', content: '《倔强》里逆风飞翔的主角', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '《干杯》里和朋友们畅饮的快乐路人', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '《温柔》里默默守护的深情角色', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '《离开地球表面》里在月球漫步的梦想家', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   }
 ];
