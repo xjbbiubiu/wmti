@@ -1,0 +1,51 @@
+/**
+ * 五月天蓝 · 全站视觉主题
+ * 主色参考演唱会/官方常见的钴蓝 → 天蓝渐变，夜间背景为深海蓝。
+ */
+:root {
+  /* 手机单列页：内容最大宽度与安全区内边距（各页可引用） */
+  --wmti-content-max: 420px;
+
+  --md-blue-50: #e8f6fc;
+  --md-blue-100: #c5e8f6;
+  --md-blue-200: #8fd4ef;
+  --md-blue-300: #4db8e8;
+  --md-blue-400: #1aa3d9;
+  --md-blue-500: #0088cc;
+  --md-blue-600: #0076b3;
+  --md-blue-700: #005f94;
+  --md-blue-800: #004a73;
+  --md-blue-900: #062d4a;
+  --md-blue-night: #051a2e;
+  --md-blue-deep: #071420;
+
+  --md-accent: #00a8e8;
+  --md-accent-bright: #33c0f0;
+  --md-accent-deep: #0077b5;
+
+  /* 页面大背景：由深到浅的天蓝晕光 */
+  --md-gradient-page: linear-gradient(
+    155deg,
+    #045a8c 0%,
+    #0077b5 35%,
+    #0099d9 68%,
+    #33c0f0 100%
+  );
+
+  /* 结果页：与首页/测验同一套天蓝底，可加一层柔光（避免「发灰/发黑」） */
+  --md-gradient-result-bg:
+    radial-gradient(ellipse 100% 70% at 50% -15%, rgba(255, 255, 255, 0.22) 0%, transparent 52%),
+    radial-gradient(ellipse 80% 50% at 100% 30%, rgba(51, 192, 240, 0.25) 0%, transparent 45%),
+    var(--md-gradient-page);
+
+  --md-text-on-blue: rgba(255, 255, 255, 0.95);
+  --md-text-on-blue-muted: rgba(255, 255, 255, 0.82);
+  --md-surface: rgba(255, 255, 255, 0.98);
+  --md-surface-glass: rgba(255, 255, 255, 0.1);
+
+  /* 四维解析：同一蓝色相内区分（五月天蓝系） */
+  --md-dim-w: #0088cc;
+  --md-dim-m: #0ea5e9;
+  --md-dim-l: #0284c7;
+  --md-dim-s: #38bdf8;
+}
