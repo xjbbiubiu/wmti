@@ -151,7 +151,7 @@ const defaultResult = {
     { name: '干杯', lyric: '会不会有一天时间真的能倒退，退回你的我的回不去的悠悠的岁月。' },
     { name: '任意门', lyric: '任意门外我们都任意的飞，是自由的滋味。' }
   ],
-  posterVisual: { tagline: '快乐五迷', imageUrl: '/posters/快乐五迷.png' }
+  posterVisual: { tagline: '快乐五迷', imageUrl: '/posters/快乐五迷.webp' }
 }
 
 const result = ref(defaultResult)

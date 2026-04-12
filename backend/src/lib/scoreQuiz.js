@@ -94,7 +94,7 @@ const POSTER_TAGLINES = {
 function posterVisualForTypeCode(typeCode) {
   const h = hashString(typeCode);
   const tagline = POSTER_TAGLINES[typeCode] || '今天也要好好生活';
-  const imageUrl = `/posters/${tagline}.png`;
+  const imageUrl = `/posters/${tagline}.webp`;
 
   return {
     tagline,
