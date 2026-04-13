@@ -39,3 +39,9 @@ coverage/
 .*
 !.gitignore
 !.env.example
+
+# Agent/Trae skills
+.agents/
+.claude/
+.qoder/
+.trae/skills/ui-ux-pro-max/
