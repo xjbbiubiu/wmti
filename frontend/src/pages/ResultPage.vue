@@ -9,13 +9,10 @@
     <div v-else class="result-content">
 
     <section class="hero-card" aria-label="测试结果卡片">
-      <div class="hero-glow" aria-hidden="true" />
-
-      <header class="hero-header">
+      <div class="hero-header">
         <span class="hero-badge">WMTI</span>
-        <h1 class="hero-title">五迷老师趣味测试</h1>
-      </header>
-
+        <span class="hero-title">五迷趣味测试</span>
+      </div>
       <div class="hero-main">
         <div class="hero-image-wrap">
           <img
@@ -24,24 +21,34 @@
             class="hero-image"
           />
         </div>
-
         <div class="hero-info">
           <h2 class="hero-label">{{ result.label }}</h2>
-          <p class="hero-type">{{ result.resultType }}</p>
-
           <div class="hero-traits">
-            <span v-for="trait in result.trait" :key="trait" class="trait-tag">{{ trait }}</span>
+            <span v-for="trait in result.trait" :key="trait" class="hero-trait">{{ trait }}</span>
           </div>
-
-          <p class="hero-desc">{{ result.desc }}</p>
-          <p class="hero-insight">{{ result.maydayInsight || '' }}</p>
+          <p class="hero-quote">"{{ result.matchingSongs[0]?.lyric || '' }}"</p>
+          <p class="hero-song-name">——《 {{ result.matchingSongs[0]?.name || '' }} 》</p>
         </div>
       </div>
-
-      <div class="hero-song">
-        <span class="song-label">🎵 你的五迷之歌</span>
-        <p class="song-quote">{{ result.matchingSongs[0]?.lyric || '' }}</p>
-        <p class="song-name">——《 {{ result.matchingSongs[0]?.name || '' }} 》</p>
+      <div class="hero-desc">{{ result.desc }}</div>
+      <div class="hero-dimensions">
+        <div class="hero-dim-badge" v-for="block in dimensionBlocks" :key="block.key">
+          <div class="hero-dim-label">
+            <span class="hero-dim-w">{{ block.key }}</span><span class="hero-dim-rest">{{ getDimRest(block.key) }}</span>
+          </div>
+          <span class="hero-dim-type">{{ block.type }}</span>
+          <div class="hero-dim-traits">
+            <span v-for="trait in block.traits.slice(0, 1)" :key="trait" class="hero-dim-trait">{{ trait }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button type="button" class="btn btn-primary" @click="handleShare">
+          分享结果
+        </button>
+        <button type="button" class="btn btn-ghost" @click="restartTest">
+          再测一次
+        </button>
       </div>
     </section>
 
@@ -82,18 +89,7 @@
       </div>
     </section>
 
-    <footer class="result-footer">
-      <p class="disclaimer">个人项目 · 仅供娱乐</p>
-
-      <div class="action-buttons">
-        <button type="button" class="btn btn-primary" @click="openShareModal">
-          分享结果
-        </button>
-        <button type="button" class="btn btn-ghost" @click="restartTest">
-          再测一次
-        </button>
-      </div>
-    </footer>
+    <p class="disclaimer-bottom">趣味测试 仅供娱乐</p>
 
     </div>
   </div>
@@ -103,27 +99,109 @@
     <div v-if="showShareModal" class="share-overlay" @click.self="closeShareModal">
       <div class="share-modal">
         <div class="modal-header">
-          <h3>分享你的结果</h3>
           <button class="modal-close" @click="closeShareModal" aria-label="关闭">×</button>
         </div>
         <div class="modal-body">
-          <p class="modal-label">复制文案，发到朋友圈/微博/小红书：</p>
-          <div class="share-text-box">
-            <p class="share-text">{{ shareText }}</p>
+          <div ref="sharePreviewRef" class="share-preview-wrap">
+            <div class="share-card-preview">
+              <div class="share-card-header">
+                <span class="share-card-badge">WMTI</span>
+                <span class="share-card-title">五迷趣味测试</span>
+              </div>
+              <div class="share-card-main">
+                <div class="share-card-image-wrap">
+                  <img
+                    :src="imageUrl(result.posterVisual.imageUrl)"
+                    :alt="result.posterVisual.tagline"
+                    class="share-card-image"
+                  />
+                </div>
+                <div class="share-card-info">
+                  <h2 class="share-card-label">{{ result.label }}</h2>
+                  <div class="share-card-traits">
+                    <span v-for="trait in result.trait" :key="trait" class="share-card-trait">{{ trait }}</span>
+                  </div>
+                  <p class="share-card-quote">"{{ result.matchingSongs[0]?.lyric || '' }}"</p>
+                  <p class="share-card-song">——《 {{ result.matchingSongs[0]?.name || '' }} 》</p>
+                </div>
+              </div>
+              <div class="share-card-desc">{{ result.desc }}</div>
+              <div class="share-card-dimensions">
+                <div class="share-dim-badge" v-for="block in dimensionBlocks" :key="block.key">
+                  <div class="share-dim-label">
+                    <span class="share-dim-w">{{ block.key }}</span><span class="share-dim-rest">{{ getDimRest(block.key) }}</span>
+                  </div>
+                  <span class="share-dim-type">{{ block.type }}</span>
+                  <div class="share-dim-traits">
+                    <span v-for="trait in block.traits.slice(0, 1)" :key="trait" class="share-dim-trait">{{ trait }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="share-card-footer">
+                <img src="/qrcode.png" alt="扫码测试" class="share-card-qr-img" />
+                <p class="share-card-qr-text">微信扫码 · 立即测试</p>
+                <p class="share-card-disclaimer">趣味测试 仅供娱乐</p>
+              </div>
+            </div>
           </div>
-          <button class="copy-btn" :class="{ copied: copyDone }" @click="copyShareText">
-            {{ copyDone ? '已复制！去粘贴分享吧～' : '复制文案' }}
+          <button class="copy-btn generate-img-btn" @click="generateShareImage">
+            保存图片
           </button>
         </div>
       </div>
     </div>
   </Teleport>
+
+  <!-- 隐藏的分享卡片（用于生成图片） -->
+  <div ref="shareCardRef" class="share-card-hidden">
+    <div class="share-card">
+      <div class="share-card-header">
+        <span class="share-card-badge">WMTI</span>
+        <span class="share-card-title">五迷趣味测试</span>
+      </div>
+      <div class="share-card-main">
+        <div class="share-card-image-wrap">
+          <img
+            :src="imageUrl(result.posterVisual.imageUrl)"
+            :alt="result.posterVisual.tagline"
+            class="share-card-image"
+          />
+        </div>
+        <div class="share-card-info">
+          <h2 class="share-card-label">{{ result.label }}</h2>
+          <div class="share-card-traits">
+            <span v-for="trait in result.trait" :key="trait" class="share-card-trait">{{ trait }}</span>
+          </div>
+          <p class="share-card-quote">"{{ result.matchingSongs[0]?.lyric || '' }}"</p>
+          <p class="share-card-song">——《 {{ result.matchingSongs[0]?.name || '' }} 》</p>
+        </div>
+      </div>
+      <div class="share-card-desc">{{ result.desc }}</div>
+      <div class="share-card-dimensions">
+        <div class="share-dim-badge" v-for="block in dimensionBlocks" :key="block.key">
+          <div class="share-dim-label">
+            <span class="share-dim-w">{{ block.key }}</span><span class="share-dim-rest">{{ getDimRest(block.key) }}</span>
+          </div>
+          <span class="share-dim-type">{{ block.type }}</span>
+          <div class="share-dim-traits">
+            <span v-for="trait in block.traits.slice(0, 1)" :key="trait" class="share-dim-trait">{{ trait }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="share-card-footer">
+        <img src="/qrcode.png" alt="扫码测试" class="share-card-qr-img" />
+        <p class="share-card-qr-text">微信扫码 · 立即测试</p>
+        <p class="share-card-disclaimer">趣味测试 仅供娱乐</p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { apiUrl, imageUrl, track } from '../api'
+import html2canvas from 'html2canvas'
 
 const router = useRouter()
 const route = useRoute()
@@ -179,28 +257,8 @@ const result = ref(defaultResult)
 const loading = ref(true)
 const error = ref(null)
 const showShareModal = ref(false)
-const copyDone = ref(false)
-
-const shareText = computed(() => {
-  const r = result.value
-  const lines = [
-    `🎵 我的 WMTI 测试结果`,
-    ``,
-    `【${r.label}】`,
-    ``,
-    `📊 四维分型`,
-    `  工作 W：${r.scores?.w ?? 0}%  ${r.analysis?.W?.type ?? ''}`,
-    `  心态 M：${r.scores?.m ?? 0}%  ${r.analysis?.M?.type ?? ''}`,
-    `  情感 L：${r.scores?.l ?? 0}%  ${r.analysis?.L?.type ?? ''}`,
-    `  挫折 S：${r.scores?.s ?? 0}%  ${r.analysis?.S?.type ?? ''}`,
-    ``,
-    `🎤 ${r.maydaySong} · ${r.maydayInsight}`,
-    ``,
-    `${r.label}！快来看看你的wmls趣味测试结果吧~~`,
-    `http://buluinfo.cn/wmti/`
-  ]
-  return lines.join('\n')
-})
+const shareCardRef = ref(null)
+const sharePreviewRef = ref(null)
 
 onMounted(async () => {
   try {
@@ -222,6 +280,11 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+const getDimRest = (key) => {
+  const map = { W: 'ork', M: 'ind', L: 'ove', S: 'tress' }
+  return map[key] || ''
+}
 
 const dimensionBlocks = computed(() => {
   const r = result.value
@@ -248,41 +311,58 @@ const dimensionBlocks = computed(() => {
   })
 })
 
+const handleShare = async () => {
+  const cardEl = shareCardRef.value
+  if (!cardEl) return
+
+  try {
+    const canvas = await html2canvas(cardEl, {
+      backgroundColor: '#e8f4fc',
+      scale: 3,
+      useCORS: true,
+      allowTaint: true
+    })
+
+    const link = document.createElement('a')
+    link.download = `WMTI-${result.value.label}.png`
+    link.href = canvas.toDataURL('image/png')
+    link.click()
+  } catch (err) {
+    console.error('生成图片失败:', err)
+    alert('生成图片失败，请重试')
+  }
+}
+
 const openShareModal = () => {
   showShareModal.value = true
-  copyDone.value = false
 }
 
 const closeShareModal = () => {
   showShareModal.value = false
 }
 
-const copyShareText = () => {
-  const text = shareText.value
-  const textarea = document.createElement('textarea')
-  textarea.value = text
-  textarea.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px;'
-  document.body.appendChild(textarea)
-  textarea.focus()
-  textarea.select()
-  let success = false
+const generateShareImage = async () => {
+  const cardEl = sharePreviewRef.value?.querySelector('.share-card-preview') || shareCardRef.value
+  if (!cardEl) return
+
   try {
-    success = document.execCommand('copy')
-  } catch {
-    success = false
+    const canvas = await html2canvas(cardEl, {
+      backgroundColor: '#e8f4fc',
+      scale: 3,
+      useCORS: true,
+      allowTaint: true
+    })
+
+    const link = document.createElement('a')
+    link.download = `WMTI-${result.value.label}.png`
+    link.href = canvas.toDataURL('image/png')
+    link.click()
+
+    closeShareModal()
+  } catch (err) {
+    console.error('生成图片失败:', err)
+    alert('生成图片失败，请重试')
   }
-  document.body.removeChild(textarea)
-  if (success) {
-    copyDone.value = true
-    setTimeout(() => { copyDone.value = false }, 2500)
-  } else {
-    // 降级：弹窗显示文案让用户手动复制
-    alert('请长按下方文案区域，全选复制哦～')
-  }
-  track('result_share', {
-    quiz_type: result.value.label,
-    quiz_type_code: result.value.typeCode
-  })
 }
 
 const restartTest = () => {
@@ -319,66 +399,56 @@ const restartTest = () => {
   margin: 0 auto;
 }
 
-/* Hero Card */
+/* Hero Card - 复用分享卡片样式 */
 .hero-card {
-  background: white;
-  border-radius: 28px;
-  padding: 28px 24px;
+  background: linear-gradient(160deg, #ffffff 0%, #e8f5ff 60%, #dbeeff 100%);
+  border-radius: 20px;
+  padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 8px 32px rgba(0, 119, 179, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 87, 174, 0.15);
   position: relative;
   overflow: hidden;
 }
 
-.hero-glow {
-  position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(0, 170, 232, 0.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-
 .hero-header {
-  text-align: center;
-  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .hero-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, var(--md-accent-bright), var(--md-blue-500));
+  background: linear-gradient(135deg, #00a8e8, #0077b5);
   color: white;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 4px 10px;
-  border-radius: 12px;
-  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  padding: 5px 12px;
+  border-radius: 8px;
 }
 
 .hero-title {
   margin: 0;
   font-size: 14px;
-  font-weight: 500;
-  color: var(--md-blue-700);
-  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #4a6fa5;
 }
 
 .hero-main {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 24px;
+  gap: 16px;
+  margin-bottom: 14px;
+  align-items: flex-start;
 }
 
 .hero-image-wrap {
-  width: 160px;
-  height: 160px;
-  border-radius: 24px;
+  width: 100px;
+  height: 100px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 119, 179, 0.2);
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 119, 179, 0.2);
+  flex-shrink: 0;
 }
 
 .hero-image {
@@ -388,103 +458,132 @@ const restartTest = () => {
 }
 
 .hero-info {
-  text-align: center;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hero-label {
-  margin: 0 0 6px;
-  font-size: 26px;
+  margin: 0 0 4px;
+  font-size: 22px;
   font-weight: 800;
-  color: var(--md-blue-900);
+  color: #0077b5;
   line-height: 1.2;
-}
-
-.hero-type {
-  margin: 0 0 14px;
-  font-size: 12px;
-  color: var(--md-accent);
-  letter-spacing: 0.05em;
 }
 
 .hero-traits {
   display: flex;
-  justify-content: center;
-  gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.trait-tag {
-  background: var(--md-blue-50);
-  color: var(--md-blue-600);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 16px;
-  border: 1px solid var(--md-blue-200);
-}
-
-.hero-desc {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--md-blue-700);
-}
-
-.hero-insight {
-  margin: 12px 0 0;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--md-accent);
-  font-style: italic;
-  word-break: break-word;
-}
-
-.hero-song {
-  background: linear-gradient(135deg, var(--md-blue-50) 0%, white 100%);
-  border-radius: 16px;
-  padding: 18px 20px;
-  text-align: center;
-  border: 1px solid var(--md-blue-200);
-}
-
-.song-label {
-  display: inline-block;
-  font-size: 11px;
-  color: var(--md-blue-600);
+  gap: 4px;
   margin-bottom: 8px;
-  letter-spacing: 0.05em;
 }
 
-.song-quote {
-  margin: 0 0 8px;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--md-blue-900);
-}
-
-.song-name {
-  margin: 0;
-  font-size: 12px;
-  color: var(--md-accent);
+.hero-trait {
+  font-size: 10px;
+  color: #0077b5;
+  background: rgba(0, 119, 179, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
   font-weight: 500;
 }
 
-.song-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
+.hero-quote {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #2c5282;
+  margin: 0 0 4px;
+  font-style: italic;
 }
 
-.song-tag {
-  background: var(--md-blue-100);
-  color: var(--md-blue-600);
-  font-size: 12px;
-  padding: 4px 10px;
+.hero-song-name {
+  font-size: 11px;
+  color: #00a8e8;
+  margin: 0;
+  font-weight: 600;
+}
+
+.hero-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #2c5282;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
+}
+
+.hero-dimensions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 0;
+  margin-bottom: 12px;
+  border-top: 1px solid rgba(0, 136, 204, 0.12);
+  border-bottom: 1px solid rgba(0, 136, 204, 0.12);
+}
+
+.hero-dim-badge {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 6px;
+  background: rgba(0, 136, 204, 0.06);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 136, 204, 0.12);
+}
+
+.hero-dim-label {
+  display: flex;
+  align-items: baseline;
+  line-height: 1;
+}
+
+.hero-dim-w {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0077b5;
+}
+
+.hero-dim-rest {
+  font-size: 11px;
+  font-weight: 600;
+  color: #7ba3c4;
+}
+
+.hero-dim-type {
+  font-size: 11px;
+  color: #2c5282;
+  text-align: center;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.hero-dim-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.hero-dim-trait {
+  font-size: 9px;
+  color: #5a8ab8;
+  background: rgba(0, 119, 179, 0.08);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 136, 204, 0.12);
 }
 
 /* Analysis Section */
@@ -631,6 +730,13 @@ const restartTest = () => {
   color: var(--md-text-on-blue-muted);
 }
 
+.disclaimer-bottom {
+  margin: 16px 0;
+  font-size: 11px;
+  color: var(--md-text-on-blue-muted);
+  text-align: center;
+}
+
 .action-buttons {
   display: flex;
   gap: 12px;
@@ -736,11 +842,292 @@ const restartTest = () => {
   padding: 20px;
 }
 
+.share-card-hidden {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 400px;
+  z-index: -1;
+}
+
+.share-preview-wrap {
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-radius: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.share-card-preview {
+  background: linear-gradient(160deg, #ffffff 0%, #e8f5ff 60%, #dbeeff 100%);
+  border-radius: 20px;
+  padding: 20px;
+  color: #2c5282;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 87, 174, 0.15);
+}
+
+.share-card-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #2c5282;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  word-break: break-all;
+}
+
+.share-card-dimensions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 0;
+  margin-bottom: 12px;
+  border-top: 1px solid rgba(0, 136, 204, 0.12);
+  border-bottom: 1px solid rgba(0, 136, 204, 0.12);
+}
+
+.share-dim-badge {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 6px;
+  background: rgba(0, 136, 204, 0.06);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 136, 204, 0.12);
+}
+
+.share-dim-label {
+  display: flex;
+  align-items: baseline;
+  line-height: 1;
+}
+
+.share-dim-w {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0077b5;
+}
+
+.share-dim-rest {
+  font-size: 11px;
+  font-weight: 600;
+  color: #7ba3c4;
+}
+
+.share-dim-type {
+  font-size: 11px;
+  color: #2c5282;
+  text-align: center;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.share-dim-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.share-dim-trait {
+  font-size: 9px;
+  color: #5a8ab8;
+  background: rgba(0, 119, 179, 0.08);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.share-card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 136, 204, 0.15);
+  gap: 6px;
+}
+
+.share-card-qr-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 87, 174, 0.15);
+}
+
+.share-card-qr-text {
+  font-size: 12px;
+  color: #0077b5;
+  margin: 0;
+  font-weight: 600;
+}
+
+.share-card-disclaimer {
+  font-size: 11px;
+  color: #7ba3c4;
+  margin: 0;
+  text-align: center;
+}
+
+.share-card {
+  background: linear-gradient(160deg, #ffffff 0%, #e8f5ff 60%, #dbeeff 100%);
+  border-radius: 20px;
+  padding: 20px;
+  color: #2c5282;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 87, 174, 0.15);
+}
+
+.share-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.share-card-badge {
+  background: linear-gradient(135deg, #00a8e8, #0077b5);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+.share-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a6fa5;
+}
+
+.share-card-main {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+
+.share-card-image-wrap {
+  width: 100px;
+  height: 100px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 119, 179, 0.2);
+}
+
+.share-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.share-card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.share-card-label {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: #0077b5;
+}
+
+.share-card-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.share-card-trait {
+  font-size: 10px;
+  color: #0077b5;
+  background: rgba(0, 119, 179, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.share-card-type {
+  font-size: 12px;
+  color: #6b8ba4;
+  margin: 0 0 10px;
+  font-weight: 500;
+}
+
+.share-card-quote {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #2c5282;
+  margin: 0 0 6px;
+  font-style: italic;
+  word-break: break-all;
+}
+
+.share-card-song {
+  font-size: 11px;
+  color: #00a8e8;
+  margin: 0;
+  font-weight: 600;
+}
+
+.share-card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 136, 204, 0.15);
+  gap: 4px;
+}
+
+.share-card-qr-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.share-card-qr-text {
+  font-size: 11px;
+  color: #0088cc;
+  margin: 0;
+  font-weight: 500;
+}
+
+.share-card-disclaimer {
+  font-size: 10px;
+  color: #6b8ba4;
+  margin: 0;
+}
+
 .share-modal {
   background: white;
   border-radius: 24px;
   width: 100%;
   max-width: 420px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 24px 60px rgba(5, 26, 46, 0.3);
   overflow: hidden;
   animation: modalIn 0.2s ease;
@@ -760,9 +1147,8 @@ const restartTest = () => {
 .modal-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid var(--md-blue-100, #e8f6fc);
+  justify-content: flex-end;
+  padding: 16px 20px;
 }
 
 .modal-header h3 {
@@ -793,32 +1179,16 @@ const restartTest = () => {
 }
 
 .modal-body {
-  padding: 20px 24px 24px;
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .modal-label {
   margin: 0 0 12px;
   font-size: 14px;
   color: var(--md-blue-700, #035a86);
-}
-
-.share-text-box {
-  background: var(--md-blue-50, #e8f6fc);
-  border: 1.5px solid var(--md-blue-200, #b8dff5);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  user-select: text;
-  -webkit-user-select: text;
-}
-
-.share-text {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--md-blue-900, #062d4a);
-  white-space: pre-wrap;
-  word-break: break-word;
 }
 
 .copy-btn {
@@ -840,8 +1210,16 @@ const restartTest = () => {
   box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
 }
 
-.copy-btn.copied {
-  background: linear-gradient(135deg, #27ae60, #2ecc71);
-  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.3);
+.generate-img-btn {
+  margin-top: 12px;
+  background: linear-gradient(135deg, #00a8e8, #0077b5);
+  box-shadow: 0 4px 16px rgba(0, 119, 179, 0.3);
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 15px;
+}
+
+.generate-img-btn:hover {
+  box-shadow: 0 6px 20px rgba(0, 119, 179, 0.4);
 }
 </style>

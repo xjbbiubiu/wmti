@@ -1,7 +1,9 @@
 /**
- * Pure scoring helpers for WMLS-style quiz (29 questions, 4 dimensions).
- * 每维度满分：W=24 M=24 L=21 S=18
- * Thresholds: type1≥16(高)  type2≥8(中)  type3<8(低)
+ * Pure scoring helpers for WMTI-style quiz (16 questions, 4 dimensions).
+ * 每维度满分：12分（4题×(A=3,B=2,C=1,D=0)）
+ * Thresholds: W/M/S type1≥8, L type1≥10 (L1更难达到，降低L1类型概率)
+ *
+ * 调整后：L1概率降低，W2M2L1占比下降
  */
 
 function aggregateScores(answers, questions) {
@@ -19,19 +21,24 @@ function aggregateScores(answers, questions) {
   return scores;
 }
 
-function typeFromDimensionSum(sum) {
-  if (sum >= 16) return 1;  // 高
-  if (sum >= 8)  return 2;  // 中
-  return 3;                  // 低
-}
-
 function typesFromScores(scores) {
   return {
     wType: typeFromDimensionSum(scores.w),
     mType: typeFromDimensionSum(scores.m),
-    lType: typeFromDimensionSum(scores.l),
+    lType: typeFromDimensionSum(scores.l, true),
     sType: typeFromDimensionSum(scores.s)
   };
+}
+
+function typeFromDimensionSum(sum, isL = false) {
+  if (isL) {
+    if (sum >= 10) return 1;
+    if (sum >= 4) return 2;
+    return 3;
+  }
+  if (sum >= 8) return 1;
+  if (sum >= 4) return 2;
+  return 3;
 }
 
 function typeCodeFromTypes(wType, mType, lType) {
@@ -39,7 +46,7 @@ function typeCodeFromTypes(wType, mType, lType) {
 }
 
 function percentScores(scores) {
-  const maxByDim = { w: 24, m: 24, l: 21, s: 18 };
+  const maxByDim = { w: 12, m: 12, l: 12, s: 12 };
   return {
     w: Math.round((scores.w / maxByDim.w) * 100),
     m: Math.round((scores.m / maxByDim.m) * 100),

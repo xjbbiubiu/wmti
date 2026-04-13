@@ -26,4 +26,4 @@ cd backend && npm test
 
 ## 题量
 
-题库见 `backend/src/data/questions.js`，当前为 **29** 道题。
+题库见 `backend/src/data/questions.js`，当前为 **16** 道题。

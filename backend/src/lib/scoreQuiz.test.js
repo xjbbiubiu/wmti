@@ -9,9 +9,9 @@ const {
   posterVisualForTypeCode
 } = require('./scoreQuiz');
 
-test('29 题全选 A：聚合与分型合法', () => {
-  assert.strictEqual(questions.length, 29);
-  const answers = Array(29).fill(0);
+test('16 题全选 A：聚合与分型合法', () => {
+  assert.strictEqual(questions.length, 16);
+  const answers = Array(16).fill(0);
   const scores = aggregateScores(answers, questions);
   const t = typesFromScores(scores);
   assert.ok(t.wType >= 1 && t.wType <= 3);
