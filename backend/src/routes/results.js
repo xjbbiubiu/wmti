@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const questions = require('../data/questions');
 const {
@@ -10,7 +12,33 @@ const {
   posterVisualForTypeCode
 } = require('../lib/scoreQuiz');
 
-const resultsStorage = new Map();
+const RESULTS_FILE = path.join(__dirname, '..', '..', 'data', 'results.json');
+
+// Load results from file
+const loadResults = () => {
+  try {
+    if (fs.existsSync(RESULTS_FILE)) {
+      const data = JSON.parse(fs.readFileSync(RESULTS_FILE, 'utf8'));
+      return new Map(Object.entries(data));
+    }
+  } catch (e) {
+    console.error('Failed to load results:', e);
+  }
+  return new Map();
+};
+
+// Save results to file
+const saveResults = (storage) => {
+  try {
+    const data = Object.fromEntries(storage);
+    fs.mkdirSync(path.dirname(RESULTS_FILE), { recursive: true });
+    fs.writeFileSync(RESULTS_FILE, JSON.stringify(data, null, 2));
+  } catch (e) {
+    console.error('Failed to save results:', e);
+  }
+};
+
+const resultsStorage = loadResults();
 
 router.post('/submit', (req, res) => {
   const { answers } = req.body;
@@ -435,6 +463,7 @@ router.post('/submit', (req, res) => {
   };
 
   resultsStorage.set(resultId, responseData);
+  saveResults(resultsStorage);
 
   res.json({ id: resultId });
 });

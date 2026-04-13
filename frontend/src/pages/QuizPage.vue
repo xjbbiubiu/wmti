@@ -1,20 +1,20 @@
 <template>
-  <div class="quiz">
+  <div class="quiz" ref="quizRef">
     <div class="progress-bar">
       <div class="progress" :style="{ width: progressPercent + '%' }"></div>
     </div>
 
-    <div class="container">
+    <div class="container" ref="containerRef">
       <div class="question-counter">
         {{ currentQuestionIndex + 1 }} / {{ totalQuestions }}
       </div>
 
-      <div class="question-card" v-if="currentQuestion">
-        <div class="question-content">
+      <div class="question-card" ref="cardRef" :key="currentQuestionIndex" :class="{ transitioning: isTransitioning }">
+        <div class="question-content" ref="questionRef">
           {{ currentQuestion.content }}
         </div>
 
-        <div class="options">
+        <div class="options" ref="optionsRef" :key="currentQuestionIndex">
           <button
             v-for="(option, index) in currentQuestion.options"
             :key="index"
@@ -30,17 +30,10 @@
       <div class="nav-buttons">
         <button
           class="nav-btn prev"
-          :disabled="currentQuestionIndex === 0"
+          :disabled="currentQuestionIndex === 0 || isTransitioning"
           @click="prevQuestion"
         >
           上一题
-        </button>
-        <button
-          class="nav-btn next"
-          :disabled="selectedAnswer === null"
-          @click="nextQuestion"
-        >
-          {{ currentQuestionIndex === totalQuestions - 1 ? '查看结果' : '下一题' }}
         </button>
       </div>
     </div>
@@ -48,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { apiUrl, track } from '../api'
 
@@ -58,23 +51,60 @@ const questions = ref([])
 const currentQuestionIndex = ref(0)
 const selectedAnswer = ref(null)
 const answers = ref([])
+const isTransitioning = ref(false)
+
+const quizRef = ref(null)
+const containerRef = ref(null)
+const cardRef = ref(null)
+const questionRef = ref(null)
+const optionsRef = ref(null)
 
 const totalQuestions = computed(() => questions.value.length)
 const currentQuestion = computed(() => questions.value[currentQuestionIndex.value])
 const progressPercent = computed(() => ((currentQuestionIndex.value + 1) / totalQuestions.value) * 100)
+
+// 自适应字体大小
+const fitFontSize = async () => {
+  await nextTick()
+  if (!cardRef.value) return
+
+  const el = cardRef.value
+  el.style.fontSize = '16px'
+
+  while (el.scrollHeight > el.clientHeight && parseFloat(el.style.fontSize) > 12) {
+    el.style.fontSize = (parseFloat(el.style.fontSize) - 0.5) + 'px'
+  }
+}
+
+let resizeObserver = null
 
 onMounted(async () => {
   try {
     const response = await fetch(apiUrl('/api/questions'))
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     questions.value = await response.json()
+    await nextTick()
+    fitFontSize()
   } catch (error) {
     console.error('Failed to load questions:', error)
   }
+
+  resizeObserver = new ResizeObserver(() => fitFontSize())
+  if (quizRef.value) resizeObserver.observe(quizRef.value)
+})
+
+onUnmounted(() => {
+  resizeObserver?.disconnect()
 })
 
 const selectAnswer = (index) => {
+  if (isTransitioning.value) return
+  isTransitioning.value = true
   selectedAnswer.value = index
+  setTimeout(() => {
+    nextQuestion()
+    isTransitioning.value = false
+  }, 150)
 }
 
 const nextQuestion = () => {
@@ -83,15 +113,25 @@ const nextQuestion = () => {
   if (currentQuestionIndex.value === totalQuestions.value - 1) {
     submitTest()
   } else {
+    // 先清空 + 换题，强制 Vue 单独渲染一次（看不到旧值）
+    selectedAnswer.value = null
     currentQuestionIndex.value++
-    selectedAnswer.value = answers.value[currentQuestionIndex.value] ?? null
+    // 等渲染完成后（下一个 microtask）再恢复该题的已选状态
+    queueMicrotask(() => {
+      selectedAnswer.value = answers.value[currentQuestionIndex.value] ?? null
+      fitFontSize()
+    })
   }
 }
 
 const prevQuestion = () => {
   if (currentQuestionIndex.value > 0) {
+    selectedAnswer.value = null
     currentQuestionIndex.value--
-    selectedAnswer.value = answers.value[currentQuestionIndex.value] ?? null
+    queueMicrotask(() => {
+      selectedAnswer.value = answers.value[currentQuestionIndex.value] ?? null
+      fitFontSize()
+    })
   }
 }
 
@@ -116,7 +156,8 @@ const submitTest = async () => {
   min-height: 100dvh;
   box-sizing: border-box;
   background: var(--md-gradient-page);
-  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
 }
 
 .progress-bar {
@@ -124,9 +165,10 @@ const submitTest = async () => {
   top: env(safe-area-inset-top, 0px);
   left: 0;
   right: 0;
-  height: 6px;
+  height: 5px;
   z-index: 10;
   background: rgba(255, 255, 255, 0.28);
+  flex-shrink: 0;
 }
 
 .progress {
@@ -136,34 +178,43 @@ const submitTest = async () => {
 }
 
 .container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   max-width: min(100%, var(--wmti-content-max));
   margin: 0 auto;
-  padding: calc(60px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 20px
+  padding: calc(52px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 16px
     max(16px, env(safe-area-inset-left, 0px));
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .question-counter {
   text-align: center;
   color: var(--md-text-on-blue-muted);
-  font-size: 14px;
-  margin-bottom: 20px;
+  font-size: 13px;
+  margin-bottom: 12px;
   letter-spacing: 0.06em;
+  flex-shrink: 0;
 }
 
 .question-card {
   background: var(--md-surface);
   border-radius: 20px;
-  padding: 30px;
+  padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 12px 40px rgba(5, 26, 46, 0.16);
-  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(5, 26, 46, 0.14);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .question-content {
-  font-size: 18px;
   color: var(--md-blue-900);
-  line-height: 1.65;
-  margin-bottom: 30px;
+  line-height: 1.55;
+  margin-bottom: 16px;
   text-align: center;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -172,17 +223,37 @@ const submitTest = async () => {
 .options {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  flex: 1;
+}
+
+.question-card.transitioning .option-btn {
+  pointer-events: none;
+  background: var(--md-blue-50) !important;
+  border-color: transparent !important;
+  color: var(--md-blue-900) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.question-card.transitioning .option-btn::before {
+  background: var(--md-blue-400) !important;
+}
+
+.question-card.transitioning .option-btn.selected {
+  background: var(--md-blue-50) !important;
+}
+
+.question-card.transitioning .nav-btn {
+  pointer-events: none;
 }
 
 .option-btn {
   background: var(--md-blue-50);
   border: 2px solid transparent;
   border-radius: 12px;
-  min-height: 48px;
-  padding: 14px 18px;
-  font-size: 16px;
-  touch-action: manipulation;
+  padding: 12px 16px;
   color: var(--md-blue-900);
   text-align: left;
   cursor: pointer;
@@ -190,16 +261,28 @@ const submitTest = async () => {
     background 0.2s ease,
     border-color 0.2s ease,
     color 0.2s ease;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+.option-btn::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--md-blue-400);
+  margin-right: 10px;
+  flex-shrink: 0;
+  transition: background 0.2s;
 }
 
 .option-btn:hover {
   background: var(--md-blue-100);
-  border-color: rgba(0, 136, 204, 0.35);
-}
-
-.option-btn:focus-visible {
-  outline: 3px solid rgba(255, 255, 255, 0.9);
-  outline-offset: 2px;
+  border-color: rgba(0, 136, 204, 0.3);
 }
 
 .option-btn.selected {
@@ -208,21 +291,26 @@ const submitTest = async () => {
   border-color: var(--md-blue-600);
 }
 
+.option-btn.selected::before {
+  background: rgba(255, 255, 255, 0.8);
+}
+
 .nav-buttons {
   display: flex;
-  gap: 15px;
+  gap: 12px;
+  margin-top: 16px;
+  flex-shrink: 0;
 }
 
 .nav-btn {
   flex: 1;
-  min-height: 48px;
-  padding: 14px 12px;
-  font-size: 16px;
+  min-height: 44px;
+  padding: 10px 12px;
+  font-size: 15px;
   font-weight: 600;
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  touch-action: manipulation;
   transition: all 0.2s ease;
 }
 
@@ -233,7 +321,7 @@ const submitTest = async () => {
 }
 
 .nav-btn.prev:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
@@ -241,16 +329,11 @@ const submitTest = async () => {
   background: var(--md-surface);
   color: var(--md-blue-600);
   border: 2px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 6px 20px rgba(5, 26, 46, 0.15);
-}
-
-.nav-btn:focus-visible {
-  outline: 3px solid rgba(255, 255, 255, 0.85);
-  outline-offset: 2px;
+  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.12);
 }
 
 .nav-btn.next:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 </style>

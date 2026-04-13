@@ -11,7 +11,7 @@
     <section class="hero-card" aria-label="测试结果卡片">
       <div class="hero-header">
         <span class="hero-badge">WMTI</span>
-        <span class="hero-title">五迷趣味测试</span>
+        <span class="hero-title">🥕五迷趣味测试</span>
       </div>
       <div class="hero-main">
         <div class="hero-image-wrap">
@@ -102,51 +102,15 @@
           <button class="modal-close" @click="closeShareModal" aria-label="关闭">×</button>
         </div>
         <div class="modal-body">
-          <div ref="sharePreviewRef" class="share-preview-wrap">
-            <div class="share-card-preview">
-              <div class="share-card-header">
-                <span class="share-card-badge">WMTI</span>
-                <span class="share-card-title">五迷趣味测试</span>
-              </div>
-              <div class="share-card-main">
-                <div class="share-card-image-wrap">
-                  <img
-                    :src="imageUrl(result.posterVisual.imageUrl)"
-                    :alt="result.posterVisual.tagline"
-                    class="share-card-image"
-                  />
-                </div>
-                <div class="share-card-info">
-                  <h2 class="share-card-label">{{ result.label }}</h2>
-                  <div class="share-card-traits">
-                    <span v-for="trait in result.trait" :key="trait" class="share-card-trait">{{ trait }}</span>
-                  </div>
-                  <p class="share-card-quote">"{{ result.matchingSongs[0]?.lyric || '' }}"</p>
-                  <p class="share-card-song">——《 {{ result.matchingSongs[0]?.name || '' }} 》</p>
-                </div>
-              </div>
-              <div class="share-card-desc">{{ result.desc }}</div>
-              <div class="share-card-dimensions">
-                <div class="share-dim-badge" v-for="block in dimensionBlocks" :key="block.key">
-                  <div class="share-dim-label">
-                    <span class="share-dim-w">{{ block.key }}</span><span class="share-dim-rest">{{ getDimRest(block.key) }}</span>
-                  </div>
-                  <span class="share-dim-type">{{ block.type }}</span>
-                  <div class="share-dim-traits">
-                    <span v-for="trait in block.traits.slice(0, 1)" :key="trait" class="share-dim-trait">{{ trait }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="share-card-footer">
-                <img src="/qrcode.png" alt="扫码测试" class="share-card-qr-img" />
-                <p class="share-card-qr-text">微信扫码 · 立即测试</p>
-                <p class="share-card-disclaimer">趣味测试 仅供娱乐</p>
-              </div>
-            </div>
+          <!-- 生成中 -->
+          <div v-if="isGenerating" class="share-loading">
+            <p>生成中...</p>
           </div>
-          <button class="copy-btn generate-img-btn" @click="generateShareImage">
-            保存图片
-          </button>
+          <!-- 图片预览 -->
+          <div v-else-if="shareImageUrl" class="share-image-preview">
+            <img :src="shareImageUrl" alt="分享图片" class="share-result-img" />
+            <p class="share-tip">长按图片保存到相册<br/>或发送给朋友</p>
+          </div>
         </div>
       </div>
     </div>
@@ -157,7 +121,7 @@
     <div class="share-card">
       <div class="share-card-header">
         <span class="share-card-badge">WMTI</span>
-        <span class="share-card-title">五迷趣味测试</span>
+        <span class="share-card-title">🥕五迷趣味测试</span>
       </div>
       <div class="share-card-main">
         <div class="share-card-image-wrap">
@@ -258,7 +222,8 @@ const loading = ref(true)
 const error = ref(null)
 const showShareModal = ref(false)
 const shareCardRef = ref(null)
-const sharePreviewRef = ref(null)
+const shareImageUrl = ref('')
+const isGenerating = ref(false)
 
 onMounted(async () => {
   try {
@@ -312,57 +277,31 @@ const dimensionBlocks = computed(() => {
 })
 
 const handleShare = async () => {
-  const cardEl = shareCardRef.value
-  if (!cardEl) return
-
+  showShareModal.value = true
+  shareImageUrl.value = ''
+  isGenerating.value = true
   try {
+    const cardEl = shareCardRef.value
     const canvas = await html2canvas(cardEl, {
       backgroundColor: '#e8f4fc',
       scale: 3,
       useCORS: true,
       allowTaint: true
     })
-
-    const link = document.createElement('a')
-    link.download = `WMTI-${result.value.label}.png`
-    link.href = canvas.toDataURL('image/png')
-    link.click()
+    shareImageUrl.value = canvas.toDataURL('image/png')
   } catch (err) {
     console.error('生成图片失败:', err)
     alert('生成图片失败，请重试')
+    showShareModal.value = false
+  } finally {
+    isGenerating.value = false
   }
-}
-
-const openShareModal = () => {
-  showShareModal.value = true
 }
 
 const closeShareModal = () => {
   showShareModal.value = false
-}
-
-const generateShareImage = async () => {
-  const cardEl = sharePreviewRef.value?.querySelector('.share-card-preview') || shareCardRef.value
-  if (!cardEl) return
-
-  try {
-    const canvas = await html2canvas(cardEl, {
-      backgroundColor: '#e8f4fc',
-      scale: 3,
-      useCORS: true,
-      allowTaint: true
-    })
-
-    const link = document.createElement('a')
-    link.download = `WMTI-${result.value.label}.png`
-    link.href = canvas.toDataURL('image/png')
-    link.click()
-
-    closeShareModal()
-  } catch (err) {
-    console.error('生成图片失败:', err)
-    alert('生成图片失败，请重试')
-  }
+  shareImageUrl.value = ''
+  isGenerating.value = false
 }
 
 const restartTest = () => {
@@ -1221,5 +1160,41 @@ const restartTest = () => {
 
 .generate-img-btn:hover {
   box-shadow: 0 6px 20px rgba(0, 119, 179, 0.4);
+}
+
+.generate-img-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.share-image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.share-result-img {
+  width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.share-tip {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.share-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: var(--md-blue-600);
+  font-size: 15px;
 }
 </style>

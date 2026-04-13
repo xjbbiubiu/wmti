@@ -8,40 +8,41 @@
 
       <div class="intro-card">
         <div class="intro-text">
-          <p>测测你是哪种「五迷老师」人设</p>
-          <p class="note">共 29 道题，约 5 分钟</p>
+          <p>🥕 测测你是哪种「五迷老师」人设</p>
+          <p class="note">共 16 道题，约 3 分钟</p>
         </div>
       </div>
 
-      <div class="dimension-preview">
-        <div class="dimension-title">测试维度</div>
-        <div class="dimensions">
-          <div class="dimension-item">
-            <div class="dim-letter">W</div>
-            <div class="dim-full">Work</div>
-            <div class="dim-icon">💼</div>
-            <div class="dim-name">工作</div>
-          </div>
-          <div class="dimension-item">
-            <div class="dim-letter">M</div>
-            <div class="dim-full">Mindset</div>
-            <div class="dim-icon">🧠</div>
-            <div class="dim-name">心态</div>
-          </div>
-          <div class="dimension-item">
-            <div class="dim-letter">L</div>
-            <div class="dim-full">Love</div>
-            <div class="dim-icon">❤️</div>
-            <div class="dim-name">情感</div>
-          </div>
-          <div class="dimension-item">
-            <div class="dim-letter">S</div>
-            <div class="dim-full">Struggle</div>
-            <div class="dim-icon">💪</div>
-            <div class="dim-name">挫折</div>
-          </div>
+      <div class="dimensions">
+        <div class="dimension-item">
+          <div class="dim-letter">W</div>
+          <div class="dim-full">Work</div>
+          <div class="dim-icon">💼</div>
+          <div class="dim-name">工作</div>
+        </div>
+        <div class="dimension-item">
+          <div class="dim-letter">M</div>
+          <div class="dim-full">Mindset</div>
+          <div class="dim-icon">🧠</div>
+          <div class="dim-name">心态</div>
+        </div>
+        <div class="dimension-item">
+          <div class="dim-letter">L</div>
+          <div class="dim-full">Love</div>
+          <div class="dim-icon">❤️</div>
+          <div class="dim-name">情感</div>
+        </div>
+        <div class="dimension-item">
+          <div class="dim-letter">S</div>
+          <div class="dim-full">Struggle</div>
+          <div class="dim-icon">💪</div>
+          <div class="dim-name">挫折</div>
         </div>
       </div>
+
+      <button class="start-btn" @click="startTest">
+        开始测试
+      </button>
 
       <div v-if="cachedResult" class="cached-result" @click="goToResult">
         <img :src="cachedResult.posterUrl" class="cached-poster" :alt="cachedResult.label" />
@@ -50,10 +51,6 @@
           <span class="cached-tip">查看上次结果 →</span>
         </div>
       </div>
-
-      <button class="start-btn" @click="startTest">
-        开始测试
-      </button>
 
       <div class="footer">
         <p>© 2026 WMTI · 个人项目仅供娱乐</p>
@@ -99,78 +96,73 @@ const goToResult = () => {
   min-height: 100dvh;
   box-sizing: border-box;
   background: var(--md-gradient-page);
+  padding: max(48px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
+    calc(32px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
-    calc(20px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
 }
 
 .container {
-  max-width: min(100%, var(--wmti-content-max));
+  max-width: min(100%, 420px);
   width: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
-  margin-bottom: 40px;
+  margin-bottom: 28px;
 }
 
 .logo {
-  font-size: 64px;
+  font-size: 56px;
   font-weight: 900;
   color: var(--md-text-on-blue);
-  letter-spacing: 4px;
-  text-shadow: 0 2px 16px rgba(5, 26, 46, 0.35);
+  letter-spacing: 3px;
+  text-shadow: 0 2px 16px rgba(5, 26, 46, 0.3);
 }
 
 .subtitle {
-  font-size: 18px;
+  font-size: 15px;
   color: var(--md-text-on-blue-muted);
-  margin-top: 8px;
+  margin-top: 6px;
   letter-spacing: 0.15em;
 }
 
 .intro-card {
   background: var(--md-surface);
-  border-radius: 20px;
-  padding: 30px;
-  margin-bottom: 30px;
+  border-radius: 18px;
+  padding: 22px 20px;
+  margin-bottom: 24px;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 12px 40px rgba(5, 26, 46, 0.18);
+  box-shadow: 0 8px 28px rgba(5, 26, 46, 0.15);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .intro-text p {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--md-blue-900);
   line-height: 1.6;
 }
 
 .intro-text .note {
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 6px;
+  font-size: 13px;
   color: var(--md-blue-700);
   opacity: 0.85;
 }
 
-.dimension-preview {
-  margin-bottom: 40px;
-}
-
-.dimension-title {
-  color: var(--md-text-on-blue-muted);
-  font-size: 14px;
-  margin-bottom: 15px;
-  letter-spacing: 0.08em;
-}
-
 .dimensions {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  justify-content: center;
   gap: 12px;
-  max-width: 360px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto 24px;
+  box-sizing: border-box;
 }
 
 .dimension-item {
@@ -183,6 +175,8 @@ const goToResult = () => {
   gap: 4px;
   box-shadow: 0 6px 20px rgba(5, 26, 46, 0.12);
   border: 1px solid rgba(0, 136, 204, 0.12);
+  flex: 1;
+  min-width: 0;
 }
 
 .dim-letter {
@@ -216,25 +210,28 @@ const goToResult = () => {
 }
 
 .start-btn {
-  background: var(--md-surface);
+  background: var(--md-blue-50);
   color: var(--md-blue-600);
-  border: 2px solid rgba(255, 255, 255, 0.65);
-  min-height: 48px;
-  padding: 16px 48px;
-  font-size: 18px;
+  border: 2px solid var(--md-blue-200);
+  min-height: 52px;
+  padding: 0 32px;
+  font-size: 17px;
   font-weight: 700;
-  border-radius: 50px;
+  letter-spacing: 0.08em;
+  border-radius: 14px;
   cursor: pointer;
   touch-action: manipulation;
-  box-shadow: 0 8px 28px rgba(5, 26, 46, 0.2);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 136, 204, 0.15);
+  transition: transform 0.15s, box-shadow 0.15s;
+  width: 50%;
+  margin: 0 auto 16px;
+  display: block;
 }
 
 .start-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(5, 26, 46, 0.28);
+  box-shadow: 0 6px 24px rgba(0, 136, 204, 0.25);
+  background: var(--md-blue-100);
 }
 
 .start-btn:focus-visible {
@@ -243,70 +240,30 @@ const goToResult = () => {
 }
 
 .footer {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .footer p {
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
   letter-spacing: 0.06em;
-}
-
-/* 手机端适配 */
-@media (max-width: 400px) {
-  .logo {
-    font-size: 52px;
-  }
-
-  .subtitle {
-    font-size: 15px;
-  }
-
-  .intro-card {
-    padding: 20px 16px;
-  }
-
-  .dimensions {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    max-width: 200px;
-  }
-
-  .dimension-item {
-    padding: 12px 6px;
-  }
-
-  .dim-letter {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-
-  .dim-full {
-    font-size: 8px;
-  }
-
-  .dim-icon {
-    font-size: 16px;
-  }
-
-  .dim-name {
-    font-size: 10px;
-  }
 }
 
 /* 缓存结果卡片 */
 .cached-result {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: var(--md-surface);
-  border-radius: 16px;
-  padding: 14px 18px;
-  margin-bottom: 24px;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(5, 26, 46, 0.15);
+  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.12);
   transition: transform 0.15s, box-shadow 0.15s;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
 }
 
 .cached-result:active {
@@ -314,29 +271,29 @@ const goToResult = () => {
 }
 
 .cached-poster {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
   object-fit: cover;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
 .cached-info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 3px;
 }
 
 .cached-label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  color: var(--md-blue-900, #062d4a);
+  color: var(--md-blue-900);
 }
 
 .cached-tip {
-  font-size: 13px;
-  color: var(--md-blue-500, #0088cc);
+  font-size: 12px;
+  color: var(--md-blue-500);
 }
 </style>
