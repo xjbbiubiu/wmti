@@ -5,303 +5,305 @@
  * 维度分布：W×8  M×8  L×7  S×6 = 29题
  * 每维度满分：W=24  M=24  L=21  S=18
  * 分型阈值：type1≥16  type2≥8  type3<8
+ *
+ * 题目和选项已融入五月天歌曲元素（歌名/歌词/专辑名/故事/生活梗）
  */
 const questions = [
   // ── W 工作 Work ──────────────────────────────────────────────
   {
     id: 1,
-    content: '老板突然甩来加班通知，周五晚上你会？',
+    content: '你刷到一个视频——有人裸辞去做手工、开奶茶店、或者全职搞乐队，拍出来的vlog特别美好。评论区有人说"这就是我想要的人生"。看着看着，你内心：',
     options: [
-      { key: 'A', content: '发完疯深呼吸，然后默默去加班', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '准时下班，后果自负吧', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '象征性抗议一下，然后还是去', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '直接躺平，反正工资照发就行', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '我不怕千万人阻挡，只怕自己投降——我也想冲动一次', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '先偷偷收藏，默默观望，等时机成熟再说', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '看他们风生水起，有点心动，但也知道自己不是这块料', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '算了，不羡慕，命里有时终须有，还是上班稳定', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 2,
-    content: '周末只有一天休息，你会选择？',
+    content: '每天上班打卡，下班回家，周末偶尔加班，日复一日。如果让你形容现在的生活，你更接近：',
     options: [
-      { key: 'A', content: '加班搞钱，演唱会经费自己挣', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '给自己充电，学点新东西', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '在家看演唱会视频，躺平休息', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '约朋友出去玩，放松最重要', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '人生有限公司，没有一天不请假——但日子也就这样过了', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '就这样吧，做一天和尚撞一天钟，反正只是份工', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '工作8小时内是本分，其他的，不关我事', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '不想一个人扛了，认真考虑换条路或者gap一下', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 3,
-    content: '对于"内卷"这件事，你是什么态度？',
+    content: '领导让你配合"调整"一下数据，把报告做得更好看。你心里清楚这是不对的，但当面拒绝又怕得罪人——你会：',
     options: [
-      { key: 'A', content: '卷！要卷到金字塔顶端！', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '被迫加入，但心里很抵触', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '走自己的路，让别人卷去吧', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '无所谓，反正我只想看演唱会', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '人在屋檐下，哪能不低头——算了，配合一下吧', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '找个理由推掉，比如身体不舒服或手上有急活', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '步步都要踩在底线上——直接拒绝，说明自己的原则', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '不伺候了，此处不留爷自有留爷处', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 4,
-    content: '你现在的工作状态最接近？',
+    content: '周末原本约好了朋友聚会，老板突然发消息说周一要开会，让你周六来加班配合。对于这个突发安排，你的第一反应是：',
     options: [
-      { key: 'A', content: '拼命三郎，工作就是我的命', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '高效精英，完成任务就下班', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '差不多先生，认真就输了', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '摸鱼大师，带薪上厕所是强项', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '有些事现在不做一辈子都不会做了——但老板的事……还是去吧', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '内心想去聚会，但工作要紧，默默接受加班', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '先给朋友发条消息说抱歉，尽量协调一下时间', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '管他呢，聚会到了再说——派对动物不加班', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 5,
-    content: '生活中最看重什么？',
+    content: '你花了很长时间认真做了一件作品（可能是手工、视频、摄影、设计……），满心期待发出去，结果评论区有人说"就这？"那一刻你：',
     options: [
-      { key: 'A', content: '事业成功，得到认可和成就感', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '内心平静，活得自在舒心', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '身边有人陪伴和爱', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '忠于自我，不被外界定义', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '当作没发生过，收拾好情绪，继续做下一个更好的', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '有点受伤，但安慰自己——至少到最后我还有狗尾巴花', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '问问他具体哪里可以改进，争取下次做得更好', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '无所谓了，反正我也只想安静地当个派对动物', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 6,
-    content: '5年前的自己，想对ta说什么？',
+    content: '当年一起玩的朋友，有人成了网红，有人靠副业月入十万，你还在原来的生活里摸鱼。偶尔被问"你还在坚持那个？"面对这类质疑，你会：',
     options: [
-      { key: 'A', content: '"继续坚持梦想，别放弃"', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '"想做什么就去做，别留遗憾"', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '"珍惜身边人，别等失去才后悔"', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '"别那么拼命，多爱惜身体"', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '沉默不反驳，告诉自己"我不怕千万人阻挡，只怕自己投降"', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '哈哈一笑，当我是派对动物啊，对这些声音左耳进右耳出', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '更加坚定，继续做自己喜欢的事，用时间证明', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '算了算了，现实点吧，先搞钱再说', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 7,
-    content: '演唱会当天发现要上班，你会？',
+    content: '你想做的事（可能是做自媒体、组乐队、开咖啡馆……）收入不稳定，身边人都说"趁早断了这个念头"。面对这种质疑，你通常：',
     options: [
-      { key: 'A', content: '请假！演唱会不能没有我', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '想办法调班，实在不行看晚场', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '算了下次再去，工作要紧', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '工作第一位，网上看视频也香', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '就算工资低，也要坚持梦想，倔强到底', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '先向现实低头，找份稳定工作，业余时间继续追', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '寻找两全的办法，看看能不能兼顾现实和理想', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '你当我是派对动物啊？管你们怎么说，我不听', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 8,
-    content: '你买专辑/周边的频率是？',
+    content: '你在一群人里说话经常被忽略，发消息经常已读不回，投的建议从来没被采纳过。知道真相后，你会：',
     options: [
-      { key: 'A', content: '出新必买，支持正版是原则', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '遇到喜欢的才买，不强制', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '网上听听就算了，不花钱', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '只买演唱会周边，其他不考虑', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '没关系，想想自己拥有的，知足常乐——至少我还有知足的眼睛', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '像一颗洋葱，层层叠叠的情绪只有自己在消化，偷偷难过一下', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '更努力表现，顽固地坚持，终有一天要让所有人看见', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '无所谓了，反正公司又不是我家——派对动物不争这些', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
 
   // ── M 心态 Mind ──────────────────────────────────────────────
   {
     id: 9,
-    content: '面对"看不到结果"的事，你通常会？',
+    content: '搬家换城市后，老朋友渐渐断了联系，能约出来的人越来越少。大多数时候你一个人吃饭、一个人过周末。这种情况下，你更接近：',
     options: [
-      { key: 'A', content: '管它呢，过程开心就行！', scores: { w: 0, m: 3, l: 0, s: 0 } },
-      { key: 'B', content: '先观望，看情况再决定', scores: { w: 0, m: 2, l: 0, s: 0 } },
-      { key: 'C', content: '没有结果就不做，及时止损', scores: { w: 0, m: 1, l: 0, s: 0 } },
-      { key: 'D', content: '先设定小目标，边走边看', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '不打扰是我的温柔——大家都很忙，各自安好吧', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '一个人也可以很好，好好吃饭，好好生活，充实一点', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '约不到人？那就主动出击，找新朋友，扩大社交圈', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '离开地球表面——一个人待着挺好，不稀罕', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 10,
-    content: '五月天官宣演唱会，你的反应是？',
+    content: '你为一件准备了很久的事情付出了很多心血，结果却以微小的差距落空了。那一瞬间，你更接近哪种状态：',
     options: [
-      { key: 'A', content: '立刻设闹钟蹲守，抢不到不罢休！', scores: { w: 0, m: 3, l: 0, s: 0 } },
-      { key: 'B', content: '随缘，抢到就去，抢不到看直播', scores: { w: 0, m: 2, l: 0, s: 0 } },
-      { key: 'C', content: '等朋友抢到一起去，一个人太孤单', scores: { w: 0, m: 1, l: 0, s: 0 } },
-      { key: 'D', content: '有没有票无所谓，听歌心情好就行', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '有没有那么一种永远，永远不改变——虽然失望，但不绝望', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '算了，有些事已经发生了，不能改变，接受吧', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '就算失望，不能绝望——重新整理，再来一次', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '当一阵风吹来，风筝飞向未知，我也在未知里，不找了', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 11,
-    content: '听到"人生有限公司"这句歌词，你的感受是？',
+    content: '你暗恋了很久的那个ta，在朋友圈发了和别人的合照，配文"终于等到你"。看到这条动态，你会：',
     options: [
-      { key: 'A', content: '太真实了，人生就是要及时行乐！', scores: { w: 0, m: 3, l: 0, s: 0 } },
-      { key: 'B', content: '有点丧，但好像说得也没错', scores: { w: 0, m: 2, l: 0, s: 0 } },
-      { key: 'C', content: '无所谓，该干嘛干嘛', scores: { w: 0, m: 1, l: 0, s: 0 } },
-      { key: 'D', content: '只要活着就有无限可能！', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '有些遗憾，但爱过就好，祝你幸福——至少我好好喜欢过你', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '突然好想你，你会在哪里——但人家已经有了答案，祝福吧', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '倔强地不甘心，如果是我，一定对ta更好', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '暗恋就暗恋呗，又不会怎样——派对动物不需要暗恋对象', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 12,
-    content: '遇到挫折时，《倔强》里哪句最戳你？',
+    content: '深夜睡不着，突然感到一种说不清的孤独，身边没有可以倾诉的人。这时你会：',
     options: [
-      { key: 'A', content: '"我不怕千万人阻挡，只怕自己投降"', scores: { w: 0, m: 3, l: 0, s: 0 } },
-      { key: 'B', content: '"逆风的方向，更适合飞翔"', scores: { w: 0, m: 2, l: 0, s: 0 } },
-      { key: 'C', content: '"如果对自己如果有太多疑问"', scores: { w: 0, m: 1, l: 0, s: 0 } },
-      { key: 'D', content: '"就算失望，不能绝望"', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '七岁的那一年，抓住那只蝉，以为能抓住夏天——打开手机，找老朋友聊聊天', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '一个人也不坏，至少安静，好好和自己相处', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '倔强地抵抗这种情绪，孤独就孤独，不代表什么', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '平凡的温柔，有时候也是一种答案——既然孤独，就享受吧', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 13,
-    content: '看完一场演唱会后，你通常会？',
+    content: '毕业在即，你拿到了一份稳定的国企offer，但心里一直有一个未完成的梦想（比如组乐队、做创作、gap year……）徘徊之际，你更倾向于：',
     options: [
-      { key: 'A', content: '激动好几天，见人就想分享！', scores: { w: 0, m: 3, l: 0, s: 0 } },
-      { key: 'B', content: '安静地回味，心里暖暖的', scores: { w: 0, m: 2, l: 0, s: 0 } },
-      { key: 'C', content: '期待下一场，继续攒钱', scores: { w: 0, m: 1, l: 0, s: 0 } },
-      { key: 'D', content: '该干嘛干嘛，生活继续', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '有些事现在不做一辈子都不会做了——趁年轻，去追梦', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '知足常乐，稳定压倒一切，好好珍惜眼前的机会', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '先工作几年，攒够了资本再追梦，给自己留条后路', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '工作是为了活着，活着不是为了工作——派对动物的我先躺了', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 14,
-    content: '对于"活在当下"，你认同几分？',
+    content: '人生中总有些事让你觉得"如果当初……就好了"。当这种后悔情绪涌上来时，你通常会：',
     options: [
-      { key: 'A', content: '10分！明天的事明天再说！', scores: { w: 0, m: 3, l: 0, s: 0 } },
-      { key: 'B', content: '7分认同，但也要有规划', scores: { w: 0, m: 2, l: 0, s: 0 } },
-      { key: 'C', content: '5分，活在当下也要有底线', scores: { w: 0, m: 1, l: 0, s: 0 } },
-      { key: 'D', content: '3分，未来规划更重要', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '回忆如烟，后悔没有用，但控制不住地反复想', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '把遗憾变成前进的动力——我不是为了失败才来到这世界的', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '不后悔，自己的选择自己承担——好好珍惜当下就好', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '后悔药买不到，浪费那时间干嘛——派对动物不后悔', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 15,
-    content: '朋友问你怎么还在听五月天，你会说？',
+    content: '你觉得自己已经很努力了，但命运好像一直在跟你作对——考学差一分、表白被拒、想做的事总差一点。某一刻你真的很崩溃，那时候你倾向于：',
     options: [
-      { key: 'A', content: '他们的歌陪我度过了人生所有低谷', scores: { w: 0, m: 3, l: 0, s: 0 } },
-      { key: 'B', content: '就是喜欢，不需要理由啊！', scores: { w: 0, m: 2, l: 0, s: 0 } },
-      { key: 'C', content: '因为他们的歌真的很好听', scores: { w: 0, m: 1, l: 0, s: 0 } },
-      { key: 'D', content: '习惯了，像老朋友一样离不开', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '我不信这就是命，我要和命运斗到底，倔强到底', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '突然有些迷茫，难道这就是命吗？开始怀疑自己', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '如烟的往事浮现眼前，开始回想过去每一次不如意的经历', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '随缘吧，是我的终究会来，不是我的强求也没用', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 16,
-    content: '"加入五月天，永远不会太迟"你怎么看？',
+    content: '有人说"有些事不是努力就能改变的，顺其自然就好"。对于这种"听天由命"的态度，你更接近：',
     options: [
-      { key: 'A', content: '太对了！有梦什么时候开始都不晚', scores: { w: 0, m: 3, l: 0, s: 0 } },
-      { key: 'B', content: '有道理，但也要面对现实', scores: { w: 0, m: 2, l: 0, s: 0 } },
-      { key: 'C', content: '哈哈，我早就加入了，资深五迷！', scores: { w: 0, m: 1, l: 0, s: 0 } },
-      { key: 'D', content: '能听进去就是缘分吧', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '不妥协，命运给我一个低起点，我偏要走出高轨迹', scores: { w: 0, m: 3, l: 0, s: 0 } },
+      { key: 'B', content: '有一定道理，尽人事听天命，努力过就不后悔', scores: { w: 0, m: 2, l: 0, s: 0 } },
+      { key: 'C', content: '接受现状也是一种智慧，不强求也是一种成熟', scores: { w: 0, m: 1, l: 0, s: 0 } },
+      { key: 'D', content: '相信当一阵风吹来，一切自有答案——随缘吧', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
 
   // ── L 情感 Love ──────────────────────────────────────────────
   {
     id: 17,
-    content: '你想和谁一起看五月天？',
+    content: '分手后，对方发来消息说"还是朋友，以后有事可以找我"。看着这条消息，你心里更接近：',
     options: [
-      { key: 'A', content: '和朋友们一起，氛围感拉满！', scores: { w: 0, m: 0, l: 3, s: 0 } },
-      { key: 'B', content: '和另一半，一起创造美好回忆', scores: { w: 0, m: 0, l: 2, s: 0 } },
-      { key: 'C', content: '自己去，一个人更自在', scores: { w: 0, m: 0, l: 1, s: 0 } },
-      { key: 'D', content: '无所谓，有票就去，人多人少都行', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '有些事现在不做一辈子都不会做了——但分手这种事，做朋友还是算了', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '虽然遗憾，但好好说再见，各自珍重', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '那就看情况吧，不刻意联系，也不刻意回避', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '谢谢，分手了就各自精彩——派对动物不需要前任的友情', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 18,
-    content: '朋友临时有事不能一起看演唱会，你会？',
+    content: '陪伴了你很久的宠物（或一位对你很重要的长辈）离开了。那些等待TA出现的习惯还在，但TA不会再回来了。面对这种失去，你会：',
     options: [
-      { key: 'A', content: '自己去！不能浪费票一个人也要嗨', scores: { w: 0, m: 0, l: 3, s: 0 } },
-      { key: 'B', content: '转让或改期，下次再一起去', scores: { w: 0, m: 0, l: 2, s: 0 } },
-      { key: 'C', content: '算了不去了，没人陪没意思', scores: { w: 0, m: 0, l: 1, s: 0 } },
-      { key: 'D', content: '找其他朋友一起去', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '七岁的那一年，抓住那只蝉以为能抓住夏天——这份记忆会一直在心里', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '伤心的人别听慢歌——允许自己难过，慢慢走出来', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '好好珍惜现在还陪在身边的人，把这份情感转化为对当下的珍重', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '派对动物活在当下，TA也希望我继续开心吧', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 19,
-    content: '五月天对你来说意味着什么？',
+    content: '你有一个认识多年的老朋友，突然找你借一笔不小的钱，理由说得模糊，但看起来真的很急。你们关系很好，你也不想因为钱失去这个朋友。你会：',
     options: [
-      { key: 'A', content: '青春回忆，每首歌都是一段故事', scores: { w: 0, m: 0, l: 3, s: 0 } },
-      { key: 'B', content: '陪伴，无论何时都在的温暖存在', scores: { w: 0, m: 0, l: 2, s: 0 } },
-      { key: 'C', content: '信仰，照亮前路的精神支柱', scores: { w: 0, m: 0, l: 1, s: 0 } },
-      { key: 'D', content: '就是偶像，听歌娱乐而已', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '朋友有难不能不帮——就算这笔钱可能回不来，也不想留遗憾', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '直接问他具体情况，理由合理就帮，模糊就婉拒', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '朋友是朋友，钱要分开——打个借条，维护友情也要有底线', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '派对动物朋友很多，但钱不乱借', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 20,
-    content: '"不打扰是我的温柔"，你认同吗？',
+    content: '你和最好的朋友不在同一座城市，平时各忙各的，几个月才联系一次。但每次联系，还是像从前一样自然舒服，不尴尬也不生疏。这种关系对你来说意味着：',
     options: [
-      { key: 'A', content: '认同，有时候放手才是真正的爱', scores: { w: 0, m: 0, l: 3, s: 0 } },
-      { key: 'B', content: '一半吧，有时候需要打扰一下', scores: { w: 0, m: 0, l: 2, s: 0 } },
-      { key: 'C', content: '不认同，有爱就要大声说出来', scores: { w: 0, m: 0, l: 1, s: 0 } },
-      { key: 'D', content: '管它呢，听歌开心就好', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '知足——有些人不需要天天见面，但一直在心里', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '有点遗憾，好朋友不在身边，好多事没人分享，但理解这就是成长', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '友谊需要经营——想办法创造更多连接，不能光靠默契', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '任意门里世界很大，城市之间飞一飞也不难——派对动物定期聚会', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 21,
-    content: '你最想和谁分享一首五月天的歌？',
+    content: '一个关系还不错的朋友找你帮忙，但帮这个忙会耗费你大量的时间和精力，而你自己最近也很忙。对于这件事，你的态度更接近：',
     options: [
-      { key: 'A', content: '在最重要的人面前唱给他们听', scores: { w: 0, m: 0, l: 3, s: 0 } },
-      { key: 'B', content: '分享给朋友，一起感动', scores: { w: 0, m: 0, l: 2, s: 0 } },
-      { key: 'C', content: '自己听，不想分享', scores: { w: 0, m: 0, l: 1, s: 0 } },
-      { key: 'D', content: '安利给更多人，让他们也入坑', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '我不愿让你一个人——如果你真的需要我，那我就再坚持一下吧', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '直接拒绝，帮不了，不找借口，成年人的世界里不行就是不行', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '看情况，如果真的重要，我会尽力，但会设定底线', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '朋友的朋友的朋友，层层叠叠，我算老几——派对动物不揽事', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 22,
-    content: '"你不孤单，因为你是我最想留住的幸运"——感受是？',
+    content: '小时候最好的玩伴，因为搬家升学早就断了联系。偶然在街上遇到，尴尬地点了个头，然后擦肩而过。那一刻你心里想的是：',
     options: [
-      { key: 'A', content: '戳心！我也有很多想留住的人', scores: { w: 0, m: 0, l: 3, s: 0 } },
-      { key: 'B', content: '有点感动，但没那么强烈', scores: { w: 0, m: 0, l: 2, s: 0 } },
-      { key: 'C', content: '听歌就好，不要想太多', scores: { w: 0, m: 0, l: 1, s: 0 } },
-      { key: 'D', content: '单身也挺好，不需要留谁', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '你也在这里——原来你也在这座城市，好想问你这几年过得好不好', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '成长就是这样，有些人走着走着就散了，接受吧', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '有些事现在不做一辈子都不会做了——要不要主动联系ta？', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '你来或不来，我都在这里——派对动物没有太多执念', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 23,
-    content: '遇到困难时，你最需要谁的支持？',
+    content: '父母和亲戚一直希望你回家乡，过"稳定"的生活。但你想留在大城市继续自己的路。每次回家聚会，三句话不离"什么时候回来"。面对这种压力，你：',
     options: [
-      { key: 'A', content: '家人，他们永远是我的后盾', scores: { w: 0, m: 0, l: 3, s: 0 } },
-      { key: 'B', content: '朋友们，有他们在就够了', scores: { w: 0, m: 0, l: 2, s: 0 } },
-      { key: 'C', content: '一个人消化，习惯了', scores: { w: 0, m: 0, l: 1, s: 0 } },
-      { key: 'D', content: '五月天的歌，它们就是我的支撑', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '不愿让你一个人，但也无法骗自己——硬着头皮继续坚持自己的路', scores: { w: 0, m: 0, l: 3, s: 0 } },
+      { key: 'B', content: '理解父母的苦心，但也清楚这不是自己想要的人生，两难', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'C', content: '先顺着说，不正面冲突，心里知道自己会按计划走', scores: { w: 0, m: 0, l: 1, s: 0 } },
+      { key: 'D', content: '任意门里世界很大，任意门随便穿梭，管他们怎么说', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
 
   // ── S 挫折 Stress ─────────────────────────────────────────────
   {
     id: 24,
-    content: '遇到挫折时，你通常怎么应对？',
+    content: '步步都是考验，每一步都不容易。当你遭遇挫折时，你通常更接近哪种应对方式：',
     options: [
-      { key: 'A', content: '越难越要冲，不信过不去', scores: { w: 0, m: 0, l: 0, s: 3 } },
-      { key: 'B', content: '先停下来想想，再找办法解决', scores: { w: 0, m: 0, l: 0, s: 2 } },
-      { key: 'C', content: '给自己一点时间，慢慢释怀', scores: { w: 0, m: 0, l: 0, s: 1 } },
-      { key: 'D', content: '睡一觉就好了，第二天满血复活', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '能不能所有伤口都能愈合——允许自己难过，然后慢慢疗伤', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '逆风的方向，更适合飞翔——不被打倒，反而在逆境中更强', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '就算失望，不能绝望——擦干眼泪，接受平凡的自己，继续走', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '反正人生终点都一样——派对动物不因挫折而动摇', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 25,
-    content: '你最近一次情绪低落，是因为什么？',
+    content: '你遭遇了一次重大打击（创业失败、失业、或者被最信任的人欺骗），感觉人生到了最低谷。这时你更接近：',
     options: [
-      { key: 'A', content: '工作/学业压力，KPI让我喘不过气', scores: { w: 0, m: 0, l: 0, s: 3 } },
-      { key: 'B', content: '感情问题，心里堵得慌', scores: { w: 0, m: 0, l: 0, s: 2 } },
-      { key: 'C', content: '生活琐事累积，莫名就emo了', scores: { w: 0, m: 0, l: 0, s: 1 } },
-      { key: 'D', content: '很少情绪低落，我心态超好', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '能不能所有伤口都能愈合——需要时间，但相信伤口会愈合', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '七岁的那一年，以为能抓住夏天——但夏天已经过去了，接受吧', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '不怕千万人阻挡，只怕自己投降——这算什么，我要反击', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '平凡的温柔，有时候也是一种答案——派对动物不需要轰轰烈烈', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 26,
-    content: '当别人对你说"加油"的时候，你的反应是？',
+    content: '人生有限公司，没有一天不请假——如果你突然被裁员，面临失业，你会怎么想：',
     options: [
-      { key: 'A', content: '谢谢！我会更努力的！', scores: { w: 0, m: 0, l: 0, s: 3 } },
-      { key: 'B', content: '心里暖暖的，有被鼓励到', scores: { w: 0, m: 0, l: 0, s: 2 } },
-      { key: 'C', content: '谢谢……但我其实还好', scores: { w: 0, m: 0, l: 0, s: 1 } },
-      { key: 'D', content: '该咋咋地，我自己能调整', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '人生有限公司，没有一天不请假——接受，这是正常的，整理好再出发', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '像一颗洋葱，层层叠叠的往事，都是伤——需要时间消化', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '就算失望，不能绝望——失业不代表失败，这只是重新开始', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '既然终点都一样——派对动物先躺平，不急，慢慢来', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 27,
-    content: '面对"成年人的崩溃"，你的态度是？',
+    content: '你最信任的人（朋友或伴侣）做了一个严重伤害你的事情。那一刻你的反应更接近：',
     options: [
-      { key: 'A', content: '咬咬牙就过去了，没有过不去的坎', scores: { w: 0, m: 0, l: 0, s: 3 } },
-      { key: 'B', content: '允许自己崩溃一下，然后重新出发', scores: { w: 0, m: 0, l: 0, s: 2 } },
-      { key: 'C', content: '人之常情，找个方式发泄就好', scores: { w: 0, m: 0, l: 0, s: 1 } },
-      { key: 'D', content: '无所谓，睡一觉世界依然美好', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '能不能所有伤口都能愈合——算了，扎心的痛，自己消化', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '有些事现在不做一辈子都不会了——无法原谅，但也放下，不让仇恨困住自己', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '就算失望，不能绝望——下次还会选择相信，但会带眼识人', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '突然好想你，你会在哪里——等等，是你的背影让我很寒心，不相信任何人了', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 28,
-    content: '你每个月愿意为看演出花多少钱？',
+    content: '连续的挫败让你觉得未来一片灰暗，甚至开始怀疑一切。能不能所有伤口都能愈合——此刻你更接近：',
     options: [
-      { key: 'A', content: '只要能去看，攒多久钱都愿意', scores: { w: 0, m: 0, l: 0, s: 3 } },
-      { key: 'B', content: '量力而行，工资的一部分刚好够用', scores: { w: 0, m: 0, l: 0, s: 2 } },
-      { key: 'C', content: '有免费活动就去，收费就算了', scores: { w: 0, m: 0, l: 0, s: 1 } },
-      { key: 'D', content: '基本不花钱，网上看看视频就行', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '有没有那么一种永远，永远不改变——有些东西是不会变的，不绝望', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '有没有答案，当一阵风吹来——不确定，但我愿意再等等看', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '能不能所有伤口都能愈合——我不确定，但还是要相信', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '终点都一样——派对动物不需要希望，不需要绝望，到哪里都一样', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 29,
-    content: '如果可以成为五月天MV里的角色，你想成为？',
+    content: '生活中你扮演太多角色：好员工、好伴侣、好父母……唯独不知道自己是谁。某刻觉得"我不是我"，洋葱层层叠叠只有自己在消化——你会：',
     options: [
-      { key: 'A', content: '《倔强》里逆风飞翔的主角', scores: { w: 0, m: 0, l: 0, s: 3 } },
-      { key: 'B', content: '《干杯》里和朋友们畅饮的快乐路人', scores: { w: 0, m: 0, l: 0, s: 2 } },
-      { key: 'C', content: '《温柔》里默默守护的深情角色', scores: { w: 0, m: 0, l: 0, s: 1 } },
-      { key: 'D', content: '《离开地球表面》里在月球漫步的梦想家', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '允许脆弱一下，承认自己也需要被照顾', scores: { w: 0, m: 0, l: 0, s: 3 } },
+      { key: 'B', content: '离开地球表面，短暂消失，给自己喘息的空间', scores: { w: 0, m: 0, l: 0, s: 2 } },
+      { key: 'C', content: '我是谁不重要，重要的是还能做什么——继续扛', scores: { w: 0, m: 0, l: 0, s: 1 } },
+      { key: 'D', content: '派对动物没有固定人设，管它呢', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   }
 ];
