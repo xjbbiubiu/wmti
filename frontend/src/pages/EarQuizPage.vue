@@ -22,75 +22,76 @@
           {{ currentIndex + 1 }} / {{ totalQuestions }}
         </div>
 
-        <div class="question-card" ref="cardRef" :key="currentIndex" :class="{ transitioning: isTransitioning }">
-          <!-- 空耳歌词大字卡片 -->
+        <div class="question-card" ref="cardRef" :key="currentIndex">
           <div class="ear-lyric-wrap">
             <div class="ear-lyric-icon">&#x1F3A7;</div>
             <div class="ear-lyric" ref="earLyricRef">{{ currentQuestion.earLyric }}</div>
             <div class="ear-lyric-hint">是什么歌？</div>
           </div>
 
-          <!-- 选项按钮 -->
           <div class="options" ref="optionsRef" :key="currentIndex">
             <button
               v-for="(option, index) in currentQuestion.options"
               :key="index"
               class="option-btn"
               :class="{
-                selected: !showFeedback && selectedAnswer === index,
-                correct: showFeedback && option.correct,
-                wrong: showFeedback && selectedAnswer === index && !option.correct
+                selected: selectedAnswer === index && !showExplanation,
+                correct: showExplanation && option.correct,
+                wrong: showExplanation && selectedAnswer === index && !option.correct
               }"
-              :disabled="showFeedback || isTransitioning"
+              :disabled="showExplanation"
               @click="selectAnswer(index)"
             >
-              <span class="option-key">{{ option.key }}</span>
               <span class="option-content">{{ option.content }}</span>
             </button>
+
+            <div v-if="showExplanation && selectedAnswer !== null" class="option-explanation" :class="isCorrect ? 'correct' : 'wrong'">
+              <div class="explanation-icon">{{ isCorrect ? '✅' : '❌' }}</div>
+              <div class="explanation-content">
+                <div class="explanation-song">
+                  歌名：《{{ currentQuestion.correctAnswer.song }}》
+                  <span class="explanation-divider">|</span>
+                  专辑：{{ currentQuestion.correctAnswer.album }}
+                </div>
+                <div class="explanation-lyric">
+                  原歌词：{{ currentQuestion.correctAnswer.originalLyric }}
+                </div>
+                <div v-if="!isCorrect && currentQuestion.correctAnswer.earReason" class="explanation-ear">
+                  空耳原因：{{ currentQuestion.correctAnswer.earReason }}
+                </div>
+              </div>
+            </div>
+
+            <div v-if="showExplanation && selectedAnswer !== null" class="option-nav">
+              <button
+                v-if="currentIndex > 0"
+                class="option-nav-btn prev"
+                @click="prevQuestion"
+              >
+                ← 上一题
+              </button>
+              <button
+                class="option-nav-btn next"
+                @click="nextQuestion"
+              >
+                {{ isLastQuestion ? '查看结果' : '下一题' }} →
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- 导航按钮 -->
         <div class="nav-buttons">
-          <button
-            class="nav-btn home"
-            :disabled="isTransitioning"
-            @click="goHome"
-          >
+          <button class="nav-btn home" @click="goHome">
             回首页
-          </button>
-          <button
-            class="nav-btn prev"
-            :disabled="currentIndex === 0 || isTransitioning"
-            @click="prevQuestion"
-          >
-            上一题
           </button>
         </div>
       </template>
     </div>
-
-    <!-- 反馈卡片 -->
-    <Transition name="feedback">
-      <div v-if="showFeedback" class="feedback-overlay" @click.prevent="handleFeedbackClick">
-        <div class="feedback-card" :class="isCorrect ? 'correct' : 'wrong'">
-          <div class="feedback-icon">{{ isCorrect ? '&#x2705;' : '&#x274C;' }}</div>
-          <div class="feedback-title">{{ isCorrect ? '回答正确！' : '回答错误！' }}</div>
-          <div class="feedback-song">
-            《{{ currentQuestion.correctAnswer.song }}》· {{ currentQuestion.correctAnswer.album }}
-          </div>
-          <div class="feedback-lyric">
-            <span class="feedback-lyric-label">原歌词：</span>
-            <span class="feedback-lyric-text">{{ currentQuestion.correctAnswer.originalLyric }}</span>
-          </div>
-        </div>
-      </div>
-    </Transition>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { apiUrl, track } from '../api'
 
@@ -99,9 +100,8 @@ const router = useRouter()
 const questions = ref([])
 const currentIndex = ref(0)
 const answers = ref([])
-const showFeedback = ref(false)
+const showExplanation = ref(false)
 const isCorrect = ref(false)
-const isTransitioning = ref(false)
 const loading = ref(true)
 const error = ref(null)
 
@@ -114,8 +114,7 @@ const totalQuestions = computed(() => questions.value.length)
 const currentQuestion = computed(() => questions.value[currentIndex.value])
 const progressPercent = computed(() => totalQuestions.value ? ((currentIndex.value + 1) / totalQuestions.value) * 100 : 0)
 const selectedAnswer = computed(() => answers.value[currentIndex.value] ?? null)
-
-let answerTimer = null
+const isLastQuestion = computed(() => currentIndex.value === totalQuestions.value - 1)
 
 const loadQuestions = async () => {
   loading.value = true
@@ -137,32 +136,16 @@ onMounted(async () => {
 })
 
 const selectAnswer = (index) => {
-  if (isTransitioning.value || showFeedback.value) return
+  if (showExplanation.value) return
   answers.value[currentIndex.value] = index
-  isTransitioning.value = true
 
   const selectedOption = currentQuestion.value.options[index]
   isCorrect.value = selectedOption?.correct === true
-  showFeedback.value = true
-
-  answerTimer = setTimeout(() => {
-    showFeedback.value = false
-    nextQuestion()
-    isTransitioning.value = false
-  }, 1500)
-}
-
-const handleFeedbackClick = () => {
-  // 点击反馈卡片可提前进入下一题（移动端友好）
-  if (showFeedback.value) {
-    clearTimeout(answerTimer)
-    showFeedback.value = false
-    nextQuestion()
-    isTransitioning.value = false
-  }
+  showExplanation.value = true
 }
 
 const nextQuestion = () => {
+  showExplanation.value = false
   if (currentIndex.value === totalQuestions.value - 1) {
     submitTest()
   } else {
@@ -172,6 +155,7 @@ const nextQuestion = () => {
 
 const prevQuestion = () => {
   if (currentIndex.value > 0) {
+    showExplanation.value = false
     currentIndex.value--
   }
 }
@@ -200,188 +184,132 @@ const submitTest = async () => {
 <style scoped>
 .ear-quiz {
   min-height: 100dvh;
-  box-sizing: border-box;
-  background: var(--md-gradient-page);
-  display: flex;
-  flex-direction: column;
+  padding: 20px 16px max(40px, calc(16px + env(safe-area-inset-bottom)));
 }
 
-/* 进度条 */
 .progress-bar {
   position: fixed;
-  top: env(safe-area-inset-top, 0px);
+  top: 0;
   left: 0;
   right: 0;
-  height: 5px;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.28);
-  flex-shrink: 0;
+  height: 4px;
+  background: rgba(0, 136, 204, 0.12);
+  z-index: 100;
 }
 
 .progress {
   height: 100%;
-  background: linear-gradient(90deg, var(--md-blue-100) 0%, white 100%);
-  transition: width 0.25s ease;
+  background: linear-gradient(90deg, var(--md-accent-bright), var(--md-blue-500));
+  transition: width 0.3s ease;
 }
 
-/* 容器 */
 .container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  max-width: min(100%, var(--wmti-content-max));
+  max-width: 480px;
   margin: 0 auto;
-  padding: calc(52px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 16px
-    max(16px, env(safe-area-inset-left, 0px));
-  width: 100%;
-  box-sizing: border-box;
 }
 
-/* 题号 */
-.question-counter {
-  text-align: center;
-  color: var(--md-text-on-blue-muted);
-  font-size: 13px;
-  margin-bottom: 12px;
-  letter-spacing: 0.06em;
-  flex-shrink: 0;
-}
-
-/* 加载 / 错误状态 */
-.loading-state,
-.error-state {
-  flex: 1;
+/* Loading */
+.loading-state, .error-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  color: var(--md-text-on-blue-muted);
-  font-size: 15px;
+  min-height: 60vh;
+  color: var(--md-blue-700);
+  font-size: 16px;
 }
 
 .retry-btn {
+  margin-top: 16px;
   padding: 10px 24px;
-  background: rgba(255, 255, 255, 0.2);
-  color: var(--md-text-on-blue);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 12px;
+  background: var(--md-accent-bright);
+  color: white;
+  border: none;
+  border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
 }
 
-/* 答题卡片 */
-.question-card {
-  background: var(--md-surface);
-  border-radius: 20px;
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 8px 32px rgba(5, 26, 46, 0.14);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+/* Question Counter */
+.question-counter {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--md-blue-500);
+  margin-bottom: 12px;
 }
 
-/* 空耳歌词区域 */
-.ear-lyric-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+/* Question Card */
+.question-card {
+  background: white;
+  border-radius: 24px;
+  padding: 24px 20px;
+  box-shadow: 0 8px 32px rgba(0, 87, 174, 0.12);
   margin-bottom: 16px;
-  min-height: 120px;
+}
+
+/* Ear Lyric */
+.ear-lyric-wrap {
+  text-align: center;
+  margin-bottom: 28px;
 }
 
 .ear-lyric-icon {
-  font-size: 28px;
-  margin-bottom: 4px;
+  font-size: 32px;
+  margin-bottom: 12px;
 }
 
 .ear-lyric {
+  font-size: 26px;
+  font-weight: 800;
   color: var(--md-blue-900);
-  font-size: 28px;
-  font-weight: 700;
-  text-align: center;
   line-height: 1.4;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 4px rgba(0, 87, 174, 0.1);
 }
 
 .ear-lyric-hint {
-  color: var(--md-blue-400);
-  font-size: 13px;
-  margin-top: 4px;
-  letter-spacing: 0.05em;
+  font-size: 14px;
+  color: var(--md-blue-500);
+  font-weight: 500;
 }
 
-/* 选项列表 */
+/* Options */
 .options {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex-shrink: 0;
 }
 
-/* 选项按钮 */
 .option-btn {
-  border-radius: 12px;
-  padding: 12px 16px;
-  text-align: left;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-appearance: none;
-  outline: none;
-  border: 2px solid transparent;
+  gap: 12px;
+  padding: 14px 16px;
   background: var(--md-blue-50);
-  color: var(--md-blue-900);
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-  min-height: 52px;
-}
-
-.option-btn .option-key {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: var(--md-blue-200);
-  color: var(--md-blue-700);
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: background 0.2s, color 0.2s;
-}
-
-.option-btn .option-content {
-  flex: 1;
+  border: 2px solid var(--md-blue-200);
+  border-radius: 14px;
   font-size: 15px;
-  font-weight: 600;
-  line-height: 1.4;
+  font-weight: 500;
+  color: var(--md-blue-800);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
 }
 
 .option-btn:hover:not(:disabled) {
   background: var(--md-blue-100);
-  border-color: rgba(0, 136, 204, 0.3);
+  transform: translateY(-1px);
+}
+
+.option-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .option-btn.selected {
   background: linear-gradient(135deg, var(--md-blue-500) 0%, var(--md-blue-600) 100%);
   color: white;
   border-color: var(--md-blue-600);
-}
-
-.option-btn.selected .option-key {
-  background: rgba(255, 255, 255, 0.25);
-  color: white;
 }
 
 .option-btn.correct {
@@ -391,11 +319,6 @@ const submitTest = async () => {
   animation: popIn 0.25s ease;
 }
 
-.option-btn.correct .option-key {
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
-}
-
 .option-btn.wrong {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
@@ -403,13 +326,110 @@ const submitTest = async () => {
   animation: shake 0.3s ease;
 }
 
-.option-btn.wrong .option-key {
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
-}
-
 .option-btn:disabled {
   cursor: default;
+}
+
+.option-content {
+  flex: 1;
+}
+
+/* 解释展开区域 */
+.option-explanation {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  display: flex;
+  gap: 10px;
+  animation: slideDown 0.3s ease;
+}
+
+.option-explanation.correct {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border: 1px solid #86efac;
+}
+
+.option-explanation.wrong {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border: 1px solid #fda4af;
+}
+
+.explanation-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.explanation-content {
+  flex: 1;
+}
+
+.explanation-song {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.explanation-divider {
+  color: #94a3b8;
+  margin: 0 6px;
+}
+
+.explanation-lyric {
+  font-size: 13px;
+  color: #4a6fa5;
+  margin-bottom: 6px;
+}
+
+.explanation-ear {
+  font-size: 12px;
+  color: #dc2626;
+  font-weight: 600;
+  background: rgba(239, 68, 68, 0.08);
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.option-nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.option-nav-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option-nav-btn.prev {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.option-nav-btn.prev:hover {
+  background: #e2e8f0;
+}
+
+.option-nav-btn.next {
+  background: linear-gradient(135deg, var(--md-accent-bright), var(--md-blue-500));
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 170, 232, 0.3);
+}
+
+.option-nav-btn.next:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 170, 232, 0.4);
 }
 
 /* 导航按钮 */
@@ -418,6 +438,7 @@ const submitTest = async () => {
   gap: 12px;
   margin-top: 16px;
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .nav-btn {
@@ -439,76 +460,25 @@ const submitTest = async () => {
 }
 
 .nav-btn.prev {
-  flex: 3;
+  flex: 2;
   background: rgba(255, 255, 255, 0.22);
   color: var(--md-text-on-blue);
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
+.nav-btn.next {
+  flex: 2;
+}
+
+.nav-btn.next.primary {
+  background: linear-gradient(135deg, var(--md-accent-bright), var(--md-blue-500));
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 170, 232, 0.3);
+}
+
 .nav-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-/* 反馈卡片 */
-.feedback-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(5, 26, 46, 0.55);
-  backdrop-filter: blur(4px);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  cursor: pointer;
-}
-
-.feedback-card {
-  width: 100%;
-  max-width: 380px;
-  border-radius: 24px;
-  padding: 28px 24px;
-  text-align: center;
-  box-shadow: 0 16px 48px rgba(5, 26, 46, 0.25);
-  animation: cardPopIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.feedback-card.correct {
-  background: linear-gradient(160deg, #22c55e 0%, #16a34a 100%);
-  color: white;
-}
-
-.feedback-card.wrong {
-  background: linear-gradient(160deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-}
-
-.feedback-icon {
-  font-size: 48px;
-  margin-bottom: 8px;
-}
-
-.feedback-title {
-  font-size: 22px;
-  font-weight: 800;
-  margin-bottom: 12px;
-}
-
-.feedback-song {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  opacity: 0.95;
-}
-
-.feedback-lyric {
-  font-size: 13px;
-  opacity: 0.8;
-}
-
-.feedback-lyric-label {
-  font-weight: 600;
 }
 
 /* 动画 */
@@ -526,25 +496,14 @@ const submitTest = async () => {
   80% { transform: translateX(4px); }
 }
 
-@keyframes cardPopIn {
+@keyframes slideDown {
   from {
     opacity: 0;
-    transform: scale(0.8) translateY(20px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
   }
-}
-
-/* 反馈过渡动画 */
-.feedback-enter-active,
-.feedback-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.feedback-enter-from,
-.feedback-leave-to {
-  opacity: 0;
 }
 </style>

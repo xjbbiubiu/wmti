@@ -11,7 +11,14 @@ router.get('/', (req, res) => {
     options: q.options.map(opt => ({
       key: opt.key,
       content: opt.content,
+      correct: opt.correct,
     })),
+    correctAnswer: {
+      song: q.correctAnswer.song,
+      album: q.correctAnswer.album,
+      originalLyric: q.correctAnswer.originalLyric,
+      earReason: q.correctAnswer.earReason,
+    }
   }));
   res.json(sanitizedQuestions);
 });
