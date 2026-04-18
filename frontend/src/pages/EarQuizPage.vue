@@ -45,7 +45,7 @@
               <span class="option-content">{{ option.content }}</span>
             </button>
 
-            <div v-if="showExplanation && selectedAnswer !== null" class="option-explanation" :class="isCorrect ? 'correct' : 'wrong'">
+            <div v-if="showExplanation && selectedAnswer !== null && isCorrect" class="option-explanation correct">
               <div class="explanation-icon">{{ isCorrect ? '✅' : '❌' }}</div>
               <div class="explanation-content">
                 <div class="explanation-song">
