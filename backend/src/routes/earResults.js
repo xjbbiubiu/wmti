@@ -30,14 +30,14 @@ const saveResults = (storage) => {
 
 const resultsStorage = loadResults();
 
-// 等级称号映射（按答对数）
+// 等级称号映射（按答对数，14题版本）
 const gradeMap = [
-  { min: 10, max: 10, level: 1, title: '🎓 空耳博士', desc: '真正的五迷听力专家，五月天在你耳边说话你都听得懂！' },
-  { min: 8, max: 9, level: 2, title: '🎤 空耳十级选手', desc: '听歌听得懂但偶尔走神，真粉无疑！' },
-  { min: 6, max: 7, level: 3, title: '🎧 空耳八级选手', desc: '大部分能猜到，但还差一点，继续修炼！' },
-  { min: 4, max: 5, level: 4, title: '🎶 空耳六级选手', desc: '有点东西，但还不够，多听几遍吧！' },
-  { min: 2, max: 3, level: 5, title: '🔉 空耳四级选手', desc: '五月天在喊你多听几遍！' },
-  { min: 0, max: 1, level: 6, title: '🤷 空耳小白', desc: '欢迎来到五迷世界，从头来过！' },
+  { min: 12, max: 14, level: 1, title: '🎓 空耳博士', desc: '阿信在你耳边唱歌你都听得出来！五迷界的天花板，建议出道当空耳评委！' },
+  { min: 10, max: 11, level: 2, title: '🎤 空耳十级选手', desc: '听力满分选手！五月天的发音在你这里全是送分题，可以开班收徒了！' },
+  { min: 8, max: 9, level: 3, title: '🎧 空耳八级选手', desc: '差一点就封神了！就差那么一点点，继续单曲循环修炼去吧！' },
+  { min: 6, max: 7, level: 4, title: '🎶 空耳六级选手', desc: '有前途但还需努力！建议把五月天歌单设成你的闹钟，早晚听一遍！' },
+  { min: 4, max: 5, level: 5, title: '🔉 空耳四级选手', desc: '你是不是平时只听《倔强》？赶紧把歌单补齐，五月天值得！' },
+  { min: 0, max: 3, level: 6, title: '🤷 空耳小白', desc: '你是不是刚入坑的新粉？没关系，慢慢来，谁还不是从听不懂开始的呢！' },
 ];
 
 const getGrade = (score) => {

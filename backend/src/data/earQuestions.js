@@ -7,29 +7,15 @@
  * 空耳：一种文字游戏，用谐音或相似发音的汉字来"翻译"外语或方言歌词。
  */
 
-/**
- * Fisher-Yates 洗牌算法，打乱数组顺序
- * @param {Array} array - 待打乱数组
- * @returns {Array} 打乱后的新数组
- */
-function shuffleOptions(array) {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
 const earQuestions = [
   {
     id: 1,
     earLyric: '难道我又我又住院了',
     options: [
-      { key: 'A', content: '我又初恋了', correct: true },
-      { key: 'B', content: '恋爱ing', correct: false },
-      { key: 'C', content: '离开地球表面', correct: false },
-      { key: 'D', content: '倔强', correct: false }
+      { key: 'A', content: '倔强', correct: false },
+      { key: 'B', content: '我又初恋了', correct: true },
+      { key: 'C', content: '恋爱ing', correct: false },
+      { key: 'D', content: '离开地球表面', correct: false }
     ],
     correctAnswer: {
       song: '我又初恋了',
@@ -41,9 +27,9 @@ const earQuestions = [
     id: 2,
     earLyric: '为什么失去了还要背乘法呢',
     options: [
-      { key: 'A', content: '你不是真正的快乐', correct: true },
-      { key: 'B', content: '你不是真正的学渣', correct: false },
-      { key: 'C', content: '后青春的诗', correct: false },
+      { key: 'A', content: '后青春的诗', correct: false },
+      { key: 'B', content: '你不是真正的快乐', correct: true },
+      { key: 'C', content: '你不是真正的学渣', correct: true },
       { key: 'D', content: '人生海海', correct: false }
     ],
     correctAnswer: {
@@ -56,13 +42,13 @@ const earQuestions = [
     id: 3,
     earLyric: '这是全天下最完蛋的阵容',
     options: [
-      { key: 'A', content: '爱情万岁', correct: true },
-      { key: 'B', content: '人生有限公司', correct: false },
-      { key: 'C', content: '倔强', correct: false },
-      { key: 'D', content: '干杯', correct: false }
+      { key: 'A', content: '干杯', correct: false },
+      { key: 'B', content: '倔强', correct: false },
+      { key: 'C', content: '爱情万岁', correct: true },
+      { key: 'D', content: '人生有限公司', correct: false }
     ],
     correctAnswer: {
-      song: '透露',
+      song: '爱情万岁',
       album: '人生‧万岁',
       originalLyric: '这是全天下最完美的阵容'
     }
@@ -71,10 +57,10 @@ const earQuestions = [
     id: 4,
     earLyric: '我的手越肮脏，眼神越是放荡',
     options: [
-      { key: 'A', content: '倔强', correct: true },
-      { key: 'B', content: '顽固', correct: false },
-      { key: 'C', content: '盛夏光年', correct: false },
-      { key: 'D', content: '任意门', correct: false }
+      { key: 'A', content: '盛夏光年', correct: false },
+      { key: 'B', content: '任意门', correct: false },
+      { key: 'C', content: '顽固', correct: false },
+      { key: 'D', content: '倔强', correct: true }
     ],
     correctAnswer: {
       song: '倔强',
@@ -86,10 +72,10 @@ const earQuestions = [
     id: 5,
     earLyric: '不要叫我瘪三不要再看我称鸡蛋',
     options: [
-      { key: 'A', content: '春天的呐喊', correct: true },
-      { key: 'B', content: '诺亚方舟', correct: false },
+      { key: 'A', content: '诺亚方舟', correct: false },
+      { key: 'B', content: '离开地球表面', correct: false },
       { key: 'C', content: '盛夏光年', correct: false },
-      { key: 'D', content: '离开地球表面', correct: false }
+      { key: 'D', content: '春天的呐喊', correct: true }
     ],
     correctAnswer: {
       song: '春天的呐喊',
@@ -101,10 +87,10 @@ const earQuestions = [
     id: 6,
     earLyric: '用最小回忆对峙宇宙',
     options: [
-      { key: 'A', content: '因为你所以我', correct: true },
-      { key: 'B', content: '后青春的诗', correct: false },
-      { key: 'C', content: '顽固', correct: false },
-      { key: 'D', content: '星空', correct: false }
+      { key: 'A', content: '星空', correct: false },
+      { key: 'B', content: '顽固', correct: false },
+      { key: 'C', content: '因为你所以我', correct: true },
+      { key: 'D', content: '后青春的诗', correct: false }
     ],
     correctAnswer: {
       song: '因为你所以我',
@@ -116,10 +102,10 @@ const earQuestions = [
     id: 7,
     earLyric: '走过的叫风景走不到脚抽筋',
     options: [
-      { key: 'A', content: '顽固', correct: true },
-      { key: 'B', content: '倔强', correct: false },
+      { key: 'A', content: '倔强', correct: false },
+      { key: 'B', content: '干杯', correct: false },
       { key: 'C', content: '憨人', correct: false },
-      { key: 'D', content: '干杯', correct: false }
+      { key: 'D', content: '顽固', correct: true }
     ],
     correctAnswer: {
       song: '顽固',
@@ -132,9 +118,9 @@ const earQuestions = [
     earLyric: '我和我最后的绝望',
     options: [
       { key: 'A', content: '倔强', correct: true },
-      { key: 'B', content: '顽固', correct: false },
-      { key: 'C', content: '盛夏光年', correct: false },
-      { key: 'D', content: '成名在望', correct: false }
+      { key: 'B', content: '成名在望', correct: false },
+      { key: 'C', content: '顽固', correct: false },
+      { key: 'D', content: '盛夏光年', correct: false }
     ],
     correctAnswer: {
       song: '倔强',
@@ -146,10 +132,10 @@ const earQuestions = [
     id: 9,
     earLyric: '每次单身我都要与你相遇',
     options: [
-      { key: 'A', content: '一千个世纪', correct: true },
-      { key: 'B', content: '我不愿让你一个人', correct: false },
-      { key: 'C', content: '最重要的小事', correct: false },
-      { key: 'D', content: '恋爱ing', correct: false }
+      { key: 'A', content: '恋爱ing', correct: false },
+      { key: 'B', content: '最重要的小事', correct: false },
+      { key: 'C', content: '我不愿让你一个人', correct: false },
+      { key: 'D', content: '一千个世纪', correct: true }
     ],
     correctAnswer: {
       song: '一千个世纪',
@@ -161,10 +147,10 @@ const earQuestions = [
     id: 10,
     earLyric: '我们都哎呀呀呀白了头',
     options: [
-      { key: 'A', content: '什么歌', correct: true },
-      { key: 'B', content: '干杯', correct: false },
-      { key: 'C', content: '倔强', correct: false },
-      { key: 'D', content: '后青春的诗', correct: false }
+      { key: 'A', content: '倔强', correct: false },
+      { key: 'B', content: '什么歌', correct: true },
+      { key: 'C', content: '后青春的诗', correct: false },
+      { key: 'D', content: '干杯', correct: false }
     ],
     correctAnswer: {
       song: '什么歌',
@@ -176,10 +162,10 @@ const earQuestions = [
     id: 11,
     earLyric: '要不要麦当劳别人帮你决定好',
     options: [
-      { key: 'A', content: 'DNA', correct: true },
-      { key: 'B', content: '离开地球表面', correct: false },
-      { key: 'C', content: '恋爱ing', correct: false },
-      { key: 'D', content: '派对动物', correct: false }
+      { key: 'A', content: '派对动物', correct: false },
+      { key: 'B', content: '恋爱ing', correct: false },
+      { key: 'C', content: 'DNA', correct: true },
+      { key: 'D', content: '离开地球表面', correct: false }
     ],
     correctAnswer: {
       song: 'DNA',
@@ -191,10 +177,10 @@ const earQuestions = [
     id: 12,
     earLyric: '丢这个丢那个的',
     options: [
-      { key: 'A', content: '离开地球表面', correct: true },
-      { key: 'B', content: '派对动物', correct: false },
-      { key: 'C', content: '倔强', correct: false },
-      { key: 'D', content: '任意门', correct: false }
+      { key: 'A', content: '派对动物', correct: false },
+      { key: 'B', content: '倔强', correct: false },
+      { key: 'C', content: '任意门', correct: false },
+      { key: 'D', content: '离开地球表面', correct: true }
     ],
     correctAnswer: {
       song: '离开地球表面',
@@ -206,28 +192,32 @@ const earQuestions = [
     id: 13,
     earLyric: '黎明之前只要和你等待黎明',
     options: [
-      { key: 'A', content: '爱情万岁', correct: true },
-      { key: 'B', content: '温柔', correct: false },
-      { key: 'C', content: '最重要的小事', correct: false },
-      { key: 'D', content: '志明与春娇', correct: false }
+      { key: 'A', content: '最重要的小事', correct: false },
+      { key: 'B', content: '志明与春娇', correct: false },
+      { key: 'C', content: '温柔', correct: false },
+      { key: 'D', content: '爱情万岁', correct: true }
     ],
     correctAnswer: {
       song: '爱情万岁',
       album: '爱情万岁',
       originalLyric: '黎明之前只要和你等待黎明'
     }
+  },
+  {
+    id: 14,
+    earLyric: '一生能有几次跟世界撞衫',
+    options: [
+      { key: 'A', content: '倔强', correct: false },
+      { key: 'B', content: '离开地球表面', correct: false },
+      { key: 'C', content: '盛夏光年', correct: false },
+      { key: 'D', content: '春天的呐喊', correct: true }
+    ],
+    correctAnswer: {
+      song: '春天的呐喊',
+      album: '后青春期的诗',
+      originalLyric: '一生能有几次 跟世界撞衫'
+    }
   }
 ];
 
-const shuffledQuestions = earQuestions.map(q => {
-  const shuffled = shuffleOptions([...q.options]);
-  return {
-    ...q,
-    options: shuffled.map((opt, idx) => ({
-      ...opt,
-      key: String.fromCharCode(65 + idx)
-    }))
-  };
-});
-
-module.exports = shuffledQuestions;
+module.exports = earQuestions;
