@@ -153,7 +153,7 @@ const submitTest = async () => {
       body: JSON.stringify({ answers: answers.value })
     })
     const result = await response.json()
-    localStorage.setItem('wmti_last_result', JSON.stringify({
+    localStorage.setItem('wmti_result', JSON.stringify({
       id: result.id,
       label: result.label,
       posterUrl: result.posterUrl,

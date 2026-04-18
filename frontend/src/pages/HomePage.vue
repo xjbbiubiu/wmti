@@ -63,19 +63,23 @@ const cachedEarResult = ref(null)
 const cachedWmtiResult = ref(null)
 
 onMounted(() => {
-  const stored = localStorage.getItem('wmti_last_result')
-  if (stored) {
+  const earStored = localStorage.getItem('ear_result')
+  if (earStored) {
     try {
-      const result = JSON.parse(stored)
-      if (result.type === 'ear') {
-        cachedEarResult.value = result
-      } else if (result.type === 'wmti') {
-        cachedWmtiResult.value = result
-      }
+      cachedEarResult.value = JSON.parse(earStored)
     } catch {
-      localStorage.removeItem('wmti_last_result')
+      localStorage.removeItem('ear_result')
     }
   }
+  const wmtiStored = localStorage.getItem('wmti_result')
+  if (wmtiStored) {
+    try {
+      cachedWmtiResult.value = JSON.parse(wmtiStored)
+    } catch {
+      localStorage.removeItem('wmti_result')
+    }
+  }
+  loadStats()
   track('page_view', { url_path: '/', quiz_type: 'home' })
 })
 
@@ -115,24 +119,6 @@ const loadStats = async () => {
     console.error('Failed to load stats:', e)
   }
 }
-
-onMounted(() => {
-  const stored = localStorage.getItem('wmti_last_result')
-  if (stored) {
-    try {
-      const result = JSON.parse(stored)
-      if (result.type === 'ear') {
-        cachedEarResult.value = result
-      } else if (result.type === 'wmti') {
-        cachedWmtiResult.value = result
-      }
-    } catch {
-      localStorage.removeItem('wmti_last_result')
-    }
-  }
-  loadStats()
-  track('page_view', { url_path: '/', quiz_type: 'home' })
-})
 </script>
 
 <style scoped>
@@ -212,12 +198,14 @@ onMounted(() => {
   gap: 14px;
   background: white;
   border-radius: 16px;
-  padding: 12px 16px;
+  padding: 12px 8px;
   margin-bottom: 12px;
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(5, 26, 46, 0.08);
   border: 1px solid rgba(0, 136, 204, 0.1);
   transition: transform 0.15s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .entry-card {
@@ -251,7 +239,7 @@ onMounted(() => {
   font-size: 16px;
   font-weight: 800;
   color: var(--md-blue-900);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .entry-card-subtitle {
@@ -295,26 +283,6 @@ onMounted(() => {
   padding: 4px 10px;
   border-radius: 12px;
   font-weight: 600;
-}
-
-.cached-result {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: white;
-  border-radius: 16px;
-  padding: 12px 16px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.08);
-  border: 1px solid rgba(0, 136, 204, 0.1);
-  width: 100%;
-  max-width: 380px;
-  transition: transform 0.15s;
-}
-
-.cached-result:active {
-  transform: scale(0.98);
 }
 
 .cached-poster {

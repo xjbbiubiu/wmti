@@ -178,7 +178,7 @@ const submitTest = async () => {
     const posterUrl = result.grade?.image 
       ? `${window.location.origin}/wmti${result.grade.image}`
       : ''
-    localStorage.setItem('wmti_last_result', JSON.stringify({
+    localStorage.setItem('ear_result', JSON.stringify({
       id: result.id,
       label: result.grade?.title || '空耳达人',
       posterUrl,

@@ -43,12 +43,14 @@
         </div>
       </div>
       <div class="hero-actions">
-        <button type="button" class="btn btn-ghost" @click="goHome">
-          回到首页
-        </button>
-        <button type="button" class="btn btn-ghost" @click="restartTest">
-          再测一次
-        </button>
+        <div class="hero-actions-row">
+          <button type="button" class="btn btn-ghost" @click="goHome">
+            回到首页
+          </button>
+          <button type="button" class="btn btn-ghost" @click="restartTest">
+            再测一次
+          </button>
+        </div>
         <button type="button" class="btn btn-primary" @click="handleShare">
           分享结果
         </button>
@@ -96,11 +98,9 @@
     <section class="other-test-section">
       <div class="other-test-title">其他测试</div>
       <div class="other-test-card" @click="goEarQuiz">
-        <div class="other-test-icon">🎤</div>
-        <div class="other-test-info">
-          <div class="other-test-name">五月天空耳猜歌测试</div>
-          <div class="other-test-desc">你是不是真正的听力王</div>
-        </div>
+        <div class="other-test-title">🎤 五月天空耳猜歌测试</div>
+        <div class="other-test-desc">你是不是真正的听力王</div>
+        <div class="other-test-count">14道题 · 约3分钟</div>
       </div>
     </section>
 
@@ -257,7 +257,7 @@ onMounted(async () => {
     if (!response.ok) throw new Error('Result not found')
     result.value = await response.json()
     // 缓存到本地
-    localStorage.setItem('wmti_last_result', JSON.stringify({
+    localStorage.setItem('wmti_result', JSON.stringify({
       id,
       label: result.value.label,
       typeCode: result.value.typeCode,
@@ -552,10 +552,19 @@ const goEarQuiz = () => {
 
 .hero-actions {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
   padding-top: 16px;
   border-top: 1px solid rgba(0, 136, 204, 0.12);
+}
+
+.hero-actions-row {
+  display: flex;
+  gap: 10px;
+}
+
+.hero-actions-row .btn {
+  flex: 1;
 }
 
 /* Analysis Section */
@@ -713,23 +722,21 @@ const goEarQuiz = () => {
 /* Other Test Card */
 .other-test-section {
   width: 100%;
-  max-width: 320px;
+  max-width: 480px;
   margin-bottom: 16px;
 }
 
 .other-test-title {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 800;
   color: var(--md-blue-900);
-  text-align: left;
-  margin-bottom: 10px;
-  padding-left: 4px;
+  margin-bottom: 4px;
 }
 
 .other-test-card {
   background: white;
   border-radius: 20px;
-  padding: 16px 12px;
+  padding: 16px 8px;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(0, 87, 174, 0.12);
   border: 1.5px solid rgba(0, 136, 204, 0.12);
@@ -743,21 +750,11 @@ const goEarQuiz = () => {
   transform: scale(0.97);
 }
 
-.other-test-icon {
-  font-size: 36px;
-  margin-bottom: 10px;
-}
-
-.other-test-info {
-  text-align: center;
-  width: 100%;
-}
-
-.other-test-name {
+.other-test-title {
   font-size: 16px;
   font-weight: 800;
   color: var(--md-blue-900);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .other-test-desc {
@@ -765,6 +762,16 @@ const goEarQuiz = () => {
   color: var(--md-blue-600);
   line-height: 1.4;
   margin-bottom: 8px;
+}
+
+.other-test-count {
+  font-size: 11px;
+  color: var(--md-blue-500);
+  background: rgba(0, 136, 204, 0.08);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
 }
 
 .action-buttons {
