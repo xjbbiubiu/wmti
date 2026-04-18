@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const { trackEvent } = require('../middleware/analytics');
 const shuffledQuestions = require('../data/earQuestions');
 
 const REQUIRED_QUESTION_IDS = [2, 3, 7];
@@ -105,6 +106,18 @@ router.post('/submit', (req, res) => {
 
   resultsStorage.set(resultId, resultData);
   saveResults(resultsStorage);
+
+  // 异步埋点，不阻塞响应
+  trackEvent({
+    event_type: 'result_submitted',
+    ip: req.headers['x-forwarded-for']?.split(',')[0]?.trim()
+      || req.headers['x-real-ip']
+      || req.ip
+      || '',
+    user_agent: req.headers['user-agent'] || '',
+    quiz_type: 'ear',
+    quiz_type_code: grade.title,  // 如 "🎓 空耳博士"
+  });
 
   res.json({ id: resultId, score, grade, questions: questionDetails });
 });
