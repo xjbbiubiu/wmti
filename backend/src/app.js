@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const earQuestionRoutes = require('./routes/earQuestions');
+const earResultRoutes = require('./routes/earResults');
 const questionRoutes = require('./routes/questions');
 const resultRoutes = require('./routes/results');
 const analyticsRoutes = require('./routes/analytics');
@@ -27,6 +29,8 @@ if (isProduction) {
 app.use('/posters', express.static(path.join(__dirname, '..', 'public', 'posters')));
 
 // API routes
+app.use('/api/ear/questions', earQuestionRoutes);
+app.use('/api/ear/results', earResultRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/results', resultRoutes);
 app.use('/api/analytics', analyticsRoutes);
