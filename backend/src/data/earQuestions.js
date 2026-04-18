@@ -176,7 +176,7 @@ const earQuestions = [
 
 const shuffledQuestions = earQuestions.map(q => ({
   ...q,
-  options: [...q.options].sort(() => Math.random() - 0.5)
+  options: shuffleOptions(q.options)
 }));
 
 module.exports = shuffledQuestions;
