@@ -8,12 +8,17 @@ export default defineConfig({
   server: {
     proxy: {
       '/wmti/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/wmti/, '')
       },
       '/wmti/posters': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/wmti/, '')
+      },
+      '/wmti/ear-posters': {
+        target: 'http://localhost:3000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/wmti/, '')
       }

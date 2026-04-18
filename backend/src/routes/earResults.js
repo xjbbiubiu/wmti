@@ -32,12 +32,12 @@ const resultsStorage = loadResults();
 
 // 等级称号映射（按答对数，14题版本）
 const gradeMap = [
-  { min: 12, max: 14, level: 1, title: '🎓 空耳博士', desc: '阿信在你耳边唱歌你都听得出来！五迷界的天花板，建议出道当空耳评委！' },
-  { min: 10, max: 11, level: 2, title: '🎤 空耳十级选手', desc: '听力满分选手！五月天的发音在你这里全是送分题，可以开班收徒了！' },
-  { min: 8, max: 9, level: 3, title: '🎧 空耳八级选手', desc: '差一点就封神了！就差那么一点点，继续单曲循环修炼去吧！' },
-  { min: 6, max: 7, level: 4, title: '🎶 空耳六级选手', desc: '有前途但还需努力！建议把五月天歌单设成你的闹钟，早晚听一遍！' },
-  { min: 4, max: 5, level: 5, title: '🔉 空耳四级选手', desc: '你是不是平时只听《倔强》？赶紧把歌单补齐，五月天值得！' },
-  { min: 0, max: 3, level: 6, title: '🤷 空耳小白', desc: '你是不是刚入坑的新粉？没关系，慢慢来，谁还不是从听不懂开始的呢！' },
+  { min: 12, max: 14, level: 1, title: '🎓 空耳博士', image: '/ear-posters/空耳博士.webp', desc: '阿信在你耳边唱歌你都听得出来？五迷界的天花板，怕不是耳朵里住了个阿信！建议出道当空耳评委！' },
+  { min: 10, max: 11, level: 2, title: '🎤 空耳十级选手', image: '/ear-posters/空耳十级选手.webp', desc: '听力满分的你，确定不是戴着耳机睡觉的？五月天的发音在你这里全是送分题，可以开班收徒了！' },
+  { min: 8, max: 9, level: 3, title: '🎧 空耳八级选手', image: '/ear-posters/空耳八级选手.webp', desc: '差一点就封神了！就差那么一两题，是时候把歌单循环模式改成永久了！' },
+  { min: 6, max: 7, level: 4, title: '🎶 空耳六级选手', image: '/ear-posters/空耳六级选手.webp', desc: '不错不错！听感还需要多练练，快去把五月天歌单循环起来，下一个空耳大师就是你！' },
+  { min: 4, max: 5, level: 5, title: '🔉 空耳四级选手', image: '/ear-posters/空耳四级选手.webp', desc: '有潜力哦！歌单听得还不够多，赶紧去补课！相信我，五月天的歌值得你反复听！' },
+  { min: 0, max: 3, level: 6, title: '🤷 空耳小白', image: '/ear-posters/空耳小白.webp', desc: '没关系，谁不是从听不懂开始的呢！多做几遍你也能成为空耳大师！' },
 ];
 
 const getGrade = (score) => {
