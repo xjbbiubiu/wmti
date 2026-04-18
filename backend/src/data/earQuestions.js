@@ -42,7 +42,7 @@ const earQuestions = [
     earLyric: '为什么失去了还要背乘法呢',
     options: [
       { key: 'A', content: '你不是真正的快乐', correct: true },
-      { key: 'B', content: '顽固', correct: false },
+      { key: 'B', content: '你不是真正的学渣', correct: false },
       { key: 'C', content: '后青春的诗', correct: false },
       { key: 'D', content: '人生海海', correct: false }
     ],
@@ -99,21 +99,36 @@ const earQuestions = [
   },
   {
     id: 6,
-    earLyric: '任意门通向了阴乐',
+    earLyric: '用最小回忆对峙宇宙',
     options: [
-      { key: 'A', content: '任意门', correct: true },
-      { key: 'B', content: '顽固', correct: false },
-      { key: 'C', content: '人生有限公司', correct: false },
-      { key: 'D', content: '憨人', correct: false }
+      { key: 'A', content: '因为你所以我', correct: true },
+      { key: 'B', content: '后青春的诗', correct: false },
+      { key: 'C', content: '顽固', correct: false },
+      { key: 'D', content: '星空', correct: false }
     ],
     correctAnswer: {
-      song: '任意门',
-      album: '自传',
-      originalLyric: '任意门通向了音乐'
+      song: '因为你所以我',
+      album: '2020单曲',
+      originalLyric: '用最小回忆堆成宇宙'
     }
   },
   {
     id: 7,
+    earLyric: '走过的叫风景走不到脚抽筋',
+    options: [
+      { key: 'A', content: '顽固', correct: true },
+      { key: 'B', content: '倔强', correct: false },
+      { key: 'C', content: '憨人', correct: false },
+      { key: 'D', content: '干杯', correct: false }
+    ],
+    correctAnswer: {
+      song: '顽固',
+      album: '自传',
+      originalLyric: '走过的叫足迹走不到叫憧憬'
+    }
+  },
+  {
+    id: 8,
     earLyric: '我和我最后的绝望',
     options: [
       { key: 'A', content: '倔强', correct: true },
@@ -128,7 +143,7 @@ const earQuestions = [
     }
   },
   {
-    id: 8,
+    id: 9,
     earLyric: '每次单身我都要与你相遇',
     options: [
       { key: 'A', content: '一千个世纪', correct: true },
@@ -143,7 +158,22 @@ const earQuestions = [
     }
   },
   {
-    id: 9,
+    id: 10,
+    earLyric: '我们都哎呀呀呀白了头',
+    options: [
+      { key: 'A', content: '什么歌', correct: true },
+      { key: 'B', content: '干杯', correct: false },
+      { key: 'C', content: '倔强', correct: false },
+      { key: 'D', content: '后青春的诗', correct: false }
+    ],
+    correctAnswer: {
+      song: '什么歌',
+      album: '捉妖记2主题曲',
+      originalLyric: '我们都哎呀呀呀白了头'
+    }
+  },
+  {
+    id: 11,
     earLyric: '要不要麦当劳别人帮你决定好',
     options: [
       { key: 'A', content: 'DNA', correct: true },
@@ -158,18 +188,33 @@ const earQuestions = [
     }
   },
   {
-    id: 10,
-    earLyric: '出事的那个公园',
+    id: 12,
+    earLyric: '丢这个丢那个的',
     options: [
-      { key: 'A', content: '诺亚方舟', correct: true },
-      { key: 'B', content: '任意门', correct: false },
-      { key: 'C', content: '顽固', correct: false },
-      { key: 'D', content: '人生海海', correct: false }
+      { key: 'A', content: '离开地球表面', correct: true },
+      { key: 'B', content: '派对动物', correct: false },
+      { key: 'C', content: '倔强', correct: false },
+      { key: 'D', content: '任意门', correct: false }
     ],
     correctAnswer: {
-      song: '诺亚方舟',
-      album: '第二人生',
-      originalLyric: '我们初识的那个公园'
+      song: '离开地球表面',
+      album: '神的孩子都在跳舞',
+      originalLyric: '丢电脑丢外套丢手表...'
+    }
+  },
+  {
+    id: 13,
+    earLyric: '黎明之前只要和你等待黎明',
+    options: [
+      { key: 'A', content: '爱情万岁', correct: true },
+      { key: 'B', content: '温柔', correct: false },
+      { key: 'C', content: '最重要的小事', correct: false },
+      { key: 'D', content: '志明与春娇', correct: false }
+    ],
+    correctAnswer: {
+      song: '爱情万岁',
+      album: '爱情万岁',
+      originalLyric: '黎明之前只要和你等待黎明'
     }
   }
 ];
