@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
 import QuizPage from '../pages/QuizPage.vue'
 import ResultPage from '../pages/ResultPage.vue'
+import EarQuizPage from '../pages/EarQuizPage.vue'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/result/:id',
     name: 'result',
     component: ResultPage
+  },
+  {
+    path: '/ear-quiz',
+    name: 'ear-quiz',
+    component: EarQuizPage
   }
 ]
 
