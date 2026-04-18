@@ -47,7 +47,7 @@ function parseUA(ua) {
 // 解析 IP 地域（离线库，无需外部 API）
 let ip2region = null;
 try {
-  const Ip2Region = require('ip2region');
+  const Ip2Region = require('ip2region').default || require('ip2region');
   ip2region = new Ip2Region(path.join(__dirname, '..', '..', 'data', 'ip2region.xdb'));
 } catch (e) {
   console.error('[Analytics] ip2region init failed:', e.message);
