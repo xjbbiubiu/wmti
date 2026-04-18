@@ -1,7 +1,7 @@
 /**
  * 五月天空耳歌词猜歌题
  *
- * 14道精选空耳歌词题目，测试用户对五月天歌词的熟悉程度。
+ * 27道精选空耳歌词题目，测试用户对五月天歌词的熟悉程度。
  * 每道题展示空耳歌词（空耳效果），用户需从四个选项中选出对应的歌曲名。
  *
  * 空耳：一种文字游戏，用谐音或相似发音的汉字来"翻译"外语或方言歌词。
@@ -30,9 +30,9 @@ const earQuestions = [
     id: 2,
     earLyric: '为什么失去了还要背乘法呢',
     options: [
-      { key: 'A', content: '后青春的诗', correct: false },
+      { key: 'A', content: '洋葱', correct: false },
       { key: 'B', content: '你不是真正的快乐', correct: true },
-      { key: 'C', content: '你不是真正的学渣', correct: false },
+      { key: 'C', content: '伤心的人别听慢歌', correct: false },
       { key: 'D', content: '人生海海', correct: false }
     ],
     correctAnswer: {
@@ -88,7 +88,7 @@ const earQuestions = [
     id: 5,
     earLyric: '不要叫我瘪三不要再看我称鸡蛋',
     options: [
-      { key: 'A', content: '诺亚方舟', correct: false },
+      { key: 'A', content: '步步', correct: false },
       { key: 'B', content: '离开地球表面', correct: false },
       { key: 'C', content: '盛夏光年', correct: false },
       { key: 'D', content: '春天的呐喊', correct: true }
@@ -109,9 +109,9 @@ const earQuestions = [
     earLyric: '用最小回忆对峙宇宙',
     options: [
       { key: 'A', content: '星空', correct: false },
-      { key: 'B', content: '顽固', correct: false },
+      { key: 'B', content: '知足', correct: false },
       { key: 'C', content: '因为你所以我', correct: true },
-      { key: 'D', content: '后青春的诗', correct: false }
+      { key: 'D', content: '如果我们不曾相遇', correct: false }
     ],
     correctAnswer: {
       song: '因为你所以我',
@@ -150,7 +150,7 @@ const earQuestions = [
     options: [
       { key: 'A', content: '倔强', correct: true },
       { key: 'B', content: '成名在望', correct: false },
-      { key: 'C', content: '顽固', correct: false },
+      { key: 'C', content: '相信', correct: false },
       { key: 'D', content: '盛夏光年', correct: false }
     ],
     correctAnswer: {
@@ -190,7 +190,7 @@ const earQuestions = [
     options: [
       { key: 'A', content: '倔强', correct: false },
       { key: 'B', content: '什么歌', correct: true },
-      { key: 'C', content: '后青春的诗', correct: false },
+      { key: 'C', content: '如烟', correct: false },
       { key: 'D', content: '干杯', correct: false }
     ],
     correctAnswer: {
@@ -282,7 +282,7 @@ const earQuestions = [
       { key: 'A', content: '透露', correct: true },
       { key: 'B', content: '恋爱ing', correct: false },
       { key: 'C', content: '派对动物', correct: false },
-      { key: 'D', content: '离开地球表面', correct: false }
+      { key: 'D', content: '有些事现在不做一辈子都不会做了', correct: false }
     ],
     correctAnswer: {
       song: '透露',
@@ -337,8 +337,8 @@ const earQuestions = [
     earLyric: '你就是太阳，绽放了膀胱',
     options: [
       { key: 'A', content: '小太阳', correct: true },
-      { key: 'B', content: '倔强', correct: false },
-      { key: 'C', content: '派对动物', correct: false },
+      { key: 'B', content: '派对动物', correct: false },
+      { key: 'C', content: '倔强', correct: false },
       { key: 'D', content: '离开地球表面', correct: false }
     ],
     correctAnswer: {
@@ -356,7 +356,7 @@ const earQuestions = [
     options: [
       { key: 'A', content: '派对动物', correct: false },
       { key: 'B', content: '第二人生', correct: true },
-      { key: 'C', content: '倔强', correct: false },
+      { key: 'C', content: '恋爱ing', correct: false },
       { key: 'D', content: '离开地球表面', correct: false }
     ],
     correctAnswer: {
@@ -394,7 +394,7 @@ const earQuestions = [
       { key: 'A', content: '哄我入睡', correct: true },
       { key: 'B', content: '顽固', correct: false },
       { key: 'C', content: '温柔', correct: false },
-      { key: 'D', content: '垃圾车', correct: false }
+      { key: 'D', content: '恋爱ing', correct: false }
     ],
     correctAnswer: {
       song: '哄我入睡',
@@ -412,7 +412,7 @@ const earQuestions = [
       { key: 'A', content: '让我照顾你', correct: true },
       { key: 'B', content: '最重要的小事', correct: false },
       { key: 'C', content: '我不愿让你一个人', correct: false },
-      { key: 'D', content: '恋爱ing', correct: false }
+      { key: 'D', content: '派对动物', correct: false }
     ],
     correctAnswer: {
       song: '让我照顾你',
