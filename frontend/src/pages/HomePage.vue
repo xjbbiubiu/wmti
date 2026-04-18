@@ -11,7 +11,7 @@
         <div class="entry-card primary" @click="startEarTest">
           <div class="entry-card-title">🎤 五月天空耳猜歌测试</div>
           <div class="entry-card-desc">你是不是真正的听力王</div>
-          <div class="entry-card-count">14道题 · 约3分钟</div>
+          <div class="entry-card-count">12道题 · 约3分钟</div>
         </div>
         <div class="entry-card" @click="startTest">
           <div class="entry-card-title">🥕 wmls人设测试</div>

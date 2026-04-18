@@ -100,7 +100,7 @@
       <div class="other-test-card" @click="goEarQuiz">
         <div class="other-test-title">🎤 五月天空耳猜歌测试</div>
         <div class="other-test-desc">你是不是真正的听力王</div>
-        <div class="other-test-count">14道题 · 约3分钟</div>
+        <div class="other-test-count">12道题 · 约3分钟</div>
       </div>
     </section>
 
