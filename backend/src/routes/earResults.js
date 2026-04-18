@@ -128,6 +128,17 @@ router.get('/stats', (req, res) => {
   res.json({ totalSubmissions });
 });
 
+// GET /questions - 获取随机12道题（包含必出题）
+router.get('/questions', (req, res) => {
+  const questions = getRandomQuestions();
+  const simplified = questions.map(q => ({
+    id: q.id,
+    earLyric: q.earLyric,
+    options: q.options.map(o => ({ key: o.key, content: o.content }))
+  }));
+  res.json(simplified);
+});
+
 // GET /:id
 router.get('/:id', (req, res) => {
   const result = resultsStorage.get(req.params.id);
