@@ -45,8 +45,24 @@
               <span class="option-content">{{ option.content }}</span>
             </button>
 
+            <div v-if="showExplanation && selectedAnswer !== null" class="option-nav">
+              <button
+                v-if="currentIndex > 0"
+                class="option-nav-btn prev"
+                @click="prevQuestion"
+              >
+                ← 上一题
+              </button>
+              <button
+                class="option-nav-btn next"
+                @click="nextQuestion"
+              >
+                {{ isLastQuestion ? '查看结果' : '下一题' }} →
+              </button>
+            </div>
+
             <div v-if="showExplanation && selectedAnswer !== null && isCorrect" class="option-explanation correct">
-              <div class="explanation-icon">{{ isCorrect ? '✅' : '❌' }}</div>
+              <div class="explanation-icon">✅</div>
               <div class="explanation-content">
                 <div class="explanation-song">
                   歌名：《{{ currentQuestion.correctAnswer.song }}》
@@ -63,22 +79,6 @@
                   空耳原因：{{ currentQuestion.correctAnswer.earReason }}
                 </div>
               </div>
-            </div>
-
-            <div v-if="showExplanation && selectedAnswer !== null" class="option-nav">
-              <button
-                v-if="currentIndex > 0"
-                class="option-nav-btn prev"
-                @click="prevQuestion"
-              >
-                ← 上一题
-              </button>
-              <button
-                class="option-nav-btn next"
-                @click="nextQuestion"
-              >
-                {{ isLastQuestion ? '查看结果' : '下一题' }} →
-              </button>
             </div>
           </div>
         </div>
