@@ -62,8 +62,8 @@ const earQuestions = [
       { key: 'D', content: '干杯', correct: false }
     ],
     correctAnswer: {
-      song: '爱情万岁',
-      album: '爱情万岁',
+      song: '透露',
+      album: '人生‧万岁',
       originalLyric: '这是全天下最完美的阵容'
     }
   },
@@ -84,17 +84,17 @@ const earQuestions = [
   },
   {
     id: 5,
-    earLyric: '那年我们冲出了阳界',
+    earLyric: '不要叫我瘪三不要再看我称鸡蛋',
     options: [
-      { key: 'A', content: '任意门', correct: true },
+      { key: 'A', content: '春天的呐喊', correct: true },
       { key: 'B', content: '诺亚方舟', correct: false },
       { key: 'C', content: '盛夏光年', correct: false },
       { key: 'D', content: '离开地球表面', correct: false }
     ],
     correctAnswer: {
-      song: '任意门',
-      album: '自传',
-      originalLyric: '那年我们都冲出南阳街'
+      song: '春天的呐喊',
+      album: '后青春期的诗',
+      originalLyric: '不要叫我比赛不要再看我成绩单'
     }
   },
   {
@@ -174,9 +174,15 @@ const earQuestions = [
   }
 ];
 
-const shuffledQuestions = earQuestions.map(q => ({
-  ...q,
-  options: shuffleOptions(q.options)
-}));
+const shuffledQuestions = earQuestions.map(q => {
+  const shuffled = shuffleOptions([...q.options]);
+  return {
+    ...q,
+    options: shuffled.map((opt, idx) => ({
+      ...opt,
+      key: String.fromCharCode(65 + idx)
+    }))
+  };
+});
 
 module.exports = shuffledQuestions;

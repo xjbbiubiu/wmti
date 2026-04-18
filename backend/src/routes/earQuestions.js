@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { shuffledQuestions } = require('../data/earQuestions');
+const shuffledQuestions = require('../data/earQuestions');
 
 // GET /api/ear/questions
 // 返回10道题，sanitized（不含 correct 字段，防止泄露答案）
