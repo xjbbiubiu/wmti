@@ -19,7 +19,8 @@
             v-for="(option, index) in currentQuestion.options"
             :key="index"
             class="option-btn"
-            :class="{ selected: selectedAnswer === index }"
+            :style="selectedAnswer === index && !isTransitioning ? selectedStyle : defaultStyle"
+            :class="{ selected: selectedAnswer === index && !isTransitioning }"
             @click="selectAnswer(index)"
           >
             {{ option.content }}
@@ -54,6 +55,18 @@ const isTransitioning = ref(false)
 
 // selectedAnswer 由当前题目的 answers 数组直接派生，不再单独维护状态
 const selectedAnswer = computed(() => answers.value[currentQuestionIndex.value] ?? null)
+
+// 用 inline style 直接控制颜色，绕过 CSS transition 导致的移动端渲染延迟
+const defaultStyle = {
+  background: 'var(--md-blue-50)',
+  borderColor: 'transparent',
+  color: 'var(--md-blue-900)',
+}
+const selectedStyle = {
+  background: 'linear-gradient(135deg, var(--md-blue-500) 0%, var(--md-blue-600) 100%)',
+  borderColor: 'var(--md-blue-600)',
+  color: 'white',
+}
 
 const quizRef = ref(null)
 const containerRef = ref(null)
@@ -251,23 +264,17 @@ const submitTest = async () => {
 }
 
 .option-btn {
-  background: var(--md-blue-50);
-  border: 2px solid transparent;
   border-radius: 12px;
   padding: 12px 16px;
-  color: var(--md-blue-900);
   text-align: left;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
   flex: 1;
   display: flex;
   align-items: center;
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: none;
   outline: none;
+  border: 2px solid transparent;
 }
 
 .option-btn::before {
