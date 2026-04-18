@@ -76,10 +76,12 @@
         <div class="feedback-card" :class="isCorrect ? 'correct' : 'wrong'">
           <div class="feedback-icon">{{ isCorrect ? '&#x2705;' : '&#x274C;' }}</div>
           <div class="feedback-title">{{ isCorrect ? '回答正确！' : '回答错误！' }}</div>
-          <div class="feedback-song">{{ currentQuestion.options.find(o => o.correct)?.content }}</div>
+          <div class="feedback-song">
+            《{{ currentQuestion.correctAnswer.song }}》· {{ currentQuestion.correctAnswer.album }}
+          </div>
           <div class="feedback-lyric">
             <span class="feedback-lyric-label">原歌词：</span>
-            <span class="feedback-lyric-text">???</span>
+            <span class="feedback-lyric-text">{{ currentQuestion.correctAnswer.originalLyric }}</span>
           </div>
         </div>
       </div>
