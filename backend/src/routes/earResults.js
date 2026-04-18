@@ -5,6 +5,21 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const shuffledQuestions = require('../data/earQuestions');
 
+const REQUIRED_QUESTION_IDS = [2, 3, 7];
+const TOTAL_QUESTIONS = 12;
+
+const getRandomQuestions = () => {
+  const required = shuffledQuestions.filter(q => REQUIRED_QUESTION_IDS.includes(q.id));
+  const remaining = shuffledQuestions.filter(q => !REQUIRED_QUESTION_IDS.includes(q.id));
+
+  const shuffled = [...remaining].sort(() => Math.random() - 0.5);
+  const selected = [...required, ...shuffled.slice(0, TOTAL_QUESTIONS - required.length)];
+
+  return selected.sort((a, b) => a.id - b.id);
+};
+
+const testQuestions = getRandomQuestions();
+
 // 数据持久化到 data/earResults.json（参考 results.js 的模式）
 const RESULTS_FILE = path.join(__dirname, '..', '..', 'data', 'earResults.json');
 
@@ -30,9 +45,9 @@ const saveResults = (storage) => {
 
 const resultsStorage = loadResults();
 
-// 等级称号映射（按答对数，14题版本）
+// 等级称号映射（按答对数，12题版本）
 const gradeMap = [
-  { min: 12, max: 14, level: 1, title: '🎓 空耳博士', image: '/ear-posters/空耳博士.webp', desc: '阿信在你耳边唱歌你都听得出来？五迷界的天花板，怕不是耳朵里住了个阿信！建议出道当空耳评委！' },
+  { min: 12, max: 12, level: 1, title: '🎓 空耳博士', image: '/ear-posters/空耳博士.webp', desc: '阿信在你耳边唱歌你都听得出来？五迷界的天花板，怕不是耳朵里住了个阿信！建议出道当空耳评委！' },
   { min: 10, max: 11, level: 2, title: '🎤 空耳十级选手', image: '/ear-posters/空耳十级选手.webp', desc: '听力满分的你，确定不是戴着耳机睡觉的？五月天的发音在你这里全是送分题，可以开班收徒了！' },
   { min: 8, max: 9, level: 3, title: '🎧 空耳八级选手', image: '/ear-posters/空耳八级选手.webp', desc: '差一点就封神了！就差那么一两题，是时候把歌单循环模式改成永久了！' },
   { min: 6, max: 7, level: 4, title: '🎶 空耳六级选手', image: '/ear-posters/空耳六级选手.webp', desc: '不错不错！听感还需要多练练，快去把五月天歌单循环起来，下一个空耳大师就是你！' },
@@ -46,14 +61,26 @@ const getGrade = (score) => {
 
 // POST /submit
 router.post('/submit', (req, res) => {
-  const { answers } = req.body;
-  if (!answers || !Array.isArray(answers) || answers.length !== shuffledQuestions.length) {
+  const { answers, questionIds } = req.body;
+  if (!answers || !Array.isArray(answers)) {
     return res.status(400).json({ error: 'Invalid answers format' });
   }
 
+  const questionMap = new Map(shuffledQuestions.map(q => [q.id, q]));
+  const userQuestions = (questionIds || [])
+    .map(id => questionMap.get(id))
+    .filter(Boolean);
+
+  const questionCount = userQuestions.length || testQuestions.length;
+  if (answers.length !== questionCount) {
+    return res.status(400).json({ error: 'Invalid answers format' });
+  }
+
+  const questionsToUse = userQuestions.length > 0 ? userQuestions : testQuestions;
+
   // 构建每题详情
   const questionDetails = answers.map((selectedIndex, i) => {
-    const q = shuffledQuestions[i];
+    const q = questionsToUse[i];
     const selectedOption = q.options[selectedIndex];
     const correct = selectedOption?.correct === true;
     return {
@@ -86,6 +113,17 @@ router.post('/submit', (req, res) => {
 router.get('/stats', (req, res) => {
   const totalSubmissions = resultsStorage.size;
   res.json({ totalSubmissions });
+});
+
+// GET /questions - 获取随机12道题（包含必出题）
+router.get('/questions', (req, res) => {
+  const questions = getRandomQuestions();
+  const simplified = questions.map(q => ({
+    id: q.id,
+    earLyric: q.earLyric,
+    options: q.options.map(o => ({ key: o.key, content: o.content }))
+  }));
+  res.json(simplified);
 });
 
 // GET /:id

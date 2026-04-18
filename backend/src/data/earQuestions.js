@@ -274,6 +274,248 @@ const earQuestions = [
 一生能有几次 终于没人管`,
       earReason: '闽南语发音：「撞衫」在闽南语中听起来像别的词'
     }
+  },
+  {
+    id: 15,
+    earLyric: '狂飙阿姨突然变得好猛 噢噢噢噢~',
+    options: [
+      { key: 'A', content: '透露', correct: true },
+      { key: 'B', content: '恋爱ing', correct: false },
+      { key: 'C', content: '派对动物', correct: false },
+      { key: 'D', content: '离开地球表面', correct: false }
+    ],
+    correctAnswer: {
+      song: '透露',
+      album: '第一张创作专辑',
+      originalLyric: '狂飙爱意突然变得好猛 噢噢噢噢~',
+      lyricsContext: `这是全天下最完美的阵容
+我和你 你和我
+狂飙爱意突然变得好猛
+在此刻向你 完全透露`,
+      earReason: '谐音：「爱意」→「阿姨」'
+    }
+  },
+  {
+    id: 16,
+    earLyric: '再见 我们出事的那个公园',
+    options: [
+      { key: 'A', content: '诺亚方舟', correct: true },
+      { key: 'B', content: '人生海海', correct: false },
+      { key: 'C', content: '任意门', correct: false },
+      { key: 'D', content: '憨人', correct: false }
+    ],
+    correctAnswer: {
+      song: '诺亚方舟',
+      album: '第二人生',
+      originalLyric: '再见 我们初识的那个公园',
+      lyricsContext: `再见 草莓甜甜圈
+街角咖啡店 落下雨点
+再见 我们初识的那个公园`,
+      earReason: '谐音：「初识」→「出事」'
+    }
+  },
+  {
+    id: 17,
+    earLyric: '昨天太近，明天太原',
+    options: [
+      { key: 'A', content: '拥抱', correct: true },
+      { key: 'B', content: '温柔', correct: false },
+      { key: 'C', content: '恋爱ing', correct: false },
+      { key: 'D', content: '垃圾车', correct: false }
+    ],
+    correctAnswer: {
+      song: '拥抱',
+      album: '第一张创作专辑',
+      originalLyric: '昨天太近 明天太远',
+      lyricsContext: `昨天太近 明天太远
+默默聆听那黑夜`,
+      earReason: '谐音：「太远」→「太原」'
+    }
+  },
+  {
+    id: 18,
+    earLyric: '你就是太阳，绽放了膀胱',
+    options: [
+      { key: 'A', content: '小太阳', correct: true },
+      { key: 'B', content: '倔强', correct: false },
+      { key: 'C', content: '派对动物', correct: false },
+      { key: 'D', content: '离开地球表面', correct: false }
+    ],
+    correctAnswer: {
+      song: '小太阳',
+      album: '小太阳单曲',
+      originalLyric: '你就是太阳 蒸发了彷徨',
+      lyricsContext: `你就是太阳 蒸发了彷徨
+所以挖开土壤 种下希望`,
+      earReason: '谐音恶搞：「蒸发了彷徨」→「绽放了膀胱」（粉丝圈经典空耳梗）'
+    }
+  },
+  {
+    id: 19,
+    earLyric: '你听到闹钟声 你推开了包拯',
+    options: [
+      { key: 'A', content: '派对动物', correct: false },
+      { key: 'B', content: '第二人生', correct: true },
+      { key: 'C', content: '倔强', correct: false },
+      { key: 'D', content: '离开地球表面', correct: false }
+    ],
+    correctAnswer: {
+      song: '第二人生',
+      album: '第二人生',
+      originalLyric: '你听到闹钟声 你推开了抱枕',
+      lyricsContext: `你听到闹钟声 你推开了抱枕
+你醒在 无尽的 疲倦的人生`,
+      earReason: '谐音：「抱枕」→「包拯」'
+    }
+  },
+  {
+    id: 20,
+    earLyric: '我站着你坐着像隔着银河',
+    options: [
+      { key: 'A', content: '你不是真正的快乐', correct: true },
+      { key: 'B', content: '最重要的小事', correct: false },
+      { key: 'C', content: '我不愿让你一个人', correct: false },
+      { key: 'D', content: '垃圾车', correct: false }
+    ],
+    correctAnswer: {
+      song: '你不是真正的快乐',
+      album: '后青春期的诗',
+      originalLyric: '我站在你左侧 却像隔着银河',
+      lyricsContext: `你不是真正的快乐
+你的伤从不肯完全的愈合
+我站在你左侧 却像隔着银河`,
+      earReason: '空耳改编，原句描述距离感'
+    }
+  },
+  {
+    id: 21,
+    earLyric: '你把孤单削面，都削面，全刀削面',
+    options: [
+      { key: 'A', content: '哄我入睡', correct: true },
+      { key: 'B', content: '顽固', correct: false },
+      { key: 'C', content: '温柔', correct: false },
+      { key: 'D', content: '垃圾车', correct: false }
+    ],
+    correctAnswer: {
+      song: '哄我入睡',
+      album: '品冠《爱到无可救药》',
+      originalLyric: '你把孤单消灭 都消灭 全都消灭',
+      lyricsContext: `你把孤单消灭 都消灭 全都消灭
+给我安慰 抱着我 哄我入睡`,
+      earReason: '谐音：「消灭」→「削面」'
+    }
+  },
+  {
+    id: 22,
+    earLyric: '新的冷笑话 找个礼堂 开始为你收藏',
+    options: [
+      { key: 'A', content: '让我照顾你', correct: true },
+      { key: 'B', content: '最重要的小事', correct: false },
+      { key: 'C', content: '我不愿让你一个人', correct: false },
+      { key: 'D', content: '恋爱ing', correct: false }
+    ],
+    correctAnswer: {
+      song: '让我照顾你',
+      album: '神的孩子都在跳舞',
+      originalLyric: '新的冷笑话 巧克力糖 开始为你收藏',
+      lyricsContext: `新的冷笑话 巧克力糖
+开始为你收藏`,
+      earReason: '谐音：「巧克力糖」→「找个礼堂」'
+    }
+  },
+  {
+    id: 23,
+    earLyric: '如果命运注定你的单身',
+    options: [
+      { key: 'A', content: '派对动物', correct: false },
+      { key: 'B', content: '第二人生', correct: true },
+      { key: 'C', content: '倔强', correct: false },
+      { key: 'D', content: '顽固', correct: false }
+    ],
+    correctAnswer: {
+      song: '第二人生',
+      album: '第二人生',
+      originalLyric: '如果命运注定你的诞生',
+      lyricsContext: `如果命运注定你的诞生
+如果末日始终没有发生`,
+      earReason: '谐音：「诞生」→「单身」（意思完全相反但发音相似）'
+    }
+  },
+  {
+    id: 24,
+    earLyric: '士杰如果被残酷攻击',
+    options: [
+      { key: 'A', content: '超人', correct: true },
+      { key: 'B', content: '倔强', correct: false },
+      { key: 'C', content: '派对动物', correct: false },
+      { key: 'D', content: '离开地球表面', correct: false }
+    ],
+    correctAnswer: {
+      song: '超人',
+      album: '神的孩子都在跳舞',
+      originalLyric: '世界如果被残酷攻击',
+      lyricsContext: `世界如果被残酷攻击
+只要给我一个电话亭`,
+      earReason: '谐音：「世界」→「士杰」（五月天和声/技师，粉丝内部梗）'
+    }
+  },
+  {
+    id: 25,
+    earLyric: '每次单身我都要芋泥香芋',
+    options: [
+      { key: 'A', content: '恋爱ing', correct: false },
+      { key: 'B', content: '最重要的小事', correct: false },
+      { key: 'C', content: '我不愿让你一个人', correct: false },
+      { key: 'D', content: '一千个世纪', correct: true }
+    ],
+    correctAnswer: {
+      song: '一千个世纪',
+      album: '为爱而生',
+      originalLyric: '每次诞生我都要与你相遇',
+      lyricsContext: `我要和你一起走过一千个世纪
+每次诞生我都要与你相遇
+每次轮回都为你`,
+      earReason: '谐音：「诞生」→「单身」，「与你相遇」→「芋泥香芋」'
+    }
+  },
+  {
+    id: 26,
+    earLyric: '我是鱼虾在你身上',
+    options: [
+      { key: 'A', content: '爱情的模样', correct: true },
+      { key: 'B', content: '志明与春娇', correct: false },
+      { key: 'C', content: '恋爱ing', correct: false },
+      { key: 'D', content: '我不愿让你一个人', correct: false }
+    ],
+    correctAnswer: {
+      song: '爱情的模样',
+      album: '爱情万岁',
+      originalLyric: '我是雨还是你眼眶',
+      lyricsContext: `我是雨还是你眼眶
+我是浪还是你胸膛
+爱情的模样 谁能看穿`,
+      earReason: '谐音：「我是雨还是你眼眶」→「我是鱼虾在你身上」'
+    }
+  },
+  {
+    id: 27,
+    earLyric: '人群烟火香槟和啤酒',
+    options: [
+      { key: 'A', content: '派对动物', correct: false },
+      { key: 'B', content: '因为你 所以我', correct: true },
+      { key: 'C', content: '离开地球表面', correct: false },
+      { key: 'D', content: '恋爱ing', correct: false }
+    ],
+    correctAnswer: {
+      song: '因为你 所以我',
+      album: '因为你 所以我（2020 单曲）',
+      originalLyric: '人群烟火香槟和气球',
+      lyricsContext: `人群烟火香槟和气球
+是你 带我 从派对逃走
+逃离 人间 耳语和骚动
+因为你我 拥有宇宙`,
+      earReason: '谐音：「气球」→「啤酒」'
+    }
   }
 ];
 

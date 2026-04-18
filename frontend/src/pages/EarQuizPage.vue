@@ -158,7 +158,10 @@ const submitTest = async () => {
     const response = await fetch(apiUrl('/api/ear/results/submit'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ answers: answers.value })
+      body: JSON.stringify({
+        answers: answers.value,
+        questionIds: questions.value.map(q => q.id)
+      })
     })
     const result = await response.json()
     const posterUrl = result.grade?.image 
