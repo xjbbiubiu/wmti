@@ -89,6 +89,16 @@
       </div>
     </section>
 
+    <!-- 空耳测试导流卡片 -->
+    <section class="promo-card" @click="goEarQuiz">
+      <div class="promo-icon">🎤</div>
+      <div class="promo-text">
+        <div class="promo-title">还没玩够？再来测测你的空耳实力！</div>
+        <div class="promo-sub">《空耳猜歌测试》10道题 →</div>
+      </div>
+      <div class="promo-arrow">›</div>
+    </section>
+
     <p class="disclaimer-bottom">趣味测试 仅供娱乐</p>
 
     </div>
@@ -306,6 +316,10 @@ const closeShareModal = () => {
 
 const restartTest = () => {
   router.push('/')
+}
+
+const goEarQuiz = () => {
+  router.push('/ear-quiz')
 }
 </script>
 
@@ -674,6 +688,53 @@ const restartTest = () => {
   font-size: 11px;
   color: var(--md-text-on-blue-muted);
   text-align: center;
+}
+
+/* 空耳导流卡片 */
+.promo-card {
+  background: var(--md-surface);
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.1);
+  border: 1px solid rgba(0, 136, 204, 0.12);
+  transition: transform 0.15s;
+}
+
+.promo-card:active {
+  transform: scale(0.98);
+}
+
+.promo-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.promo-text {
+  flex: 1;
+  text-align: left;
+}
+
+.promo-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--md-blue-900);
+  margin-bottom: 4px;
+}
+
+.promo-sub {
+  font-size: 12px;
+  color: var(--md-blue-500);
+}
+
+.promo-arrow {
+  font-size: 24px;
+  color: var(--md-blue-400);
+  font-weight: 300;
 }
 
 .action-buttons {
