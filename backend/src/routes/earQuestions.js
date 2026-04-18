@@ -1,11 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const shuffledQuestions = require('../data/earQuestions');
+const allQuestions = require('../data/earQuestions');
 
-// GET /api/ear/questions
-// 返回10道题，sanitized（不含 correct 字段，防止泄露答案）
+const REQUIRED_QUESTION_IDS = [2, 3, 7];
+const TOTAL_QUESTIONS = 12;
+
+// 返回12道随机题：3道必出 + 9道随机，sanitized（含 correct 字段，前端展示用）
 router.get('/', (req, res) => {
-  const sanitizedQuestions = shuffledQuestions.map(q => ({
+  const required = allQuestions.filter(q => REQUIRED_QUESTION_IDS.includes(q.id));
+  const remaining = allQuestions.filter(q => !REQUIRED_QUESTION_IDS.includes(q.id));
+  const shuffled = [...remaining].sort(() => Math.random() - 0.5);
+  const selected = [...required, ...shuffled.slice(0, TOTAL_QUESTIONS - required.length)];
+  const questions = selected.sort((a, b) => a.id - b.id);
+
+  const sanitizedQuestions = questions.map(q => ({
     id: q.id,
     earLyric: q.earLyric,
     options: q.options.map(opt => ({
