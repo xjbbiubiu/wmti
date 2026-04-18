@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const { trackEvent } = require('../middleware/analytics');
 const questions = require('../data/questions');
 const {
   aggregateScores,
@@ -458,6 +459,18 @@ router.post('/submit', (req, res) => {
 
   resultsStorage.set(resultId, responseData);
   saveResults(resultsStorage);
+
+  // 异步埋点，不阻塞响应
+  trackEvent({
+    event_type: 'result_submitted',
+    ip: req.headers['x-forwarded-for']?.split(',')[0]?.trim()
+      || req.headers['x-real-ip']
+      || req.ip
+      || '',
+    user_agent: req.headers['user-agent'] || '',
+    quiz_type: 'wmti',
+    quiz_type_code: typeCode,
+  });
 
   res.json({ id: resultId });
 });
