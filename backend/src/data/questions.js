@@ -17,9 +17,9 @@ const questions = [
     id: 1,
     content: '五月天要开演唱会了！你提前半年就开始蹲票，结果开票一秒售罄。此时你的反应是：',
     options: [
-      { key: 'A', content: '成名在望在此一举——吃土也要去！', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '找找团票渠道，或者拜托五迷群的大佬帮忙', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '等一等，说不定有人转票呢', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'A', content: '我不怕千万人阻挡——票没了就一直刷！', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '蹲平台等二开，手速我已经练好了', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '没事，去场外和wmls们感受一下氛围也不错', scores: { w: 1, m: 0, l: 0, s: 0 } },
       { key: 'D', content: '算了，诺亚方舟会再开的——下次一定！', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
