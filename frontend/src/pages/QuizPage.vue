@@ -19,8 +19,8 @@
             v-for="(option, index) in currentQuestion.options"
             :key="index"
             class="option-btn"
-            :style="selectedAnswer === index && !isTransitioning ? selectedStyle : defaultStyle"
-            :class="{ selected: selectedAnswer === index && !isTransitioning }"
+            :style="selectedAnswer !== index ? defaultStyle : null"
+            :class="{ selected: selectedAnswer === index }"
             @click="selectAnswer(index)"
           >
             {{ option.content }}
@@ -63,16 +63,11 @@ const isTransitioning = ref(false)
 // selectedAnswer 由当前题目的 answers 数组直接派生，不再单独维护状态
 const selectedAnswer = computed(() => answers.value[currentQuestionIndex.value] ?? null)
 
-// 用 inline style 直接控制颜色，绕过 CSS transition 导致的移动端渲染延迟
+// 用 inline style 控制未选中状态的背景，避免移动端渲染延迟
 const defaultStyle = {
   background: 'var(--md-blue-50)',
   borderColor: 'transparent',
   color: 'var(--md-blue-900)',
-}
-const selectedStyle = {
-  background: 'linear-gradient(135deg, var(--md-blue-500) 0%, var(--md-blue-600) 100%)',
-  borderColor: 'var(--md-blue-600)',
-  color: 'white',
 }
 
 const quizRef = ref(null)
@@ -286,6 +281,7 @@ const submitTest = async () => {
   -webkit-appearance: none;
   outline: none;
   border: 2px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .option-btn::before {
@@ -308,6 +304,7 @@ const submitTest = async () => {
   background: linear-gradient(135deg, var(--md-blue-500) 0%, var(--md-blue-600) 100%);
   color: white;
   border-color: var(--md-blue-600);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .option-btn.selected::before {
