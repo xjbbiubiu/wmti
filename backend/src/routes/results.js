@@ -469,7 +469,7 @@ router.post('/submit', (req, res) => {
       || '',
     user_agent: req.headers['user-agent'] || '',
     quiz_type: 'wmti',
-    quiz_type_code: resultType,
+    quiz_type_code: personResult.label,
   });
 
   res.json({ id: resultId });
