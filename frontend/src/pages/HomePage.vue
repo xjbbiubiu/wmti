@@ -63,6 +63,22 @@ const cachedEarResult = ref(null)
 const cachedWmtiResult = ref(null)
 
 onMounted(() => {
+  // 迁移旧数据
+  const lastStored = localStorage.getItem('wmti_last_result')
+  if (lastStored) {
+    try {
+      const result = JSON.parse(lastStored)
+      if (result.type === 'ear' && !localStorage.getItem('ear_result')) {
+        localStorage.setItem('ear_result', lastStored)
+      } else if (result.type === 'wmti' && !localStorage.getItem('wmti_result')) {
+        localStorage.setItem('wmti_result', lastStored)
+      }
+      localStorage.removeItem('wmti_last_result')
+    } catch {
+      localStorage.removeItem('wmti_last_result')
+    }
+  }
+
   const earStored = localStorage.getItem('ear_result')
   if (earStored) {
     try {
