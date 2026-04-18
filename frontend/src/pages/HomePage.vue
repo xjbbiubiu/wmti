@@ -44,6 +44,16 @@
         开始测试
       </button>
 
+      <!-- 空耳测试入口卡片 -->
+      <div class="ear-entry-card" @click="startEarTest">
+        <div class="ear-entry-icon">🎤</div>
+        <div class="ear-entry-text">
+          <div class="ear-entry-title">空耳猜歌</div>
+          <div class="ear-entry-desc">10道空耳歌词，测测你是不是真正的五迷听力王！</div>
+        </div>
+        <div class="ear-entry-arrow">›</div>
+      </div>
+
       <div v-if="cachedResult" class="cached-result" @click="goToResult">
         <img :src="cachedResult.posterUrl" class="cached-poster" :alt="cachedResult.label" />
         <div class="cached-info">
@@ -82,6 +92,11 @@ onMounted(() => {
 const startTest = () => {
   track('quiz_start')
   router.push('/quiz')
+}
+
+const startEarTest = () => {
+  track('quiz_start', { quiz_type: 'ear' })
+  router.push('/ear-quiz')
 }
 
 const goToResult = () => {
@@ -237,6 +252,58 @@ const goToResult = () => {
 .start-btn:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.85);
   outline-offset: 3px;
+}
+
+/* 空耳测试入口卡片 */
+.ear-entry-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.1);
+  border: 1.5px solid rgba(0, 136, 204, 0.18);
+  transition: transform 0.15s, box-shadow 0.15s;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+}
+
+.ear-entry-card:active {
+  transform: scale(0.98);
+}
+
+.ear-entry-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.ear-entry-text {
+  flex: 1;
+  text-align: left;
+}
+
+.ear-entry-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--md-blue-900);
+  margin-bottom: 3px;
+}
+
+.ear-entry-desc {
+  font-size: 12px;
+  color: var(--md-blue-600);
+  line-height: 1.4;
+}
+
+.ear-entry-arrow {
+  font-size: 22px;
+  color: var(--md-blue-400);
+  font-weight: 300;
+  flex-shrink: 0;
 }
 
 .footer {
