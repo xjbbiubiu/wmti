@@ -30,6 +30,13 @@
 
       <div class="nav-buttons">
         <button
+          class="nav-btn home"
+          :disabled="isTransitioning"
+          @click="goHome"
+        >
+          回首页
+        </button>
+        <button
           class="nav-btn prev"
           :disabled="currentQuestionIndex === 0 || isTransitioning"
           @click="prevQuestion"
@@ -137,6 +144,10 @@ const prevQuestion = () => {
     currentQuestionIndex.value--
     queueMicrotask(() => fitFontSize())
   }
+}
+
+const goHome = () => {
+  router.push({ name: 'home' })
 }
 
 const submitTest = async () => {
@@ -311,7 +322,6 @@ const submitTest = async () => {
 }
 
 .nav-btn {
-  flex: 1;
   min-height: 44px;
   padding: 10px 12px;
   font-size: 15px;
@@ -322,7 +332,15 @@ const submitTest = async () => {
   transition: all 0.2s ease;
 }
 
+.nav-btn.home {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--md-text-on-blue);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
 .nav-btn.prev {
+  flex: 3;
   background: rgba(255, 255, 255, 0.22);
   color: var(--md-text-on-blue);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -333,14 +351,7 @@ const submitTest = async () => {
   cursor: not-allowed;
 }
 
-.nav-btn.next {
-  background: var(--md-surface);
-  color: var(--md-blue-600);
-  border: 2px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.12);
-}
-
-.nav-btn.next:disabled {
+.nav-btn.home:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
