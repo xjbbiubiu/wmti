@@ -36,8 +36,8 @@
               class="option-btn"
               :class="{
                 selected: selectedAnswer === index && !showExplanation,
-                correct: showExplanation && option.correct,
-                wrong: showExplanation && selectedAnswer === index && !option.correct
+                correct: showExplanation && isCorrect && option.correct,
+                wrong: showExplanation && !isCorrect && selectedAnswer === index && !option.correct
               }"
               :disabled="showExplanation"
               @click="selectAnswer(index)"
@@ -54,12 +54,12 @@
                   专辑：{{ currentQuestion.correctAnswer.album }}
                 </div>
                 <div v-if="currentQuestion.correctAnswer.lyricsContext" class="explanation-lyrics">
-                  <pre class="lyrics-context" v-html="highlightLyrics(currentQuestion.correctAnswer.lyricsContext, currentQuestion.correctAnswer.originalLyric)"></pre>
+                  <pre class="lyrics-context">{{ currentQuestion.correctAnswer.lyricsContext }}</pre>
                 </div>
                 <div v-else class="explanation-lyric">
                   原歌词：{{ currentQuestion.correctAnswer.originalLyric }}
                 </div>
-                <div v-if="!isCorrect && currentQuestion.correctAnswer.earReason" class="explanation-ear">
+                <div v-if="currentQuestion.correctAnswer.earReason" class="explanation-ear">
                   空耳原因：{{ currentQuestion.correctAnswer.earReason }}
                 </div>
               </div>
@@ -147,19 +147,6 @@ const selectAnswer = (index) => {
   showExplanation.value = true
 }
 
-const highlightLyrics = (lyricsContext, originalLyric) => {
-  if (!lyricsContext || !originalLyric) return lyricsContext
-  const lines = lyricsContext.split('\n')
-  const target = originalLyric.trim()
-  const highlighted = lines.map(line => {
-    if (line.includes(target) || target.includes(line.trim())) {
-      return `<span class="lyric-highlight">${line}</span>`
-    }
-    return line
-  }).join('\n')
-  return highlighted
-}
-
 const nextQuestion = () => {
   showExplanation.value = false
   if (currentIndex.value === totalQuestions.value - 1) {
@@ -201,6 +188,7 @@ const submitTest = async () => {
 .ear-quiz {
   min-height: 100dvh;
   padding: 20px 16px max(40px, calc(16px + env(safe-area-inset-bottom)));
+  background: var(--md-gradient-page);
 }
 
 .progress-bar {
@@ -410,11 +398,6 @@ const submitTest = async () => {
   line-height: 1.6;
   white-space: pre-wrap;
   margin: 0;
-}
-
-.lyric-highlight {
-  font-weight: 700;
-  color: #1e3a5f;
 }
 
 .explanation-ear {

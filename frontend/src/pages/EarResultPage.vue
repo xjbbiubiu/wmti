@@ -11,28 +11,27 @@
     <!-- 结果卡片 -->
     <section class="result-card" aria-label="空耳测试结果卡片">
       <div class="result-card-header">
-        <span class="result-badge">WMTI</span>
-        <span class="result-subtitle">🎤 空耳猜歌</span>
+        <span class="result-title">五月天歌词空耳猜歌大赛</span>
       </div>
-
-      <div class="score-display">
-        <span class="score-num">{{ result.score ?? 0 }}</span>
-        <span class="score-sep">/</span>
-        <span class="score-total">{{ result.questions ? result.questions.length : 10 }}</span>
-        <span class="score-label">题答对</span>
+      <div class="result-main-card">
+        <div class="result-score-wrap">
+          <span class="result-score-label">正确率</span>
+          <span class="result-score-num">{{ Math.round((result.score ?? 0) / (result.questions?.length || 1) * 100) }}</span>
+          <span class="result-score-sep">%</span>
+        </div>
+        <div class="result-image-wrap">
+          <img
+            v-if="result.grade?.image"
+            :src="imageUrl(result.grade.image)"
+            :alt="result.grade.title"
+            class="result-grade-image"
+          />
+        </div>
+        <div class="result-info">
+          <h2 class="result-grade-title">{{ result.grade?.title }}</h2>
+          <p class="result-grade-desc">{{ result.grade?.desc }}</p>
+        </div>
       </div>
-
-      <div class="grade-block">
-        <img
-          v-if="result.grade?.image"
-          :src="imageUrl(result.grade.image)"
-          :alt="result.grade.title"
-          class="grade-image"
-        />
-        <div class="grade-title">{{ result.grade?.title }}</div>
-        <div class="grade-desc">{{ result.grade?.desc }}</div>
-      </div>
-
       <div class="result-actions">
         <button type="button" class="btn btn-primary" @click="handleShare">
           分享结果
@@ -56,30 +55,22 @@
           class="question-item"
           :class="q.correct ? 'question-correct' : 'question-wrong'"
         >
-          <div class="question-index">
+          <div class="question-header">
             <span class="question-num">{{ index + 1 }}</span>
-            <span class="question-status">{{ q.correct ? '答对' : '答错' }}</span>
+            <span class="question-status">{{ q.correct ? '✅ 答对' : '❌ 答错' }}</span>
           </div>
-          <div class="question-body">
-            <div class="question-row">
-              <span class="question-tag ear-tag">空耳</span>
-              <span class="question-text ear-lyric">{{ q.earLyric }}</span>
+          <div class="question-ear-lyric">{{ q.earLyric }}</div>
+          <div class="question-explanation" :class="q.correct ? 'correct' : 'wrong'">
+            <div class="explanation-song">
+              歌名：《{{ q.correctAnswer?.song }}》
+              <span class="explanation-divider">|</span>
+              专辑：{{ q.correctAnswer?.album }}
             </div>
-            <div class="question-row">
-              <span class="question-tag answer-tag">歌曲</span>
-              <span class="question-text correct-answer">{{ q.correctAnswer?.song }}</span>
+            <div v-if="q.correctAnswer?.lyricsContext" class="explanation-lyrics">
+              <pre class="lyrics-context">{{ q.correctAnswer?.lyricsContext }}</pre>
             </div>
-            <div class="question-row">
-              <span class="question-tag album-tag">专辑</span>
-              <span class="question-text album-name">{{ q.correctAnswer?.album }}</span>
-            </div>
-            <div class="question-row">
-              <span class="question-tag original-tag">原词</span>
-              <span class="question-text original-lyric">{{ q.correctAnswer?.originalLyric }}</span>
-            </div>
-            <div class="question-row ear-reason-row" v-if="q.correctAnswer?.earReason">
-              <span class="question-tag reason-tag">原因</span>
-              <span class="question-text ear-reason">{{ q.correctAnswer?.earReason }}</span>
+            <div v-if="q.correctAnswer?.earReason" class="explanation-ear">
+              空耳原因：{{ q.correctAnswer?.earReason }}
             </div>
           </div>
         </article>
@@ -124,12 +115,11 @@
     <div ref="shareCardRef" class="share-card-hidden">
       <div class="share-card">
         <div class="share-card-header">
-          <span class="share-card-badge">🎤 空耳猜歌</span>
-          <span class="share-card-title">五月天</span>
+          <span class="share-card-title">五月天歌词空耳猜歌大赛</span>
         </div>
         <div class="share-card-challenge">
           <span class="challenge-emoji">🏆</span>
-          <span class="challenge-text">我得了 <b>{{ result.score }}</b> 分！不服来战？</span>
+          <span class="challenge-text">正确率 <b>{{ Math.round((result.score ?? 0) / (result.questions?.length || 1) * 100) }}</b>%</span>
         </div>
         <div class="share-card-main">
           <div class="share-card-image-wrap">
@@ -142,12 +132,11 @@
           <div class="share-card-info">
             <h2 class="share-card-label">{{ result.grade?.title }}</h2>
             <p class="share-card-desc">{{ result.grade?.desc }}</p>
-            <p class="share-card-roast">💢 {{ roastText }}</p>
           </div>
         </div>
         <div class="share-card-cta">
-          <span class="cta-text">👇 扫码进来挑战</span>
-          <span class="cta-text">看看你能答对几道题</span>
+          <div v-if="roastText" class="roast-ear-lyric">{{ wrongQuestion?.earLyric }}</div>
+          <span class="cta-text">👇 你能听出来哪首吗？扫码进来挑战一下！</span>
         </div>
         <div class="share-card-footer">
           <img src="/qrcode.png" alt="扫码测试" class="share-card-qr-img" />
@@ -192,13 +181,20 @@ const wrongQuestion = computed(() => {
   return wrong[Math.floor(Math.random() * wrong.length)]
 })
 
+const randomQuestion = computed(() => {
+  const questions = result.value.questions || []
+  if (questions.length === 0) return null
+  return questions[Math.floor(Math.random() * questions.length)]
+})
+
 const roastText = computed(() => {
   const q = wrongQuestion.value
-  const score = result.value.score || 0
-  const total = result.value.questions?.length || 14
+  const score = result.score || 0
+  const total = result.questions?.length || 14
 
   if (score === total) {
-    return '太强了！你是空耳界的天花板，阿信都得给你鼓掌！'
+    const rq = randomQuestion.value
+    return rq ? `"${rq.earLyric}" 你能听出来是哪首吗？进来挑战一下！` : '太强了！你是空耳界的天花板！'
   }
 
   if (q) {
@@ -291,7 +287,7 @@ const goHome = () => {
 /* Result Card */
 .result-card {
   background: linear-gradient(160deg, #ffffff 0%, #e8f5ff 60%, #dbeeff 100%);
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 24px 20px;
   margin-bottom: 20px;
   box-shadow: 0 8px 32px rgba(0, 87, 174, 0.15);
@@ -300,89 +296,169 @@ const goHome = () => {
   text-align: center;
 }
 
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 136, 204, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
 .result-card-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .result-badge {
   background: linear-gradient(135deg, #00a8e8, #0077b5);
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
-  padding: 5px 12px;
-  border-radius: 8px;
+  padding: 4px 12px;
+  border-radius: 20px;
 }
 
-.result-subtitle {
-  font-size: 14px;
+.result-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--md-blue-800);
+}
+
+.result-challenge {
+  background: rgba(0, 136, 204, 0.1);
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(0, 136, 204, 0.2);
+}
+
+.challenge-emoji {
+  font-size: 24px;
+}
+
+.challenge-text {
+  font-size: 16px;
+  color: var(--md-blue-800);
   font-weight: 600;
-  color: #4a6fa5;
 }
 
-.score-display {
+.challenge-text b {
+  color: var(--md-accent);
+  font-size: 20px;
+}
+
+.result-main-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0, 87, 174, 0.1);
+}
+
+.result-score-wrap {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 4px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-.score-num {
-  font-size: 52px;
+.result-score-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--md-blue-500);
+}
+
+.result-score-num {
+  font-size: 48px;
   font-weight: 800;
   color: var(--md-accent);
   line-height: 1;
 }
 
-.score-sep {
-  font-size: 36px;
-  font-weight: 300;
-  color: var(--md-blue-400);
-}
-
-.score-total {
-  font-size: 36px;
-  font-weight: 700;
+.result-score-sep {
+  font-size: 28px;
+  font-weight: 600;
   color: var(--md-blue-500);
 }
 
-.score-label {
-  font-size: 16px;
-  color: var(--md-blue-600);
-  font-weight: 600;
-  margin-left: 4px;
-}
-
-.grade-block {
-  margin-bottom: 24px;
-}
-
-.grade-image {
+.result-image-wrap {
   width: 100%;
-  max-width: 280px;
-  margin: 0 auto 16px;
-  display: block;
-  border-radius: 16px;
+  margin-bottom: 12px;
 }
 
-.grade-title {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--md-blue-900);
-  margin-bottom: 8px;
-  line-height: 1.3;
+.result-grade-image {
+  width: 100%;
+  max-width: 180px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 87, 174, 0.1);
+}
+
+.result-info {
   text-align: center;
 }
 
-.grade-desc {
+.result-grade-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--md-blue-900);
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.result-grade-desc {
+  font-size: 13px;
+  color: var(--md-blue-600);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.result-roast {
+  font-size: 12px;
+  color: #dc2626;
+  line-height: 1.4;
+  margin: 10px 0 0;
+  font-style: italic;
+  background: #fff5f5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px dashed #fda4af;
+}
+
+.result-cta {
+  background: linear-gradient(135deg, #00a8e8, #0077b5);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+}
+
+.cta-text {
+  display: block;
+  color: white;
   font-size: 14px;
-  color: var(--md-blue-700);
-  line-height: 1.6;
+  font-weight: 700;
+}
+
+.cta-text:last-child {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 2px;
+  opacity: 0.9;
 }
 
 .result-actions {
@@ -416,13 +492,13 @@ const goHome = () => {
 }
 
 .btn-ghost {
-  background: white;
+  background: var(--md-blue-50);
   color: var(--md-blue-600);
   border: 1.5px solid var(--md-blue-300);
 }
 
 .btn-ghost:hover {
-  background: var(--md-blue-50);
+  background: var(--md-blue-100);
 }
 
 /* Analysis Section */
@@ -460,20 +536,20 @@ const goHome = () => {
 }
 
 .question-correct {
-  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-  border-color: #86efac;
+  background: white;
+  border: 1px solid #e5e7eb;
 }
 
 .question-wrong {
-  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
-  border-color: #fda4af;
+  background: white;
+  border: 1px solid #e5e7eb;
 }
 
-.question-index {
+.question-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .question-num {
@@ -482,21 +558,11 @@ const goHome = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.08);
-  color: inherit;
+  background: var(--md-blue-100);
+  color: var(--md-blue-700);
   font-size: 12px;
   font-weight: 700;
   border-radius: 8px;
-}
-
-.question-correct .question-num {
-  background: rgba(34, 197, 94, 0.2);
-  color: #15803d;
-}
-
-.question-wrong .question-num {
-  background: rgba(239, 68, 68, 0.2);
-  color: #b91c1c;
 }
 
 .question-status {
@@ -505,95 +571,72 @@ const goHome = () => {
 }
 
 .question-correct .question-status {
-  color: #15803d;
+  color: #16a34a;
 }
 
 .question-wrong .question-status {
-  color: #b91c1c;
+  color: #dc2626;
 }
 
-.question-body {
+.question-ear-lyric {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--md-blue-900);
+  margin-bottom: 12px;
+}
+
+.question-explanation {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.question-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
+.question-explanation.correct {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border: 1px solid #86efac;
 }
 
-.question-tag {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
-  flex-shrink: 0;
-  min-width: 36px;
-  text-align: center;
+.question-explanation.wrong {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border: 1px solid #fda4af;
 }
 
-.ear-tag {
-  background: rgba(0, 119, 179, 0.12);
-  color: #0077b5;
-}
-
-.answer-tag {
-  background: rgba(0, 136, 204, 0.12);
-  color: #0077b5;
-}
-
-.album-tag {
-  background: rgba(139, 92, 246, 0.12);
-  color: #7c3aed;
-}
-
-.original-tag {
-  background: rgba(0, 136, 204, 0.08);
-  color: var(--md-blue-600);
-}
-
-.reason-tag {
-  background: rgba(239, 68, 68, 0.12);
-  color: #dc2626;
-}
-
-.ear-reason-row {
-  margin-top: 4px;
-  padding-top: 8px;
-  border-top: 1px dashed rgba(0, 0, 0, 0.08);
-}
-
-.ear-reason {
-  color: #dc2626;
-  font-style: italic;
-  font-size: 13px;
-}
-
-.question-text {
+.explanation-song {
   font-size: 14px;
-  line-height: 1.5;
-  word-break: break-all;
-}
-
-.ear-lyric {
-  color: #0077b5;
-  font-weight: 600;
-}
-
-.correct-answer {
-  color: #15803d;
   font-weight: 700;
+  color: #1e3a5f;
+  line-height: 1.5;
 }
 
-.album-name {
-  color: #7c3aed;
+.explanation-divider {
+  color: #94a3b8;
+  margin: 0 6px;
+}
+
+.explanation-lyrics {
+  margin-bottom: 4px;
+}
+
+.lyrics-context {
+  font-family: inherit;
+  font-size: 13px;
+  color: #4a6fa5;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.explanation-ear {
+  font-size: 12px;
+  color: #dc2626;
   font-weight: 600;
-}
-
-.original-lyric {
-  color: var(--md-blue-700);
+  background: rgba(239, 68, 68, 0.08);
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
 }
 
 /* Promo Card */
@@ -728,10 +771,10 @@ const goHome = () => {
 
 .share-card {
   width: 360px;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(160deg, #ffffff 0%, #e8f5ff 60%, #dbeeff 100%);
   border-radius: 24px;
   padding: 24px 20px;
-  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 87, 174, 0.15);
   position: relative;
   overflow: hidden;
 }
@@ -743,7 +786,7 @@ const goHome = () => {
   right: -50%;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(0, 136, 204, 0.1) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -756,25 +799,23 @@ const goHome = () => {
 }
 
 .share-card-badge {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, #00a8e8, #0077b5);
   color: white;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
   padding: 4px 12px;
   border-radius: 20px;
-  backdrop-filter: blur(10px);
 }
 
 .share-card-title {
   font-size: 16px;
   font-weight: 800;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  color: var(--md-blue-800);
 }
 
 .share-card-challenge {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(0, 136, 204, 0.1);
   border-radius: 16px;
   padding: 12px 16px;
   margin-bottom: 16px;
@@ -782,8 +823,7 @@ const goHome = () => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 136, 204, 0.2);
 }
 
 .challenge-emoji {
@@ -792,12 +832,12 @@ const goHome = () => {
 
 .challenge-text {
   font-size: 16px;
-  color: white;
+  color: var(--md-blue-800);
   font-weight: 600;
 }
 
 .challenge-text b {
-  color: #ffd700;
+  color: var(--md-accent);
   font-size: 20px;
 }
 
@@ -843,29 +883,47 @@ const goHome = () => {
 }
 
 .share-card-roast {
-  font-size: 12px;
-  color: #dc2626;
-  line-height: 1.4;
   margin: 10px 0 0;
-  font-style: italic;
   background: #fff5f5;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 8px;
   border: 1px dashed #fda4af;
 }
 
+.roast-ear-lyric {
+  font-size: 15px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 6px;
+}
+
+.roast-text {
+  font-size: 12px;
+  color: #dc2626;
+  line-height: 1.4;
+  font-style: italic;
+}
+
 .share-card-cta {
-  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  background: linear-gradient(135deg, #e8f5ff 0%, #dbeeff 100%);
   border-radius: 12px;
-  padding: 10px 16px;
+  padding: 14px 16px;
   margin-bottom: 16px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(255, 170, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 136, 204, 0.15);
+  border: 1px solid rgba(0, 136, 204, 0.2);
+}
+
+.roast-ear-lyric {
+  font-size: 16px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 8px;
 }
 
 .cta-text {
   display: block;
-  color: #5c4d00;
+  color: var(--md-blue-600);
   font-size: 14px;
   font-weight: 700;
 }
@@ -891,8 +949,8 @@ const goHome = () => {
 }
 
 .share-card-disclaimer {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  color: var(--md-blue-500);
   margin: 0;
 }
 </style>
