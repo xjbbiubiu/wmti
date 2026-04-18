@@ -3,6 +3,7 @@ import HomePage from '../pages/HomePage.vue'
 import QuizPage from '../pages/QuizPage.vue'
 import ResultPage from '../pages/ResultPage.vue'
 import EarQuizPage from '../pages/EarQuizPage.vue'
+import EarResultPage from '../pages/EarResultPage.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/ear-quiz',
     name: 'ear-quiz',
     component: EarQuizPage
+  },
+  {
+    path: '/ear-result/:id',
+    name: 'ear-result',
+    component: EarResultPage
   }
 ]
 
