@@ -153,6 +153,12 @@ const submitTest = async () => {
       body: JSON.stringify({ answers: answers.value })
     })
     const result = await response.json()
+    localStorage.setItem('wmti_last_result', JSON.stringify({
+      id: result.id,
+      label: result.label,
+      posterUrl: result.posterUrl,
+      type: 'wmti'
+    }))
     track('quiz_submit', { url_path: '/quiz', quiz_result_id: result.id })
     router.push({ name: 'result', params: { id: result.id } })
   } catch (error) {

@@ -33,12 +33,33 @@
         </div>
       </div>
       <div class="result-actions">
-        <button type="button" class="btn btn-primary" @click="handleShare">
-          分享结果
+        <button type="button" class="btn btn-ghost" @click="goHome">
+          回到首页
         </button>
         <button type="button" class="btn btn-ghost" @click="restartTest">
           再测一次
         </button>
+        <button type="button" class="btn btn-primary" @click="handleShare">
+          分享结果
+        </button>
+      </div>
+    </section>
+
+    <!-- 其他测试卡片 -->
+    <section class="other-test-section">
+      <div class="other-test-title">其他测试</div>
+      <div class="other-test-card" @click="goQuiz">
+        <div class="other-test-icon">🥕</div>
+        <div class="other-test-info">
+          <div class="other-test-name">WMLS人设测试</div>
+          <div class="other-test-desc">测测你是哪种五迷人设</div>
+          <div class="other-test-dims">
+            <span><b>W</b>ork</span>
+            <span><b>M</b>indset</span>
+            <span><b>L</b>ove</span>
+            <span><b>S</b>truggle</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -77,16 +98,6 @@
       </div>
     </section>
 
-    <!-- WMLS 导流卡片 -->
-    <section class="promo-card" @click="goHome">
-      <div class="promo-icon">🍎</div>
-      <div class="promo-text">
-        <div class="promo-title">WMTI · 五迷趣味测试</div>
-        <div class="promo-sub">趣味测试 仅供娱乐</div>
-      </div>
-      <div class="promo-arrow">›</div>
-    </section>
-
     <p class="disclaimer-bottom">趣味测试 仅供娱乐</p>
 
     </div>
@@ -105,6 +116,10 @@
             <div v-else-if="shareImageUrl" class="share-image-preview">
               <img :src="shareImageUrl" alt="分享图片" class="share-result-img" />
               <p class="share-tip">长按图片保存到相册<br/>或发送给朋友</p>
+              <div class="share-qrcode">
+                <img :src="qrcodeImg" alt="交流群" class="qrcode-img" />
+                <p class="qrcode-tip">扫码进群交流</p>
+              </div>
             </div>
           </div>
         </div>
@@ -139,8 +154,14 @@
           <span class="cta-text">👇 你能听出来哪首吗？扫码进来挑战一下！</span>
         </div>
         <div class="share-card-footer">
-          <img src="/qrcode.png" alt="扫码测试" class="share-card-qr-img" />
-          <p class="share-card-disclaimer">趣味测试 仅供娱乐</p>
+          <div class="share-card-qr-wrap">
+            <img src="/qrcode.png" alt="扫码测试" class="share-card-qr-img" />
+            <p class="share-card-label">扫码测试</p>
+          </div>
+          <div class="share-card-qr-wrap">
+            <img :src="qrcodeImg" alt="交流群" class="share-card-qr-img" />
+            <p class="share-card-label">进群交流</p>
+          </div>
         </div>
       </div>
     </div>
@@ -152,6 +173,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { apiUrl, imageUrl, track } from '../api'
 import html2canvas from 'html2canvas'
+import qrcodeImg from '/group-qrcode.png'
 
 const router = useRouter()
 const route = useRoute()
@@ -252,6 +274,10 @@ const restartTest = () => {
 
 const goHome = () => {
   router.push('/')
+}
+
+const goQuiz = () => {
+  router.push('/quiz')
 }
 </script>
 
@@ -639,51 +665,69 @@ const goHome = () => {
   display: inline-block;
 }
 
-/* Promo Card */
-.promo-card {
-  background: var(--md-surface);
-  border-radius: 16px;
-  padding: 16px 18px;
+/* Other Test Card */
+.other-test-section {
+  width: 100%;
+  max-width: 320px;
   margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.1);
-  border: 1px solid rgba(0, 136, 204, 0.12);
-  transition: transform 0.15s;
 }
 
-.promo-card:active {
-  transform: scale(0.98);
-}
-
-.promo-icon {
-  font-size: 32px;
-  flex-shrink: 0;
-}
-
-.promo-text {
-  flex: 1;
-  text-align: left;
-}
-
-.promo-title {
-  font-size: 15px;
+.other-test-title {
+  font-size: 14px;
   font-weight: 700;
   color: var(--md-blue-900);
-  margin-bottom: 4px;
+  text-align: left;
+  margin-bottom: 10px;
+  padding-left: 4px;
 }
 
-.promo-sub {
+.other-test-card {
+  background: white;
+  border-radius: 20px;
+  padding: 16px 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 87, 174, 0.12);
+  border: 1.5px solid rgba(0, 136, 204, 0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.other-test-card:active {
+  transform: scale(0.97);
+}
+
+.other-test-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.other-test-info {
+  text-align: center;
+  width: 100%;
+}
+
+.other-test-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--md-blue-900);
+  margin-bottom: 6px;
+}
+
+.other-test-desc {
   font-size: 12px;
-  color: var(--md-blue-500);
+  color: var(--md-blue-600);
+  line-height: 1.4;
+  margin-bottom: 8px;
 }
 
-.promo-arrow {
-  font-size: 24px;
-  color: var(--md-blue-400);
-  font-weight: 300;
+.other-test-dims {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--md-blue-500);
 }
 
 /* Disclaimer */
@@ -760,6 +804,26 @@ const goHome = () => {
   font-size: 13px;
   color: var(--md-blue-600);
   line-height: 1.5;
+}
+
+.share-qrcode {
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.qrcode-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.qrcode-tip {
+  font-size: 12px;
+  color: #666;
+  margin: 8px 0 0;
 }
 
 /* Hidden Share Card */
@@ -936,21 +1000,42 @@ const goHome = () => {
 }
 
 .share-card-footer {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.share-card-qr-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .share-card-qr-img {
-  width: 70px;
-  height: 70px;
-  margin-bottom: 6px;
+  width: 80px;
+  height: 80px;
   border-radius: 8px;
   background: white;
   padding: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.share-card-label {
+  font-size: 11px;
+  color: var(--md-blue-500);
+  margin: 6px 0 0;
 }
 
 .share-card-disclaimer {
   font-size: 11px;
   color: var(--md-blue-500);
   margin: 0;
+}
+
+.share-qrcode,
+.qrcode-img,
+.qrcode-tip {
+  display: none;
 }
 </style>

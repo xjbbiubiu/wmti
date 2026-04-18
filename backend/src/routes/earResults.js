@@ -79,8 +79,13 @@ router.post('/submit', (req, res) => {
   resultsStorage.set(resultId, resultData);
   saveResults(resultsStorage);
 
-  // 只返回 ID，前端拿ID后请求详情
-  res.json({ id: resultId });
+  res.json({ id: resultId, score, grade, questions: questionDetails });
+});
+
+// GET /stats
+router.get('/stats', (req, res) => {
+  const totalSubmissions = resultsStorage.size;
+  res.json({ totalSubmissions });
 });
 
 // GET /:id

@@ -175,6 +175,15 @@ const submitTest = async () => {
       body: JSON.stringify({ answers: answers.value })
     })
     const result = await response.json()
+    const posterUrl = result.grade?.image 
+      ? `${window.location.origin}/wmti${result.grade.image}`
+      : ''
+    localStorage.setItem('wmti_last_result', JSON.stringify({
+      id: result.id,
+      label: result.grade?.title || '空耳达人',
+      posterUrl,
+      type: 'ear'
+    }))
     track('quiz_submit', { url_path: '/ear-quiz', quiz_result_id: result.id })
     router.push({ name: 'ear-result', params: { id: result.id } })
   } catch (e) {

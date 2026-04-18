@@ -3,62 +3,46 @@
     <div class="container">
       <div class="header">
         <div class="logo">WMTI</div>
-        <div class="subtitle">五迷老师趣味测试</div>
+        <div class="subtitle">五迷趣味测试</div>
+        <div v-if="totalTests > 0" class="total-tests">已有 {{ totalTests }} 人测试</div>
       </div>
 
-      <div class="intro-card">
-        <div class="intro-text">
-          <p>🥕 测测你是哪种「五迷老师」人设</p>
-          <p class="note">共 16 道题，约 3 分钟</p>
+      <div class="entry-cards">
+        <div class="entry-card primary" @click="startEarTest">
+          <div class="entry-card-title">🎤 五月天空耳猜歌测试</div>
+          <div class="entry-card-desc">你是不是真正的听力王</div>
+          <div class="entry-card-count">14道题 · 约3分钟</div>
         </div>
-      </div>
-
-      <div class="dimensions">
-        <div class="dimension-item">
-          <div class="dim-letter">W</div>
-          <div class="dim-full">Work</div>
-          <div class="dim-icon">💼</div>
-          <div class="dim-name">工作</div>
-        </div>
-        <div class="dimension-item">
-          <div class="dim-letter">M</div>
-          <div class="dim-full">Mindset</div>
-          <div class="dim-icon">🧠</div>
-          <div class="dim-name">心态</div>
-        </div>
-        <div class="dimension-item">
-          <div class="dim-letter">L</div>
-          <div class="dim-full">Love</div>
-          <div class="dim-icon">❤️</div>
-          <div class="dim-name">情感</div>
-        </div>
-        <div class="dimension-item">
-          <div class="dim-letter">S</div>
-          <div class="dim-full">Struggle</div>
-          <div class="dim-icon">💪</div>
-          <div class="dim-name">挫折</div>
+        <div class="entry-card" @click="startTest">
+          <div class="entry-card-title">🥕 wmls人设测试</div>
+          <div class="entry-card-desc">测测你是哪种五迷人设</div>
+          <div class="entry-card-subtitle">
+            <div class="wmls-dims">
+              <span class="dim-item"><b>W</b>ork 工作</span>
+              <span class="dim-item"><b>M</b>indset 心态</span>
+              <span class="dim-item"><b>L</b>ove 情感</span>
+              <span class="dim-item"><b>S</b>truggle 挫折</span>
+            </div>
+          </div>
+          <div class="entry-card-count">16道题 · 约3分钟</div>
         </div>
       </div>
 
-      <button class="start-btn" @click="startTest">
-        开始测试
-      </button>
-
-      <!-- 空耳测试入口卡片 -->
-      <div class="ear-entry-card" @click="startEarTest">
-        <div class="ear-entry-icon">🎤</div>
-        <div class="ear-entry-text">
-          <div class="ear-entry-title">空耳猜歌</div>
-          <div class="ear-entry-desc">10道空耳歌词，测测你是不是真正的五迷听力王！</div>
+      <div v-if="cachedEarResult || cachedWmtiResult" class="cached-section">
+        <div class="cached-title">测试结果</div>
+        <div v-if="cachedEarResult" class="cached-result" @click="goToEarResult">
+          <img :src="cachedEarResult.posterUrl" class="cached-poster" :alt="cachedEarResult.label" />
+          <div class="cached-info">
+            <span class="cached-label">{{ cachedEarResult.label }}</span>
+            <span class="cached-tip">🎤 上次五月天空耳猜歌测试结果</span>
+          </div>
         </div>
-        <div class="ear-entry-arrow">›</div>
-      </div>
-
-      <div v-if="cachedResult" class="cached-result" @click="goToResult">
-        <img :src="cachedResult.posterUrl" class="cached-poster" :alt="cachedResult.label" />
-        <div class="cached-info">
-          <span class="cached-label">{{ cachedResult.label }}</span>
-          <span class="cached-tip">查看上次结果 →</span>
+        <div v-if="cachedWmtiResult" class="cached-result" @click="goToWmtiResult">
+          <img :src="cachedWmtiResult.posterUrl" class="cached-poster" :alt="cachedWmtiResult.label" />
+          <div class="cached-info">
+            <span class="cached-label">{{ cachedWmtiResult.label }}</span>
+            <span class="cached-tip">🥕 上次WMLS人设测试结果</span>
+          </div>
         </div>
       </div>
 
@@ -75,13 +59,19 @@ import { useRouter } from 'vue-router'
 import { track } from '../api'
 
 const router = useRouter()
-const cachedResult = ref(null)
+const cachedEarResult = ref(null)
+const cachedWmtiResult = ref(null)
 
 onMounted(() => {
   const stored = localStorage.getItem('wmti_last_result')
   if (stored) {
     try {
-      cachedResult.value = JSON.parse(stored)
+      const result = JSON.parse(stored)
+      if (result.type === 'ear') {
+        cachedEarResult.value = result
+      } else if (result.type === 'wmti') {
+        cachedWmtiResult.value = result
+      }
     } catch {
       localStorage.removeItem('wmti_last_result')
     }
@@ -99,11 +89,50 @@ const startEarTest = () => {
   router.push('/ear-quiz')
 }
 
-const goToResult = () => {
-  if (cachedResult.value) {
-    router.push(`/result/${cachedResult.value.id}`)
+const goToEarResult = () => {
+  if (cachedEarResult.value) {
+    router.push(`/ear-result/${cachedEarResult.value.id}`)
   }
 }
+
+const goToWmtiResult = () => {
+  if (cachedWmtiResult.value) {
+    router.push(`/result/${cachedWmtiResult.value.id}`)
+  }
+}
+
+const totalTests = ref(0)
+const loadStats = async () => {
+  try {
+    const [earRes, wmtiRes] = await Promise.all([
+      fetch(apiUrl('/api/ear/results/stats')),
+      fetch(apiUrl('/api/stats'))
+    ])
+    const earStats = await earRes.json()
+    const wmtiStats = await wmtiRes.json()
+    totalTests.value = (earStats.totalSubmissions || 0) + (wmtiStats.totalSubmissions || 0)
+  } catch (e) {
+    console.error('Failed to load stats:', e)
+  }
+}
+
+onMounted(() => {
+  const stored = localStorage.getItem('wmti_last_result')
+  if (stored) {
+    try {
+      const result = JSON.parse(stored)
+      if (result.type === 'ear') {
+        cachedEarResult.value = result
+      } else if (result.type === 'wmti') {
+        cachedWmtiResult.value = result
+      }
+    } catch {
+      localStorage.removeItem('wmti_last_result')
+    }
+  }
+  loadStats()
+  track('page_view', { url_path: '/', quiz_type: 'home' })
+})
 </script>
 
 <style scoped>
@@ -118,7 +147,7 @@ const goToResult = () => {
 }
 
 .container {
-  max-width: min(100%, 420px);
+  max-width: min(100%, 480px);
   width: 100%;
   text-align: center;
   display: flex;
@@ -139,198 +168,149 @@ const goToResult = () => {
 }
 
 .subtitle {
-  font-size: 15px;
-  color: var(--md-text-on-blue-muted);
-  margin-top: 6px;
-  letter-spacing: 0.15em;
-}
-
-.intro-card {
-  background: var(--md-surface);
-  border-radius: 18px;
-  padding: 22px 20px;
-  margin-bottom: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 28px rgba(5, 26, 46, 0.15);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.intro-text p {
-  margin: 0;
-  font-size: 15px;
-  color: var(--md-blue-900);
-  line-height: 1.6;
-}
-
-.intro-text .note {
-  margin-top: 6px;
-  font-size: 13px;
-  color: var(--md-blue-700);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--md-text-on-blue);
   opacity: 0.85;
+  margin-top: 6px;
 }
 
-.dimensions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  max-width: 380px;
-  margin: 0 auto 24px;
-  box-sizing: border-box;
+.total-tests {
+  font-size: 12px;
+  color: var(--md-text-on-blue);
+  opacity: 0.7;
+  margin-top: 8px;
 }
 
-.dimension-item {
-  background: var(--md-surface);
-  border-radius: 16px;
-  padding: 16px 8px;
+.entry-cards {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  box-shadow: 0 6px 20px rgba(5, 26, 46, 0.12);
-  border: 1px solid rgba(0, 136, 204, 0.12);
-  flex: 1;
-  min-width: 0;
-}
-
-.dim-letter {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(145deg, var(--md-accent-bright) 0%, var(--md-blue-500) 100%);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: 900;
-  color: white;
-}
-
-.dim-full {
-  font-size: 9px;
-  color: var(--md-blue-600);
-  font-weight: 500;
-}
-
-.dim-icon {
-  font-size: 18px;
-  margin: 2px 0;
-}
-
-.dim-name {
-  font-size: 11px;
-  color: var(--md-blue-900);
-  font-weight: 600;
-}
-
-.start-btn {
-  background: var(--md-blue-50);
-  color: var(--md-blue-600);
-  border: 2px solid var(--md-blue-200);
-  min-height: 52px;
-  padding: 0 32px;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  border-radius: 14px;
-  cursor: pointer;
-  touch-action: manipulation;
-  box-shadow: 0 4px 16px rgba(0, 136, 204, 0.15);
-  transition: transform 0.15s, box-shadow 0.15s;
-  width: 50%;
-  margin: 0 auto 16px;
-  display: block;
-}
-
-.start-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(0, 136, 204, 0.25);
-  background: var(--md-blue-100);
-}
-
-.start-btn:focus-visible {
-  outline: 3px solid rgba(255, 255, 255, 0.85);
-  outline-offset: 3px;
-}
-
-/* 空耳测试入口卡片 */
-.ear-entry-card {
-  display: flex;
-  align-items: center;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 16px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.1);
-  border: 1.5px solid rgba(0, 136, 204, 0.18);
-  transition: transform 0.15s, box-shadow 0.15s;
   width: 100%;
-  max-width: 380px;
-  box-sizing: border-box;
+  max-width: 320px;
+  margin-bottom: 16px;
 }
 
-.ear-entry-card:active {
-  transform: scale(0.98);
+.cached-section {
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 16px;
 }
 
-.ear-entry-icon {
-  font-size: 28px;
-  flex-shrink: 0;
-}
-
-.ear-entry-text {
-  flex: 1;
-  text-align: left;
-}
-
-.ear-entry-title {
-  font-size: 15px;
+.cached-title {
+  font-size: 14px;
   font-weight: 700;
   color: var(--md-blue-900);
-  margin-bottom: 3px;
+  text-align: left;
+  margin-bottom: 10px;
+  padding-left: 4px;
 }
 
-.ear-entry-desc {
-  font-size: 12px;
-  color: var(--md-blue-600);
-  line-height: 1.4;
-}
-
-.ear-entry-arrow {
-  font-size: 22px;
-  color: var(--md-blue-400);
-  font-weight: 300;
-  flex-shrink: 0;
-}
-
-.footer {
-  margin-top: 20px;
-}
-
-.footer p {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-}
-
-/* 缓存结果卡片 */
 .cached-result {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 14px;
+  background: white;
+  border-radius: 16px;
   padding: 12px 16px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.12);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.08);
+  border: 1px solid rgba(0, 136, 204, 0.1);
+  transition: transform 0.15s;
+}
+
+.entry-card {
+  background: white;
+  border-radius: 20px;
+  padding: 16px 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 87, 174, 0.12);
+  border: 1.5px solid rgba(0, 136, 204, 0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.entry-card:active {
+  transform: scale(0.97);
+}
+
+.entry-card.primary {
+  background: linear-gradient(160deg, #ffffff 0%, #e8f5ff 100%);
+  border-color: rgba(0, 136, 204, 0.25);
+}
+
+.entry-card-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.entry-card-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--md-blue-900);
+  margin-bottom: 6px;
+}
+
+.entry-card-subtitle {
+  margin-bottom: 6px;
+}
+
+.wmls-dims {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.dim-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.dim-ltr {
+  font-weight: 800;
+  color: var(--md-blue-800);
+}
+
+.dim-txt {
+  color: var(--md-blue-500);
+}
+
+.entry-card-desc {
+  font-size: 12px;
+  color: var(--md-blue-600);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.entry-card-count {
+  font-size: 11px;
+  color: var(--md-blue-500);
+  background: rgba(0, 136, 204, 0.08);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.cached-result {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: white;
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(5, 26, 46, 0.08);
+  border: 1px solid rgba(0, 136, 204, 0.1);
   width: 100%;
-  max-width: 300px;
-  box-sizing: border-box;
+  max-width: 380px;
+  transition: transform 0.15s;
 }
 
 .cached-result:active {
@@ -338,23 +318,23 @@ const goToResult = () => {
 }
 
 .cached-poster {
-  width: 46px;
-  height: 46px;
+  width: 56px;
+  height: 56px;
   border-radius: 10px;
   object-fit: cover;
-  flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .cached-info {
+  flex: 1;
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 3px;
+  gap: 4px;
 }
 
 .cached-label {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--md-blue-900);
 }
@@ -362,5 +342,17 @@ const goToResult = () => {
 .cached-tip {
   font-size: 12px;
   color: var(--md-blue-500);
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 11px;
+  color: var(--md-text-on-blue);
+  opacity: 0.6;
 }
 </style>
