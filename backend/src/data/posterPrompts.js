@@ -49,11 +49,11 @@ const posterPrompts = {
   },
   'W2M2L1': {
     prompt: 'Patient chibi turtle character climbing mountain step by step, steady progress, bamboo mountain background, green and blue tones, sunrise peak ahead, persistent and hardworking, determined expression',
-    tagline: '踏实生活派'
+    tagline: '不平庸五迷'
   },
   'W2M2L2': {
     prompt: 'Authentic chibi character with paintbrush painting colorful world, standing out from ordinary gray background, vibrant rainbow colors, artistic and unique, creative explosion, self-expression vibes',
-    tagline: '不平庸五迷'
+    tagline: '踏实生活派'
   },
   'W2M2L3': {
     prompt: 'Wise chibi owl wearing glasses sitting calmly, observing world with clarity, floating ice cream cone and concert ticket, balance and perspective, warm golden hour lighting, thoughtful and serene expression, cozy atmosphere',
