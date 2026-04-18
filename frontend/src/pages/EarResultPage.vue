@@ -16,7 +16,7 @@
       </div>
 
       <div class="score-display">
-        <span class="score-num">{{ result.score }}</span>
+        <span class="score-num">{{ result.score ?? 0 }}</span>
         <span class="score-sep">/</span>
         <span class="score-total">{{ result.questions ? result.questions.length : 10 }}</span>
         <span class="score-label">题答对</span>
