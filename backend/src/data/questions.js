@@ -17,7 +17,7 @@ const questions = [
     id: 1,
     content: '五月天要开演唱会了！你提前半年就开始蹲票，结果开票一秒售罄。此时你的反应是：',
     options: [
-      { key: 'A', content: '成名在望在此一举——蹲到黄牛价也要去！', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'A', content: '成名在望在此一举——吃土也要去！', scores: { w: 3, m: 0, l: 0, s: 0 } },
       { key: 'B', content: '找找团票渠道，或者拜托五迷群的大佬帮忙', scores: { w: 2, m: 0, l: 0, s: 0 } },
       { key: 'C', content: '等一等，说不定有人转票呢', scores: { w: 1, m: 0, l: 0, s: 0 } },
       { key: 'D', content: '算了，诺亚方舟会再开的——下次一定！', scores: { w: 0, m: 0, l: 0, s: 0 } }
@@ -25,19 +25,19 @@ const questions = [
   },
   {
     id: 2,
-    content: '你终于抢到了演唱会门票，但票价是你工资的半个月。接下来你准备：',
+    content: '演唱会票价加上交通住宿，是一笔不小的开支。为了能去，你会：',
     options: [
-      { key: 'A', content: '吃土也要去！第二人生就是要有这种疯狂！', scores: { w: 3, m: 0, l: 0, s: 0 } },
-      { key: 'B', content: '精打细算：坐绿皮火车、住青旅也无所谓', scores: { w: 2, m: 0, l: 0, s: 0 } },
-      { key: 'C', content: '还是好好上班吧，把票转给更需要的朋友', scores: { w: 1, m: 0, l: 0, s: 0 } },
-      { key: 'D', content: '生存以上生活以下——等以后的Live版本也行', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'A', content: '接下来一个月节衣缩食，把预算全挤出来', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'B', content: '周末兼职或接点小活，赚钱去看', scores: { w: 2, m: 0, l: 0, s: 0 } },
+      { key: 'C', content: '找找有没有更便宜的组合方案', scores: { w: 1, m: 0, l: 0, s: 0 } },
+      { key: 'D', content: '算了，线上听也一样有感觉', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   },
   {
     id: 3,
     content: '你精心打扮去演唱会，结果发现荧光棒忘带了。此时你的反应是：',
     options: [
-      { key: 'A', content: '轧马路也要轧到便利店买一支——仪式感不能少！', scores: { w: 3, m: 0, l: 0, s: 0 } },
+      { key: 'A', content: '轧马路也要轧到周边店，StayReal荧光棒必须安排上！', scores: { w: 3, m: 0, l: 0, s: 0 } },
       { key: 'B', content: '用手机手电筒代替，灵魂的共鸣不靠荧光棒', scores: { w: 2, m: 0, l: 0, s: 0 } },
       { key: 'C', content: '找旁边的人借，或者干脆用拳头挥舞', scores: { w: 1, m: 0, l: 0, s: 0 } },
       { key: 'D', content: '无所谓，我的手就是最好的荧光棒', scores: { w: 0, m: 0, l: 0, s: 0 } }
@@ -112,7 +112,7 @@ const questions = [
     content: '你带着一个完全不了解五月天的朋友来看演唱会。散场后，他/她说："原来他们的歌不止一首！"你会：',
     options: [
       { key: 'A', content: '《好好》给你听——这是最温柔的歌', scores: { w: 0, m: 0, l: 3, s: 0 } },
-      { key: 'B', content: '好高兴你入坑了！加微信，以后一起抢票！', scores: { w: 0, m: 0, l: 2, s: 0 } },
+      { key: 'B', content: '好高兴你入坑了！以后一起抢票！', scores: { w: 0, m: 0, l: 2, s: 0 } },
       { key: 'C', content: '默默发个歌单给他：从《温柔》开始', scores: { w: 0, m: 0, l: 1, s: 0 } },
       { key: 'D', content: '无所谓——透露一点我们的快乐就够了', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
@@ -171,12 +171,12 @@ const questions = [
   },
   {
     id: 16,
-    content: '看完演唱会回家的路上，你发了条朋友圈，配文应该写：',
+    content: '看完演唱会回家的路上，你久久不能平静。此时你的感受是：',
     options: [
       { key: 'A', content: '"我如果有梦有没有错"——今晚值了！', scores: { w: 0, m: 0, l: 0, s: 3 } },
       { key: 'B', content: '"如果我们不曾相遇"——感谢五月天，感谢五迷们', scores: { w: 0, m: 0, l: 0, s: 2 } },
       { key: 'C', content: '"自传"的下半场——继续书写属于我们的故事', scores: { w: 0, m: 0, l: 0, s: 1 } },
-      { key: 'D', content: '"终于一眼就看到注定的改变"——明天继续加油', scores: { w: 0, m: 0, l: 0, s: 0 } }
+      { key: 'D', content: '"I love you无望"——今晚的快乐还没释放完！', scores: { w: 0, m: 0, l: 0, s: 0 } }
     ]
   }
 ];

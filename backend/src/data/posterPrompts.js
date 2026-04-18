@@ -49,7 +49,7 @@ const posterPrompts = {
   },
   'W2M2L1': {
     prompt: 'Patient chibi turtle character climbing mountain step by step, steady progress, bamboo mountain background, green and blue tones, sunrise peak ahead, persistent and hardworking, determined expression',
-    tagline: '不屈奋斗者'
+    tagline: '踏实生活派'
   },
   'W2M2L2': {
     prompt: 'Authentic chibi character with paintbrush painting colorful world, standing out from ordinary gray background, vibrant rainbow colors, artistic and unique, creative explosion, self-expression vibes',

@@ -11,7 +11,7 @@
     <section class="hero-card" aria-label="测试结果卡片">
       <div class="hero-header">
         <span class="hero-badge">WMTI</span>
-        <span class="hero-title">🥕五迷趣味测试</span>
+        <span class="hero-title">🥕五迷老师趣味测试</span>
       </div>
       <div class="hero-main">
         <div class="hero-image-wrap">
@@ -121,7 +121,7 @@
     <div class="share-card">
       <div class="share-card-header">
         <span class="share-card-badge">WMTI</span>
-        <span class="share-card-title">🥕五迷趣味测试</span>
+        <span class="share-card-title">🥕五迷老师趣味测试</span>
       </div>
       <div class="share-card-main">
         <div class="share-card-image-wrap">
