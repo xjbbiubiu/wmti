@@ -174,4 +174,9 @@ const earQuestions = [
   }
 ];
 
-module.exports = shuffleOptions(earQuestions);
+const shuffledQuestions = earQuestions.map(q => ({
+  ...q,
+  options: [...q.options].sort(() => Math.random() - 0.5)
+}));
+
+module.exports = shuffledQuestions;
