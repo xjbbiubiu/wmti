@@ -101,8 +101,9 @@ onUnmounted(() => {
 
 const selectAnswer = (index) => {
   if (isTransitioning.value) return
-  isTransitioning.value = true
+  // 先立即清除旧选中状态，强制 DOM 立即更新
   answers.value[currentQuestionIndex.value] = index
+  isTransitioning.value = true
   setTimeout(() => {
     nextQuestion()
     isTransitioning.value = false
@@ -225,6 +226,9 @@ const submitTest = async () => {
   box-shadow: none !important;
   outline: none !important;
   -webkit-tap-highlight-color: transparent !important;
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
 }
 
 .question-card.transitioning .option-btn::before {
@@ -237,6 +241,13 @@ const submitTest = async () => {
 
 .question-card.transitioning .nav-btn {
   pointer-events: none;
+}
+
+.question-card.transitioning .option-btn.selected,
+.question-card.transitioning .option-btn:active {
+  background: var(--md-blue-50) !important;
+  color: var(--md-blue-900) !important;
+  border-color: transparent !important;
 }
 
 .option-btn {
