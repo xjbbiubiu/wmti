@@ -90,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { apiUrl, track } from '../api'
 
@@ -115,18 +115,7 @@ const currentQuestion = computed(() => questions.value[currentIndex.value])
 const progressPercent = computed(() => totalQuestions.value ? ((currentIndex.value + 1) / totalQuestions.value) * 100 : 0)
 const selectedAnswer = computed(() => answers.value[currentIndex.value] ?? null)
 
-// 自适应字体大小
-const fitFontSize = async () => {
-  await nextTick()
-  if (!earLyricRef.value) return
-  const el = earLyricRef.value
-  el.style.fontSize = '28px'
-  while (el.scrollHeight > el.clientHeight && parseFloat(el.style.fontSize) > 14) {
-    el.style.fontSize = (parseFloat(el.style.fontSize) - 0.5) + 'px'
-  }
-}
-
-let resizeObserver = null
+let answerTimer = null
 
 const loadQuestions = async () => {
   loading.value = true
@@ -140,20 +129,11 @@ const loadQuestions = async () => {
     error.value = e.message || '加载题目失败，请检查网络后重试。'
   } finally {
     loading.value = false
-    await nextTick()
-    fitFontSize()
   }
 }
 
 onMounted(async () => {
   await loadQuestions()
-
-  resizeObserver = new ResizeObserver(() => fitFontSize())
-  if (quizRef.value) resizeObserver.observe(quizRef.value)
-})
-
-onUnmounted(() => {
-  resizeObserver?.disconnect()
 })
 
 const selectAnswer = (index) => {
@@ -165,7 +145,7 @@ const selectAnswer = (index) => {
   isCorrect.value = selectedOption?.correct === true
   showFeedback.value = true
 
-  setTimeout(() => {
+  answerTimer = setTimeout(() => {
     showFeedback.value = false
     nextQuestion()
     isTransitioning.value = false
@@ -175,6 +155,7 @@ const selectAnswer = (index) => {
 const handleFeedbackClick = () => {
   // 点击反馈卡片可提前进入下一题（移动端友好）
   if (showFeedback.value) {
+    clearTimeout(answerTimer)
     showFeedback.value = false
     nextQuestion()
     isTransitioning.value = false
@@ -186,14 +167,12 @@ const nextQuestion = () => {
     submitTest()
   } else {
     currentIndex.value++
-    queueMicrotask(() => fitFontSize())
   }
 }
 
 const prevQuestion = () => {
   if (currentIndex.value > 0) {
     currentIndex.value--
-    queueMicrotask(() => fitFontSize())
   }
 }
 
