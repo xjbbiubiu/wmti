@@ -60,7 +60,7 @@
               <span class="question-text ear-lyric">{{ q.earLyric }}</span>
             </div>
             <div class="question-row">
-              <span class="question-tag answer-tag">答案</span>
+              <span class="question-tag answer-tag">歌曲</span>
               <span class="question-text correct-answer">{{ q.correctAnswer?.song }}</span>
             </div>
             <div class="question-row">
@@ -70,6 +70,10 @@
             <div class="question-row">
               <span class="question-tag original-tag">原词</span>
               <span class="question-text original-lyric">{{ q.correctAnswer?.originalLyric }}</span>
+            </div>
+            <div class="question-row ear-reason-row" v-if="q.correctAnswer?.earReason">
+              <span class="question-tag reason-tag">原因</span>
+              <span class="question-text ear-reason">{{ q.correctAnswer?.earReason }}</span>
             </div>
           </div>
         </article>
@@ -418,6 +422,23 @@ const goHome = () => {
 .original-tag {
   background: rgba(0, 136, 204, 0.08);
   color: var(--md-blue-600);
+}
+
+.reason-tag {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+}
+
+.ear-reason-row {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.ear-reason {
+  color: #dc2626;
+  font-style: italic;
+  font-size: 13px;
 }
 
 .question-text {
