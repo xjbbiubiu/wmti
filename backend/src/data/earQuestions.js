@@ -154,7 +154,7 @@ const earQuestions = [
   },
   {
     id: 10,
-    earLyric: '我们都哎呀呀呀白了头是什么歌',
+    earLyric: '我们都哎呀呀呀白了头',
     options: [
       { key: 'A', content: '倔强', correct: false },
       { key: 'B', content: '什么歌', correct: true },

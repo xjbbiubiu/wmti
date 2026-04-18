@@ -27,7 +27,7 @@
           <div class="ear-lyric-wrap">
             <div class="ear-lyric-icon">&#x1F3A7;</div>
             <div class="ear-lyric" ref="earLyricRef">{{ currentQuestion.earLyric }}</div>
-            <div class="ear-lyric-hint">听成了哪首歌？</div>
+            <div class="ear-lyric-hint">是什么歌？</div>
           </div>
 
           <!-- 选项按钮 -->
@@ -37,7 +37,7 @@
               :key="index"
               class="option-btn"
               :class="{
-                selected: selectedAnswer === index,
+                selected: !showFeedback && selectedAnswer === index,
                 correct: showFeedback && option.correct,
                 wrong: showFeedback && selectedAnswer === index && !option.correct
               }"
