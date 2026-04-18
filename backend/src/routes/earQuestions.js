@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
       song: q.correctAnswer.song,
       album: q.correctAnswer.album,
       originalLyric: q.correctAnswer.originalLyric,
+      lyricsContext: q.correctAnswer.lyricsContext,
       earReason: q.correctAnswer.earReason,
     }
   }));

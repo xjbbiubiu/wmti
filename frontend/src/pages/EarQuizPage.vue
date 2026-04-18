@@ -53,7 +53,10 @@
                   <span class="explanation-divider">|</span>
                   专辑：{{ currentQuestion.correctAnswer.album }}
                 </div>
-                <div class="explanation-lyric">
+                <div v-if="currentQuestion.correctAnswer.lyricsContext" class="explanation-lyrics">
+                  <pre class="lyrics-context" v-html="highlightLyrics(currentQuestion.correctAnswer.lyricsContext, currentQuestion.correctAnswer.originalLyric)"></pre>
+                </div>
+                <div v-else class="explanation-lyric">
                   原歌词：{{ currentQuestion.correctAnswer.originalLyric }}
                 </div>
                 <div v-if="!isCorrect && currentQuestion.correctAnswer.earReason" class="explanation-ear">
@@ -142,6 +145,19 @@ const selectAnswer = (index) => {
   const selectedOption = currentQuestion.value.options[index]
   isCorrect.value = selectedOption?.correct === true
   showExplanation.value = true
+}
+
+const highlightLyrics = (lyricsContext, originalLyric) => {
+  if (!lyricsContext || !originalLyric) return lyricsContext
+  const lines = lyricsContext.split('\n')
+  const target = originalLyric.trim()
+  const highlighted = lines.map(line => {
+    if (line.includes(target) || target.includes(line.trim())) {
+      return `<span class="lyric-highlight">${line}</span>`
+    }
+    return line
+  }).join('\n')
+  return highlighted
 }
 
 const nextQuestion = () => {
@@ -381,6 +397,24 @@ const submitTest = async () => {
   font-size: 13px;
   color: #4a6fa5;
   margin-bottom: 6px;
+}
+
+.explanation-lyrics {
+  margin-bottom: 8px;
+}
+
+.lyrics-context {
+  font-family: inherit;
+  font-size: 13px;
+  color: #4a6fa5;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.lyric-highlight {
+  font-weight: 700;
+  color: #1e3a5f;
 }
 
 .explanation-ear {
