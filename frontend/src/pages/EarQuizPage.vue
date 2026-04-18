@@ -47,13 +47,6 @@
 
             <div v-if="showExplanation && selectedAnswer !== null" class="option-nav">
               <button
-                v-if="currentIndex > 0"
-                class="option-nav-btn prev"
-                @click="prevQuestion"
-              >
-                ← 上一题
-              </button>
-              <button
                 class="option-nav-btn next"
                 @click="nextQuestion"
               >
@@ -153,13 +146,6 @@ const nextQuestion = () => {
     submitTest()
   } else {
     currentIndex.value++
-  }
-}
-
-const prevQuestion = () => {
-  if (currentIndex.value > 0) {
-    showExplanation.value = false
-    currentIndex.value--
   }
 }
 
