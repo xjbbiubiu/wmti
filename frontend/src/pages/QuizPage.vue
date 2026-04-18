@@ -49,9 +49,11 @@ const router = useRouter()
 
 const questions = ref([])
 const currentQuestionIndex = ref(0)
-const selectedAnswer = ref(null)
 const answers = ref([])
 const isTransitioning = ref(false)
+
+// selectedAnswer 由当前题目的 answers 数组直接派生，不再单独维护状态
+const selectedAnswer = computed(() => answers.value[currentQuestionIndex.value] ?? null)
 
 const quizRef = ref(null)
 const containerRef = ref(null)
@@ -100,7 +102,7 @@ onUnmounted(() => {
 const selectAnswer = (index) => {
   if (isTransitioning.value) return
   isTransitioning.value = true
-  selectedAnswer.value = index
+  answers.value[currentQuestionIndex.value] = index
   setTimeout(() => {
     nextQuestion()
     isTransitioning.value = false
@@ -108,30 +110,18 @@ const selectAnswer = (index) => {
 }
 
 const nextQuestion = () => {
-  answers.value[currentQuestionIndex.value] = selectedAnswer.value
-
   if (currentQuestionIndex.value === totalQuestions.value - 1) {
     submitTest()
   } else {
-    // 先清空 + 换题，强制 Vue 单独渲染一次（看不到旧值）
-    selectedAnswer.value = null
     currentQuestionIndex.value++
-    // 等渲染完成后（下一个 microtask）再恢复该题的已选状态
-    queueMicrotask(() => {
-      selectedAnswer.value = answers.value[currentQuestionIndex.value] ?? null
-      fitFontSize()
-    })
+    queueMicrotask(() => fitFontSize())
   }
 }
 
 const prevQuestion = () => {
   if (currentQuestionIndex.value > 0) {
-    selectedAnswer.value = null
     currentQuestionIndex.value--
-    queueMicrotask(() => {
-      selectedAnswer.value = answers.value[currentQuestionIndex.value] ?? null
-      fitFontSize()
-    })
+    queueMicrotask(() => fitFontSize())
   }
 }
 
