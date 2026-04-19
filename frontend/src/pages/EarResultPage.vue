@@ -145,7 +145,7 @@
           </div>
         </div>
         <div class="share-card-cta">
-          <div v-if="roastText" class="roast-ear-lyric">{{ wrongQuestion?.earLyric }}</div>
+          <div v-if="roastText" class="roast-ear-lyric">{{ allCorrectShareQuestion?.earLyric || wrongQuestion?.earLyric }}</div>
           <span class="cta-text">👇 你能听出来哪首吗？扫码进来挑战一下！</span>
         </div>
         <div class="share-card-footer">
@@ -348,6 +348,14 @@ const randomQuestion = computed(() => {
   const questions = result.value.questions || []
   if (questions.length === 0) return null
   return questions[Math.floor(Math.random() * questions.length)]
+})
+
+// 全对时从做过的12题中随机选一道用于分享卡片
+const allCorrectShareQuestion = computed(() => {
+  const score = result.value.score || 0
+  const total = result.value.questions?.length || 12
+  if (score !== total) return null
+  return randomQuestion.value
 })
 
 const roastText = computed(() => {
