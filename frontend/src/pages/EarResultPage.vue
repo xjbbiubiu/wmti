@@ -707,10 +707,10 @@ const goQuiz = () => {
   justify-content: center;
   gap: 20px;
   margin-bottom: 10px;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #e8f5ff 0%, #dbeeff 100%);
-  border-radius: 14px;
-  border: 1px solid rgba(0, 136, 204, 0.2);
+  padding: 10px 14px;
+  background: rgba(0, 136, 204, 0.08);
+  border-radius: 12px;
+  border: none;
 }
 
 .result-qr-wrap {
@@ -724,15 +724,15 @@ const goQuiz = () => {
   width: 66px;
   height: 66px;
   border-radius: 8px;
-  background: white;
-  padding: 3px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  padding: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .result-qr-label {
   font-size: 10px;
-  font-weight: 700;
-  color: var(--md-blue-600);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
 }
 

@@ -327,10 +327,10 @@ const goHome = () => {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  padding: 12px 16px;
-  background: rgba(255,255,255,0.92);
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 87, 174, 0.12);
+  padding: 10px 14px;
+  background: rgba(0, 136, 204, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 87, 174, 0.08);
 }
 
 .qr-wrap {
@@ -346,13 +346,13 @@ const goHome = () => {
   border-radius: 8px;
   background: white;
   padding: 3px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .qr-label {
   font-size: 10px;
-  font-weight: 700;
-  color: var(--md-blue-600);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
 }
 
