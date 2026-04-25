@@ -32,6 +32,26 @@
           <p class="result-grade-desc">{{ result.grade?.desc }}</p>
         </div>
       </div>
+
+      <!-- 调侃语区：截图直接展示一道挑战题 -->
+      <div class="result-roast-section" v-if="roastLyric || roastSuffix">
+        <div class="roast-lyric" v-if="roastLyric">"{{ roastLyric }}"</div>
+        <div class="roast-suffix" v-if="roastSuffix">{{ roastSuffix }}</div>
+      </div>
+
+      <!-- 二维码展示区：截图分享直接带二维码 -->
+      <div class="result-qr-section">
+        <div class="result-qr-wrap">
+          <img src="/qrcode.png" alt="扫码挑战" class="result-qr-img" />
+          <p class="result-qr-label">扫码挑战空耳</p>
+        </div>
+        <div class="result-qr-divider">|</div>
+        <div class="result-qr-wrap">
+          <img :src="qrcodeImg" alt="进群交流" class="result-qr-img" />
+          <p class="result-qr-label">进群交流</p>
+        </div>
+      </div>
+
       <div class="result-actions">
         <div class="result-actions-row">
           <button type="button" class="btn btn-ghost" @click="goHome">
@@ -40,10 +60,10 @@
           <button type="button" class="btn btn-ghost" @click="restartTest">
             再测一次
           </button>
+          <button type="button" class="btn btn-primary" @click="handleShare">
+            生成分享图
+          </button>
         </div>
-        <button type="button" class="btn btn-primary" @click="handleShare">
-          分享结果
-        </button>
       </div>
     </section>
 
@@ -145,7 +165,7 @@
           </div>
         </div>
         <div class="share-card-cta">
-          <div v-if="roastText" class="roast-ear-lyric">{{ allCorrectShareQuestion?.earLyric || wrongQuestion?.earLyric }}</div>
+          <div v-if="roastLyric" class="roast-ear-lyric">"{{ roastLyric }}"</div>
           <span class="cta-text">👇 你能听出来哪首吗？扫码进来挑战一下！</span>
         </div>
         <div class="share-card-footer">
@@ -358,20 +378,20 @@ const allCorrectShareQuestion = computed(() => {
   return randomQuestion.value
 })
 
-const roastText = computed(() => {
+const roastLyric = computed(() => {
   const q = wrongQuestion.value
-  const score = result.score || 0
-  const total = result.questions?.length || 12
+  const score = result.value.score || 0
 
-  if (score === total) {
-    const rq = randomQuestion.value
-    return rq ? `"${rq.earLyric}" 你能听出来是哪首吗？进来挑战一下！` : '太强了！你是空耳界的天花板！'
+  if (score === (result.value.questions?.length || 12)) {
+    return randomQuestion.value?.earLyric || null
   }
+  return q?.earLyric || null
+})
 
-  if (q) {
-    return `"${q.earLyric}" 你能听出来是哪首吗？进来挑战一下！`
+const roastSuffix = computed(() => {
+  if (roastLyric.value) {
+    return '你能听出来是哪首吗？进来挑战一下！'
   }
-
   return '来试试你能答对几道？'
 })
 
@@ -652,6 +672,76 @@ const goQuiz = () => {
 
 .result-actions-row .btn {
   flex: 1;
+}
+
+/* 调侃语区 */
+.result-roast-section {
+  background: rgba(0, 136, 204, 0.08);
+  border: 1.5px solid rgba(0, 136, 204, 0.2);
+  border-radius: 16px;
+  padding: 16px 20px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.result-roast-section .roast-lyric {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--md-blue-800);
+  line-height: 1.5;
+  word-break: break-all;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 4px rgba(0, 87, 174, 0.1);
+}
+
+.result-roast-section .roast-suffix {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--md-blue-500);
+  line-height: 1.5;
+}
+
+/* 二维码展示区 */
+.result-qr-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #e8f5ff 0%, #dbeeff 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 136, 204, 0.2);
+}
+
+.result-qr-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.result-qr-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.result-qr-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--md-blue-600);
+  margin: 0;
+}
+
+.result-qr-divider {
+  font-size: 22px;
+  color: rgba(0, 136, 204, 0.25);
+  font-weight: 300;
+  line-height: 1;
 }
 
 /* Buttons */
@@ -1129,9 +1219,11 @@ const goQuiz = () => {
 
 .roast-ear-lyric {
   font-size: 16px;
-  font-weight: 700;
-  color: #dc2626;
+  font-weight: 900;
+  color: var(--md-blue-800);
   margin-bottom: 8px;
+  line-height: 1.5;
+  word-break: break-all;
 }
 
 .cta-text {

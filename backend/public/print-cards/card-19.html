@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空耳卡片 #19 - 你听到闹钟声 你推开了包拯</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111;
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 40px;
+  }
+
+  .page-label {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /* ─── 卡片尺寸：140×80mm（300 DPI ≈ 1654×945 px）─── */
+  .card {
+    width: 140mm;
+    height: 80mm;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    /* 出血保护：出血区域仅供打印店裁切，不含重要内容 */
+    background: #1a1a2e;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+
+  /* ════════════════════════════════════════
+     正面
+  ════════════════════════════════════════ */
+  .card-front {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex;
+  }
+
+  /* 背景装饰光效 */
+  .card-front::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background:
+      radial-gradient(ellipse at 0% 50%, rgba(255,105,180,0.25) 0%, transparent 55%),
+      radial-gradient(ellipse at 0% 80%, rgba(0,150,255,0.2) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* 左侧 AI 图片区 */
+  .card-image-zone {
+    width: 42%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-image-zone img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* AI 图片占位符（黄色虚线边框提示） */
+  .ai-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed rgba(255,200,50,0.6);
+    background: rgba(255,200,50,0.05);
+    gap: 8px;
+  }
+
+  .ai-placeholder-icon {
+    font-size: 28px;
+    opacity: 0.7;
+  }
+
+  .ai-placeholder-text {
+    font-size: 8px;
+    color: rgba(255,200,50,0.8);
+    text-align: center;
+    line-height: 1.5;
+    padding: 0 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  /* 右侧文字区 */
+  .card-text-zone {
+    width: 58%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10mm 8mm 8mm 6mm;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ear-lyric-label {
+    font-size: 7px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .ear-lyric-text {
+    font-size: 13.5mm;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.25;
+    text-shadow: 0 0 16px rgba(255,105,180,0.5), 0 2px 8px rgba(0,0,0,0.5);
+    margin-bottom: auto;
+    padding-top: 2mm;
+    letter-spacing: 0.02em;
+  }
+
+  /* 底部信息栏 */
+  .card-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 4mm;
+  }
+
+  .scan-hint {
+    font-size: 7px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+
+  .qr-wrap {
+    width: 18mm;
+    height: 18mm;
+    flex-shrink: 0;
+    border-radius: 3mm;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: #fff;
+    padding: 1.5mm;
+  }
+
+  .qr-wrap img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* 荧光棒装饰条 */
+  .glow-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #ff69b4, #00a8e8);
+    opacity: 0.8;
+  }
+
+  /* ════════════════════════════════════════
+     背面
+  ════════════════════════════════════════ */
+  .card-back {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #1a1a2e 0%, #0f3460 60%, #1a1a2e 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8mm 10mm;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 背景光效 */
+  .card-back::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(255,105,180,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 80%, rgba(0,150,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* 歌词金句 */
+  .back-quote-mark {
+    font-size: 28px;
+    color: rgba(255,105,180,0.4);
+    font-family: Georgia, serif;
+    line-height: 1;
+    margin-bottom: 2mm;
+    font-style: italic;
+  }
+
+  .back-quote {
+    font-size: 10.5mm;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.4;
+    text-shadow: 0 0 20px rgba(255,105,180,0.3);
+    margin-bottom: 4mm;
+    letter-spacing: 0.03em;
+  }
+
+  .back-source {
+    font-size: 7px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: auto;
+  }
+
+  .back-song-name {
+    font-size: 8px;
+    font-weight: 800;
+    color: rgba(0,168,232,0.9);
+    letter-spacing: 0.08em;
+    margin-bottom: 1mm;
+  }
+
+  .back-divider {
+    width: 20mm;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,105,180,0.5), transparent);
+    margin-bottom: 1mm;
+  }
+
+  .back-wmls {
+    font-size: 6.5px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .back-glow-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #00a8e8, #ff69b4);
+    opacity: 0.8;
+  }
+
+  /* 打印样式 */
+  @media print {
+    body {
+      background: white;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .page-label {
+      display: none;
+    }
+    .card {
+      width: 146mm;   /* 含出血：140 + 3×2 */
+      height: 86mm;   /* 含出血：80 + 3×2 */
+      box-shadow: none;
+      border-radius: 0;
+      page-break-after: always;
+    }
+    .card:last-child {
+      page-break-after: auto;
+    }
+  }
+
+  @page {
+    size: 146mm 86mm landscape;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     正面：空耳歌词挑战卡
+     左图（用户自行添加AI图）+ 右歌词 + 右下角QR码
+════════════════════════════════════════ -->
+<div class="page-label">正面 — 空耳挑战 #19</div>
+<div class="card">
+  <div class="card-front">
+    <!-- 左侧：AI生成图案区（请替换 {{AI_IMAGE}} 为实际图片）-->
+    <div class="card-image-zone">
+      <!-- ⚠️  将下方占位符替换为你的 AI 生成图  -->
+      <!-- 替换方式：删除 .ai-placeholder div，把下方的注释取消 -->
+      <!-- <img src="{{AI_IMAGE}}" alt="五月天元素图" /> -->
+      <div class="ai-placeholder">
+        <div class="ai-placeholder-icon">🎵</div>
+        <div class="ai-placeholder-text">
+          替换此处为<br>AI 生成图案<br>
+          <span style="font-size:7px;opacity:0.6;">建议 800×450px PNG</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：空耳歌词 + 二维码 -->
+    <div class="card-text-zone">
+      <div class="ear-lyric-label">你听到的是</div>
+      <div class="ear-lyric-text">你听到闹钟声 你推开了包拯</div>
+
+      <div class="card-bottom">
+        <div class="scan-hint">
+          扫码听歌<br>揭晓答案 →
+        </div>
+        <div class="qr-wrap">
+          <img src="data:image/png;base64,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" alt="QR码" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="glow-bar"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     背面：歌词金句卡
+════════════════════════════════════════ -->
+<div class="page-label">背面 — 歌词金句 #19</div>
+<div class="card">
+  <div class="card-back">
+    <div class="back-glow-bar"></div>
+    <div class="back-quote-mark">"</div>
+    <div class="back-quote">你醒在 无尽的 疲倦的人生</div>
+    <div class="back-source">— 第二人生</div>
+    <div class="back-song-name">🎤 第二人生</div>
+    <div class="back-divider"></div>
+    <div class="back-wmls">WMLS · 五月天 · 互换物料</div>
+  </div>
+</div>
+
+</body>
+</html>

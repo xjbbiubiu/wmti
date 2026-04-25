@@ -32,4 +32,24 @@ router.get('/', (req, res) => {
   res.json(sanitizedQuestions);
 });
 
+// 返回指定ID的题目（用于卡片扫码页）
+router.get('/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const question = allQuestions.find(q => q.id === id);
+  if (!question) {
+    return res.status(404).json({ error: '题目不存在' });
+  }
+  res.json({
+    id: question.id,
+    earLyric: question.earLyric,
+    correctAnswer: {
+      song: question.correctAnswer.song,
+      album: question.correctAnswer.album,
+      originalLyric: question.correctAnswer.originalLyric,
+      lyricsContext: question.correctAnswer.lyricsContext,
+      earReason: question.correctAnswer.earReason,
+    }
+  });
+});
+
 module.exports = router;
