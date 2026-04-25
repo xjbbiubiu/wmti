@@ -60,10 +60,10 @@
           <button type="button" class="btn btn-ghost" @click="restartTest">
             再测一次
           </button>
-          <button type="button" class="btn btn-primary" @click="handleShare">
-            生成分享图
-          </button>
         </div>
+        <button type="button" class="btn btn-primary" @click="handleShare">
+          生成分享图
+        </button>
       </div>
     </section>
 
@@ -755,9 +755,12 @@ const goQuiz = () => {
 }
 
 .btn-primary {
+  width: 100%;
   background: linear-gradient(135deg, var(--md-accent-bright), var(--md-blue-500));
   color: white;
   box-shadow: 0 4px 16px rgba(0, 170, 232, 0.3);
+  font-size: 14px;
+  padding: 12px 24px;
 }
 
 .btn-primary:hover {
