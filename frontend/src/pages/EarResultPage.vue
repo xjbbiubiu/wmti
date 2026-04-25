@@ -484,8 +484,8 @@ const goQuiz = () => {
 .result-card {
   background: linear-gradient(160deg, #ffffff 0%, #e8f5ff 60%, #dbeeff 100%);
   border-radius: 24px;
-  padding: 24px 20px;
-  margin-bottom: 20px;
+  padding: 20px 16px;
+  margin-bottom: 12px;
   box-shadow: 0 8px 32px rgba(0, 87, 174, 0.15);
   position: relative;
   overflow: hidden;
@@ -544,21 +544,21 @@ const goQuiz = () => {
 }
 
 .challenge-text {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--md-blue-800);
   font-weight: 600;
 }
 
 .challenge-text b {
   color: var(--md-accent);
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .result-main-card {
   background: white;
   border-radius: 20px;
-  padding: 20px 16px;
-  margin-bottom: 16px;
+  padding: 16px 14px;
+  margin-bottom: 12px;
   box-shadow: 0 4px 20px rgba(0, 87, 174, 0.1);
 }
 
@@ -566,40 +566,40 @@ const goQuiz = () => {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 6px;
+  margin-bottom: 10px;
 }
 
 .result-score-label {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--md-blue-500);
 }
 
 .result-score-num {
-  font-size: 48px;
+  font-size: 36px;
   font-weight: 800;
   color: var(--md-accent);
   line-height: 1;
 }
 
 .result-score-sep {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 600;
   color: var(--md-blue-500);
 }
 
 .result-image-wrap {
   width: 100%;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .result-grade-image {
   width: 100%;
-  max-width: 180px;
+  max-width: 160px;
   display: block;
   margin: 0 auto;
-  border-radius: 16px;
+  border-radius: 14px;
   box-shadow: 0 4px 16px rgba(0, 87, 174, 0.1);
 }
 
@@ -608,10 +608,10 @@ const goQuiz = () => {
 }
 
 .result-grade-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--md-blue-900);
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   line-height: 1.3;
 }
 
@@ -678,27 +678,26 @@ const goQuiz = () => {
 .result-roast-section {
   background: rgba(0, 136, 204, 0.08);
   border: 1.5px solid rgba(0, 136, 204, 0.2);
-  border-radius: 16px;
-  padding: 16px 20px;
+  border-radius: 14px;
+  padding: 12px 16px;
   text-align: center;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .result-roast-section .roast-lyric {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 900;
   color: var(--md-blue-800);
-  line-height: 1.5;
+  line-height: 1.4;
   word-break: break-all;
-  margin-bottom: 8px;
-  text-shadow: 0 1px 4px rgba(0, 87, 174, 0.1);
+  margin-bottom: 6px;
 }
 
 .result-roast-section .roast-suffix {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--md-blue-500);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 /* 二维码展示区 */
@@ -706,11 +705,11 @@ const goQuiz = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  margin-bottom: 14px;
-  padding: 14px 16px;
+  gap: 20px;
+  margin-bottom: 10px;
+  padding: 12px 16px;
   background: linear-gradient(135deg, #e8f5ff 0%, #dbeeff 100%);
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid rgba(0, 136, 204, 0.2);
 }
 
@@ -718,27 +717,27 @@ const goQuiz = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .result-qr-img {
-  width: 72px;
-  height: 72px;
+  width: 66px;
+  height: 66px;
   border-radius: 8px;
   background: white;
-  padding: 4px;
+  padding: 3px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .result-qr-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--md-blue-600);
   margin: 0;
 }
 
 .result-qr-divider {
-  font-size: 22px;
+  font-size: 20px;
   color: rgba(0, 136, 204, 0.25);
   font-weight: 300;
   line-height: 1;
