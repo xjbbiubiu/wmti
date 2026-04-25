@@ -48,7 +48,19 @@
         <button class="btn-listen" @click="goQuiz">
           🎤 我也要挑战空耳测试
         </button>
-        <p class="listen-hint">扫码测试 · 看看你能答对几道</p>
+
+        <!-- 二维码区 -->
+        <div class="listen-qr-section">
+          <div class="listen-qr-wrap">
+            <img src="/qrcode.png" alt="扫码测试" class="listen-qr-img" />
+            <p class="listen-qr-label">扫码挑战空耳</p>
+          </div>
+          <div class="listen-qr-divider">|</div>
+          <div class="listen-qr-wrap">
+            <img :src="qrcodeImg" alt="进群交流" class="listen-qr-img" />
+            <p class="listen-qr-label">进群交流</p>
+          </div>
+        </div>
       </div>
 
       <p class="disclaimer-bottom">趣味测试 仅供娱乐</p>
@@ -65,6 +77,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { apiUrl, track } from '../api'
+import qrcodeImg from '/group-qrcode.png'
 
 const router = useRouter()
 const route = useRoute()
@@ -346,8 +359,50 @@ const goHome = () => {
 .listen-hint {
   font-size: 12px;
   color: rgba(255,255,255,0.6);
-  margin: 0;
+  margin: 0 0 12px;
   font-weight: 500;
+}
+
+/* 二维码区 */
+.listen-qr-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 87, 174, 0.12);
+}
+
+.listen-qr-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.listen-qr-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.listen-qr-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--md-blue-600);
+  margin: 0;
+}
+
+.listen-qr-divider {
+  font-size: 22px;
+  color: rgba(0, 136, 204, 0.25);
+  font-weight: 300;
+  line-height: 1;
 }
 
 /* Disclaimer */
