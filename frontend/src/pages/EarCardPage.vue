@@ -13,7 +13,7 @@
         <span class="card-badge">🎵 五月天歌词空耳大挑战</span>
       </div>
 
-      <!-- 空耳歌词展示 -->
+      <!-- 空耳歌词 -->
       <div class="ear-lyric-card">
         <div class="ear-lyric-label">你听到的是</div>
         <div class="ear-lyric-text">"{{ question.earLyric }}"</div>
@@ -22,7 +22,6 @@
       <!-- 答案揭晓 -->
       <div class="answer-card">
         <div class="answer-reveal">
-          <span class="answer-label">这首歌是</span>
           <span class="answer-song">《{{ question.correctAnswer.song }}》</span>
           <span class="answer-album">{{ question.correctAnswer.album }}</span>
         </div>
@@ -43,23 +42,21 @@
         </div>
       </div>
 
-      <!-- 听歌按钮 -->
-      <div class="listen-section">
-        <button class="btn-listen" @click="goQuiz">
-          🎤 我也要挑战空耳测试
-        </button>
+      <!-- 挑战按钮 -->
+      <button class="btn-listen" @click="goQuiz">
+        🎤 我也要挑战空耳测试
+      </button>
 
-        <!-- 二维码区 -->
-        <div class="listen-qr-section">
-          <div class="listen-qr-wrap">
-            <img src="/qrcode.png" alt="扫码测试" class="listen-qr-img" />
-            <p class="listen-qr-label">扫码挑战空耳</p>
-          </div>
-          <div class="listen-qr-divider">|</div>
-          <div class="listen-qr-wrap">
-            <img :src="qrcodeImg" alt="进群交流" class="listen-qr-img" />
-            <p class="listen-qr-label">进群交流</p>
-          </div>
+      <!-- 二维码区 -->
+      <div class="qr-bottom-section">
+        <div class="qr-wrap">
+          <img src="/qrcode.png" alt="扫码测试" class="qr-img" />
+          <p class="qr-label">扫码挑战空耳</p>
+        </div>
+        <div class="qr-divider">|</div>
+        <div class="qr-wrap">
+          <img :src="qrcodeImg" alt="进群交流" class="qr-img" />
+          <p class="qr-label">进群交流</p>
         </div>
       </div>
 
@@ -147,7 +144,7 @@ const goHome = () => {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 /* Header */
@@ -171,88 +168,61 @@ const goHome = () => {
 /* Ear lyric card */
 .ear-lyric-card {
   background: rgba(255,255,255,0.92);
-  border-radius: 20px;
-  padding: 24px 20px;
+  border-radius: 16px;
+  padding: 16px;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 87, 174, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-.ear-lyric-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(0, 136, 204, 0.08) 0%, transparent 60%);
-  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0, 87, 174, 0.12);
 }
 
 .ear-lyric-label {
-  font-size: 13px;
-  color: var(--md-blue-500);
-  margin-bottom: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  color: var(--md-blue-400);
+  margin-bottom: 6px;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .ear-lyric-text {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 19px;
+  font-weight: 900;
   color: var(--md-blue-800);
   line-height: 1.4;
-  text-shadow: 0 1px 4px rgba(0,87,174,0.1);
 }
 
-/* Answer card */
+/* 答案卡 */
 .answer-card {
   background: white;
-  border-radius: 24px;
-  padding: 24px 20px;
-  box-shadow: 0 8px 32px rgba(0, 87, 174, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-.answer-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(0, 136, 204, 0.08) 0%, transparent 60%);
-  pointer-events: none;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 16px rgba(0, 87, 174, 0.1);
 }
 
 .answer-reveal {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
 .answer-label {
   display: block;
-  font-size: 13px;
-  color: var(--md-blue-500);
-  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--md-blue-400);
+  margin-bottom: 4px;
   font-weight: 600;
 }
 
 .answer-song {
   display: block;
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 900;
   color: var(--md-blue-800);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   line-height: 1.2;
 }
 
 .answer-album {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--md-blue-400);
   font-weight: 500;
 }
@@ -260,95 +230,90 @@ const goHome = () => {
 .answer-divider {
   height: 1px;
   background: var(--md-blue-100);
-  margin: 16px 0;
+  margin: 8px 0;
 }
 
-/* Original lyric */
+/* 原歌词 */
 .original-lyric-section {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .section-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--md-blue-400);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .original-lyric {
   font-family: inherit;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--md-blue-800);
-  line-height: 1.6;
+  color: var(--md-blue-700);
+  line-height: 1.5;
   white-space: pre-wrap;
-  margin: 0 0 8px;
+  margin: 0 0 4px;
 }
 
 .lyrics-context {
   font-family: inherit;
-  font-size: 13px;
-  color: var(--md-blue-700);
-  line-height: 1.7;
+  font-size: 12px;
+  color: var(--md-blue-600);
+  line-height: 1.5;
   white-space: pre-wrap;
   margin: 0;
-  padding: 12px;
+  padding: 8px;
   background: var(--md-blue-50);
-  border-radius: 10px;
-  border-left: 3px solid var(--md-blue-400);
+  border-radius: 8px;
+  border-left: 3px solid var(--md-blue-300);
 }
 
-/* Ear reason */
+/* 空耳原因 */
 .ear-reason-section {
-  background: linear-gradient(135deg, #fff5f7 0%, #fff0f3 100%);
+  background: #fff5f7;
   border: 1px solid #fda4af;
-  border-radius: 14px;
-  padding: 14px 16px;
+  border-radius: 10px;
+  padding: 10px 12px;
 }
 
 .ear-reason-badge {
   display: inline-block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
   color: #be185d;
   background: rgba(219,39,119,0.1);
-  padding: 3px 10px;
-  border-radius: 12px;
-  margin-bottom: 8px;
-  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-bottom: 4px;
 }
 
 .ear-reason-text {
-  font-size: 14px;
+  font-size: 12px;
   color: #831843;
-  line-height: 1.6;
+  line-height: 1.5;
   font-weight: 600;
 }
 
-/* Listen section */
-.listen-section {
-  text-align: center;
-}
-
+/* 挑战按钮 */
 .btn-listen {
   width: 100%;
   background: linear-gradient(135deg, var(--md-accent-bright), var(--md-blue-500));
   color: white;
   border: none;
-  border-radius: 16px;
-  padding: 16px 24px;
-  font-size: 16px;
+  border-radius: 14px;
+  padding: 13px 24px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(0, 136, 204, 0.35);
   transition: transform 0.2s, box-shadow 0.2s;
-  margin-bottom: 10px;
+  text-align: center;
 }
 
 .btn-listen:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 6px 24px rgba(0, 136, 204, 0.45);
 }
 
@@ -356,50 +321,43 @@ const goHome = () => {
   transform: translateY(0);
 }
 
-.listen-hint {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  margin: 0 0 12px;
-  font-weight: 500;
-}
-
 /* 二维码区 */
-.listen-qr-section {
+.qr-bottom-section {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  padding: 14px 16px;
-  background: rgba(255,255,255,0.9);
-  border-radius: 16px;
+  gap: 20px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 14px;
   box-shadow: 0 4px 16px rgba(0, 87, 174, 0.12);
 }
 
-.listen-qr-wrap {
+.qr-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
-.listen-qr-img {
-  width: 72px;
-  height: 72px;
+.qr-img {
+  width: 70px;
+  height: 70px;
   border-radius: 8px;
   background: white;
-  padding: 4px;
+  padding: 3px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.listen-qr-label {
-  font-size: 11px;
+.qr-label {
+  font-size: 10px;
   font-weight: 700;
   color: var(--md-blue-600);
   margin: 0;
 }
 
-.listen-qr-divider {
-  font-size: 22px;
+.qr-divider {
+  font-size: 20px;
   color: rgba(0, 136, 204, 0.25);
   font-weight: 300;
   line-height: 1;
@@ -407,10 +365,10 @@ const goHome = () => {
 
 /* Disclaimer */
 .disclaimer-bottom {
-  font-size: 11px;
-  color: rgba(255,255,255,0.45);
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
   text-align: center;
-  margin: 8px 0 0;
+  margin: 0;
 }
 
 /* Not found */
