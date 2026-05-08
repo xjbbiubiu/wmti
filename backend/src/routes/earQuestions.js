@@ -9,7 +9,8 @@ const REQUIRED_QUESTION_IDS = [2, 3, 7];
 function getImageUrl(questionId) {
   const cardsDir = path.join(__dirname, '..', '..', 'public', 'cards');
   try {
-    const files = fs.readdirSync(cardsDir).filter(f => f.startsWith(`${questionId}_`) && f.endsWith('_mobile.webp'));
+    const paddedId = String(questionId).padStart(2, '0');
+    const files = fs.readdirSync(cardsDir).filter(f => f.startsWith(`${paddedId}_`) && f.endsWith('_mobile.webp'));
     return files.length > 0 ? `/cards/${files[0]}` : null;
   } catch {
     return null;
