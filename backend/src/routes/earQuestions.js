@@ -1,8 +1,20 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 const allQuestions = require('../data/earQuestions');
 
 const REQUIRED_QUESTION_IDS = [2, 3, 7];
+
+function getImageUrl(questionId) {
+  const cardsDir = path.join(__dirname, '..', '..', 'public', 'cards');
+  try {
+    const files = fs.readdirSync(cardsDir).filter(f => f.startsWith(`${questionId}_`) && f.endsWith('_mobile.webp'));
+    return files.length > 0 ? `/cards/${files[0]}` : null;
+  } catch {
+    return null;
+  }
+}
 const TOTAL_QUESTIONS = 12;
 
 // 返回12道随机题：3道必出 + 9道随机，sanitized（含 correct 字段，前端展示用）
@@ -27,7 +39,8 @@ router.get('/', (req, res) => {
       originalLyric: q.correctAnswer.originalLyric,
       lyricsContext: q.correctAnswer.lyricsContext,
       earReason: q.correctAnswer.earReason,
-    }
+    },
+    imageUrl: getImageUrl(q.id)
   }));
   res.json(sanitizedQuestions);
 });
@@ -48,7 +61,8 @@ router.get('/:id', (req, res) => {
       originalLyric: question.correctAnswer.originalLyric,
       lyricsContext: question.correctAnswer.lyricsContext,
       earReason: question.correctAnswer.earReason,
-    }
+    },
+    imageUrl: getImageUrl(question.id)
   });
 });
 

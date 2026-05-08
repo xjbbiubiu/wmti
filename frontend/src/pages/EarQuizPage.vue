@@ -24,6 +24,10 @@
 
         <div class="question-card" ref="cardRef" :key="currentIndex">
           <div class="ear-lyric-wrap">
+            <img v-if="currentQuestion.imageUrl"
+                 :src="apiUrl(currentQuestion.imageUrl)"
+                 class="ear-lyric-image"
+                 :alt="currentQuestion.earLyric" />
             <div class="ear-lyric-icon">&#x1F3A7;</div>
             <div class="ear-lyric" ref="earLyricRef">{{ currentQuestion.earLyric }}</div>
             <div class="ear-lyric-hint">是什么歌？</div>
@@ -248,6 +252,14 @@ const submitTest = async () => {
   padding: 24px 20px;
   box-shadow: 0 8px 32px rgba(0, 87, 174, 0.12);
   margin-bottom: 16px;
+}
+
+.ear-lyric-image {
+  width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 12px;
 }
 
 /* Ear Lyric */
