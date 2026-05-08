@@ -732,7 +732,7 @@ const goQuiz = () => {
 .result-qr-label {
   font-size: 10px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--md-blue-700);
   margin: 0;
 }
 
