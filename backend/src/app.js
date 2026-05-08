@@ -28,6 +28,7 @@ if (isProduction) {
 // Posters are always served from backend/public
 app.use('/posters', express.static(path.join(__dirname, '..', 'public', 'posters')));
 app.use('/ear-posters', express.static(path.join(__dirname, '..', 'public', 'ear-posters')));
+app.use('/cards', express.static(path.join(__dirname, '..', 'public', 'cards')));
 
 // API routes
 app.use('/api/ear/questions', earQuestionRoutes);
